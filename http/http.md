@@ -93,7 +93,8 @@ text/plain
 multipart/form-data
 application/x-www-form-urlencoded
 
-缓存头 Cache-Control 的含义和使用 （只是限制性的作用，没有强制的约束力）
+Cache-Control 的含义和使用 （只是限制性的作用，没有强制的约束力）
+客户端缓存
 可缓存性：
 public：任何地方都允许缓存
 private：请求的网页允许缓存
@@ -112,6 +113,58 @@ Cache-Control : max-age 配置
 如果浏览器请求的 url 没有改变，且缓存配置的时间没有到期，他不会去请求新资源（不经过服务端的验证）
 目前处理方式，url跟上hash值。表示这次的更新，去请求新资源
 
-缓存验证Last-Modified和 Etag 的使用
+缓存验证 Last-Modified 和 Etag 的使用
 资源验证：
 ![缓存读取的流程](../img/缓存操作.jpg)
+Last-Modified：上次修改时间
+配合 If-Modified-Since 或者 If-Unmodified-Since 头使用
+对比上次修改时间来验证资源是否需要更新
+
+Etag
+数据签名
+配合If-Match 或者 If-None-Match 头使用
+对比资源的签名判断是否缓存
+
+Cookie 和 session
+
+Cookie
+通过 Set-Cookie 设置
+下次请求会自动带上
+属性：
+max-age expires 设置过期时间
+Secure 只在 https 的时候发送
+httpOnly无法js访问cookie
+session 不等于 cookie
+网站用到最多的是 cookie 来保存 session
+
+HTTP 长连接
+http1.1请求是有时间顺序的
+http请求是在TCP连接上发送的
+tcp最多6个并发请求。
+一个TCP可以发送多个http请求
+问题：浏览器允许的并发请求数量能不能调整
+Connection: 'keep-alive' 保持连接，还可以设施长连接保持的时间
+Connection:'close' 一个TCP只能一个http请求
+http2.0 
+信道复用
+一个TCP可以并发http请求
+
+数据协商：服务端和客户端相互约定数据传输的类型和方式
+请求
+Accept: 申明需要的数据类型 
+Accept-Encoding: 用什么数据压缩方式
+Accept-language: 返回的语言类型
+User-Agent: 浏览器的内核版本（很混乱的一个属性） 判断端（pc or 移动）
+返回
+Content-Type:返回的数据类型（text/html:主类型/分支类型）
+Content-Encoding: 用什么数据压缩方式
+Content-language:返回的语言类型
+
+
+![内容安全策略](https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP)
+
+代理缓存：
+
+https：
+公钥：
+私钥：只放在服务器上

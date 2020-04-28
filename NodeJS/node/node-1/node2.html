@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  1、Linux起源
+  多路信息计算系统
+  为什么计算机时间从1970年1月1日0分0秒   UNIX 的诞生
+  因为不开源的原因
+  Linus 开源了 Linux
+
+  Linux分类：
+  Ubuntu: 界面华丽，完善的管理系统和软件支持 分用户端和服务端
+  CentOS: 很多公司部署CentOs，来源 RHEL 体积小，
+  Debian: 内核非常小，非常稳定，适用于系统硬盘空间少，内存小的机器
+  RedHat 和 CentOS: 
+  RedHat 基于Linux 开发的公司。代码开源，服务收费
+  CentOS 基于RedHat 分支开源免费的。
+
+  linux命令遵循的协议：FHS协议：文件系统的层次化标准
+
+
+  下载 wget  
+  yum -y install wget
+  wget + 下载地址
+  进入 root 模式 su or  sudo su
+  重启 reboot
+  ifconfig  可设置网络设备的状态，或是显示目前的设置。
+  根目录路径：
+  1、/usr
+  2、/var
+ *3、/bin
+  4、/boot (开机相关的目录)
+  5、/dev (硬件设备相关。如打印机)
+ *6、/etc （存放各种配置文件的。账号密码等）
+  7、/home （用户目录）
+  8、/root （直接在根目录）
+  9、lib （存放函数）
+  10、Media (存放光盘。可以移除的设备)
+ *11、/opt （存在第三方软件的目录）装软件存放目录
+  12、/sbin 可执行的文件，只允许管理员访问）
+
+  命令：
+  cd 进入或者出某个文件夹
+
+  cd ..  回到上一级目录
+  cd ~   回到当前的主文件夹
+  cd /  回到根目录
+
+  ls 列出目录
+  ls -al 看到隐藏文件（.开头）
+
+  mkdir xxx 创建路径（单路径）
+  mkdir -p xxx/aaa 
+
+  rmdir xx  删除单路径
+ *rm -rf  (删除多路径) 慎用
+
+
+ 文件权限：
+ 第一个字符：路径还是文件（D表示路径，-表示文件）
+ 分三组，每组三个字符
+ 第一组：当前所属用户的权限
+ 第二组：当前所属组的权限
+ 第三组：其他用户的权限
+
+ r w x  （读，写，执行）
+ 4 2 1
+ r-- 只读 
+ rw- 读写
+ --x 只执行
+ rwx 全能
+
+ 需要搭建五台服务器
+ 集群配置：
+ Proxy: 512  代理服务器
+ Service: 1024 
+ Cache: 1024
+ Database: 1024
+ Release: 1024/512
+
+
+用户和用户组对创建： 配合查找用户指令 cat /etc/group 使用
+
+用户创建：useradd xx用户名  (当用户没有分配到组里到时候，自动创建一个组)
+
+用户组创建：groupadd xx组名 
+
+创建并且把用户添加到对应组里： useradd -G xxx组名  xx用户名 
+
+1、建用户：
+adduser phpq    //新建phpq用户
+passwd phpq     //给phpq用户设置密码
+
+2、建工作组
+groupadd test   //新建test工作组
+
+3、新建用户同时增加工作组
+useradd -g test phpq     //新建phpq用户并增加到test工作组
+
+4、给已有的用户增加工作组
+usermod -G groupname username  （这个会把用户从其他组中去掉）
+
+usermod -a groupname username
+
+//切换用户组 
+su xx组名
+exit 推出当前用户
+
+lscpu （查看cpu参数）
+df  //查看磁盘空间
+df -h  //使用人类可读的格式
+df -a  //包含所有的具有 0 Blocks 的文件系统
+df -i （磁盘索引。查看哪个磁盘碎文件多）
+
+|grep 筛选命令
+ps aux  查看服务
+ps aux |grep "node" 查看node服务有没有运行
+
+top 查看机器资源占用情况
+
+
+// 运行node程序。执行第一行代码
+vi test.js >> i >>console.log('hello, world') >>esc >> node tset.js
+
+建立服务器访问。访问不到需要关闭防火墙
+
+网络知识：五层网络模型（也有七层）
+应用层 HTTP（超文本传输协议），FTP（文件），DNS（域名），SMTP（邮件），Telnet等协议
+*表示层：
+会话层：
+传输层：TCP，UDP等协议
+网络层：IP 
+数据链路层：PPP，SLIP
+物理层：ISO2110，IEEE802等规范
+
+eg：
+应用层：浏览器（HTTP）（邓哥叫st送信给小姑娘）
+表示层：加密，格式转化（摩斯电码）
+会话层：解除或者建立和其他节点到联系（在搭理这个姑娘到时候不搭理其他人）
+传输层：TCP/UDP（TCP：告诉我送到了，我再睡觉，UDP：你送吧，我睡觉去了）
+网络层：IP（送信的地址）
+数据链路层：如何传输（搭乘什么交通工具去）
+物理层：OSI的物理层规范（搭乘工具的时候。是什么速度）
+
+http协议返回状态码：
+200: 成功，信收到了
+404: 没找到这人
+302: 搬家了，搬到了上海
+500: 地方找到了，人也在，就是不开门。
+304: 还看刚刚那封信就行。
+Request：发送
+请求头：
+
+数据体：
+两种格式：
+1、文本格式
+2、二进制格式--会有分隔符
+
+Response：返回
+返回头：
+数据体：
+Cache Control: 
+可否缓存
+public：可以被任何中间层缓存，服务器，代理服务器等
+Private：只能被一个东西缓存，服务器可以缓存（代理服务器不能）
+No-No-cache：不要相信缓存，使用缓存前。需要像服务器验证
+
+到期时间
+Max-age：缓存的最大周期（单位s）
+
+重新验证加载：
+Must-revalidate：在使用缓存之前验证资源状态，如果资源过期不能使用。
+Proxy-revalidate：和上面作用相同。适用于共享缓存（比如代理服务器）
+
+不使用缓存
+No-store：不允许使用缓存
+No-transform: 不许对缓存资源进行转码。
+
+node.js 正式开始
+第一部分：后端的规范于思想
+第二部分：基础API
+第三部分：常用的框架
+第四部分：（web项目）
+1、接收web请求
+2、处理业务逻辑
+3、文件操作
+4、数据库（关系型数据库：Mysql，非关系型：MongoDB）
+5、反向代理服务器（IP哈希，轮询）
+第五部分：
+大项目
+
+module.exports 和 exports 的区别
+</body>
+</html>
