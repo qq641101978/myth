@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>liquidFill</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // https://www.cnblogs.com/dashnowords/p/10692243.html 
+    let context = null
+
+    let options = {
+      startValue:0,
+      endValue: 40,
+      a: 20,//振幅
+      pos: [120,150],//水球图位置
+      r: 120,//水球图半径
+      color:['#b0af6b','#f0ffb4']//水纹颜色
+    };
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      context = canvas.getContext('2d')
+      context.fillRect(0, 0, document.body.clientWidth, document.body.clientHeight)
+      context.shadowColor = options.color[0];
+      context.shadowBlur = 2;
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 2;
+      context.font = 'bold 60px Arial';
+      context.textAlign='center';
+      context.textBaseLine = 'baseline';
+      start(options);
+    }
+    // 绘制水球图
+    function start(options) {
+      //移动绘图坐标至水球图左边界点
+      context.translate(options.pos[0],options.pos[1]);
+      //计算水球图绘图数据
+      createParams(options);
+      //开启帧动画
+      requestAnimationFrame(startAnim);
+    }
+
+    //生成水波动画参数，位置坐标公式为 y = A * (wt + φ)
+    function createParams(options) {
+      options.w = []; //存储水波的角速度
+      options.theta = []; //存储每条水波的位移 每次绘制时水波的偏移距离
+      options.w.push(Math.PI / 120, Math.PI / 140);
+      options.theta.push(20,60);
+    }
+
+    //绘制水波线
+    function drawWaterLines(options) {
+      let offset;
+      let A = options.a; //正弦曲线振幅
+      let y,x,w,theta;
+      let r = options.r;
+      //遍历每一条水纹理
+      for(let line = 0; line < 2; line++){ 
+        context.save();
+        offset = r + A / 2 - (r * 19 / 8 + A) * (options.startValue / 100 ) + line * r / 12;
+        //获取正弦曲线计算参数
+        w = options.w[line];
+        theta = options.theta[line];
+        context.fillStyle = options.color[line];
+        // context.moveTo(0,0);
+        context.beginPath(); 
+        //以0.1为步长绘制正弦曲线
+        for(x = 0; x <= 2 * r; x += 0.2){
+          y = A * Math.sin(w * x + theta) + offset;
+          //绘制点
+          context.lineTo(x,y);
+        }
+        //绘制为超出水球范围的封闭图形
+        context.lineTo(x,r);
+        context.lineTo(x - 2 * r,r);
+        context.lineTo(0, A * Math.sin(theta) - options.height);
+        context.closePath();
+        //填充封闭图形得到一条水波
+        context.fill();
+        //截取水波范围，绘制文字
+        context.clip();
+        context.fillStyle = '#fff';
+        context.fillText(parseInt(options.startValue,10) + '%',options.r + 10,10);
+        context.restore();
+      }
+    }
+
+    //绘制最底层文字
+    function drawText1(options) {
+      context.fillStyle = options.color[0];
+      context.fillText(parseInt(options.startValue,10) + '%',options.r + 10,10);
+    }
+
+    //帧动画循环
+    function startAnim() {
+      //用位移变化模拟水波
+      options.theta = options.theta.map(item=>item - 0.03);
+      
+      //用百分比进度计算水波的高度
+      options.startValue += options.startValue > options.endValue ? 0 : 0.2;
+      
+      context.save();
+      resetClip(options); //剪切绘图区
+      drawText1(options); //绘制蓝色文字
+      drawWaterLines(options); //绘制水波线
+      context.restore();
+      requestAnimationFrame(startAnim);
+    }
+
+    /**设置水球范围为剪裁区域
+    *(本例中并没有水球以外的部分需要绘制，实际上这里不需要加入帧动画循环中，只需要在开头设置一次即可。)
+    */
+    function resetClip(options) {
+      let r = options.r;
+      context.strokeStyle = options.color[0];
+      context.fillStyle = '#fff';
+      context.lineWidth = 10;
+      context.beginPath();
+      context.arc(r, 0, r + 10, 0, 2*Math.PI);
+      context.closePath();
+      context.fill();
+      context.stroke();
+      context.beginPath();
+      context.arc(r, 0, r, 0, 2*Math.PI, true);
+      context.clip();
+    }
+  </script>
+</body>
+</html>

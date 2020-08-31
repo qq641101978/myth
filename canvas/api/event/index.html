@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    let cxt = null
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      cxt = canvas.getContext('2d')
+
+      cxt.ellipse(400, 400, 300, 200, 10, 0, 1* Math.PI)
+      cxt.fill()
+      // setBalls()
+      // balls.map(ball => drawBalls(ball))
+      
+      // canvas.addEventListener('click', handleChange)
+      // canvas.onmousemove = handleChange
+    }
+    const balls = []
+    function setBalls() {
+      for (let i =0; i < 10; i++) {
+        balls.push({
+          x: Math.random() * 900,
+          y: Math.random() * 900,
+          r: Math.random() * 80
+        })
+      }
+    }
+    function drawBalls(ball) {
+      cxt.save()
+      cxt.translate(ball.x, ball.y)
+      cxt.scale(ball.r, ball.r)
+      ballPath()
+      cxt.fill()
+      cxt.restore()
+    }
+    function ballPath() {
+      cxt.beginPath()
+      cxt.arc(0, 0, 1, 0, 2 * Math.PI)
+      cxt.fillStyle = '#f40'
+    }
+    // cxt.isPointInPath(x, y) :x,y 是否在绘制区域内 
+    function handleChange(e) {
+      cxt.clearRect(0, 0, canvas.width, canvas.height)
+      const x = e.clientX - canvas.getBoundingClientRect().left
+      const y = e.clientY - canvas.getBoundingClientRect().top
+      balls.map(ball => {
+        cxt.beginPath()
+        cxt.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI)
+        if (cxt.isPointInPath(x, y))  {
+          cxt.fillStyle = '#0ff'
+        } else {
+          cxt.fillStyle = '#f40'
+        }
+        cxt.fill()
+      })
+      // console.log(e.clientX, canvas.getBoundingClientRect().left)
+    }
+  </script>
+</body>
+</html>

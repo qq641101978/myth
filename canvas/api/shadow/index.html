@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      height: 100%;
+    }
+    .demo{
+      margin: 0 auto ;
+      width: 100px;
+      height: 100px;
+      background: #f30;
+      box-shadow: 10px 5px 5px #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <!-- <div class="demo"></div> -->
+  <script>
+    let cxt = null
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      cxt = canvas.getContext('2d')
+      cxt.fillStyle = '#f40'
+      shadowF()
+      cxt.fillRect(200, 200, 200, 200)
+    }
+    // 阴影 根据 css 阴影
+    // cxt.shadowColor 阴影颜色
+    // cxt.shadowOffsetX 阴影X偏移 number
+    // cxt.shadowOffsetY 阴影Y偏移  number
+    // cxt.shadowBlur 阴影模糊程度
+    function shadowF() {
+      cxt.shadowColor = '#000'
+      cxt.shadowOffsetX = -20
+      cxt.shadowOffsetY = -20
+      cxt.shadowBlur = 5
+    }
+  </script>
+</body>
+</html>

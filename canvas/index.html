@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas</title>
+  <style>
+    body{
+      height: 98vh;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas">
+    浏览器不支持canvas时候当提示
+  </canvas>
+  <script src="./demo/demo.js"></script>
+  <script>
+    let cxt = null
+    const styles = ['#caff67','#67becf', '#ef3d61','#f9f51a','#a594c0','#fa8ecc','#f6ca29']
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      cxt = canvas.getContext('2d')
+      globalAlphaF()
+      // quadraticCurveTo()
+      // drawMoon()
+      // bezierCurveTo()
+
+    }
+    
+    // 绘制线条
+    // 线条的帽子: 只能用于线条的开始处和结尾处
+    // lineCap: butt(default), round(突出圆角), square(突出方头)
+    // 线条交接出等样式
+    // lineJoin: miter(default, miterLimit =10), bevel , round
+    function drawLine(){
+      cxt.lineWidth = 10
+      cxt.strokeStyle = '#f40'
+
+      cxt.beginPath()
+      cxt.lineTo(100,100)
+      cxt.lineTo(400,100)
+      cxt.lineCap = 'butt'
+      cxt.stroke()
+
+      cxt.beginPath()
+      cxt.lineTo(100, 200)
+      cxt.lineTo(400,200)
+      cxt.lineCap = 'round'
+      cxt.stroke()
+
+      cxt.beginPath()
+      cxt.lineTo(100,300)
+      cxt.lineTo(400,300)
+      cxt.lineCap = 'square'
+      cxt.stroke()
+
+      // baseLine
+      cxt.beginPath()
+      cxt.lineTo(100,0)
+      cxt.lineTo(100,700)
+      cxt.moveTo(400, 0)
+      cxt.lineTo(400, 700)
+      cxt.lineWidth = 1
+      cxt.strokeStyle = '#000'
+      cxt.stroke()
+
+    }
+
+    // cxt.arc(centerX, centerY, radius, startingAngle, endingAngle, anticlockwise)
+    // 绘制一段弧 圆心x, 圆心y, 圆弧半径r, 开始角度，结束角度， 默认顺时针绘制（default = false）
+    // 弧度位子固定从右侧顶点开始顺时针 [0, 0.5pi ,1pi, 1.5pi , 2pi]
+    function drawArc(){
+      cxt.lineWidth = 5
+      cxt.strokeStyle = '#000'
+      // 顺时针绘制
+      for(let i = 0; i< 4; i++) {
+        cxt.beginPath()
+        cxt.arc(50 + i*100, 100, 20, 0, 2* Math.PI*(i+1)/ 4)
+        // cxt.closePath()
+        cxt.stroke()
+      }
+      // 逆时针绘制
+      for(let i = 0; i< 10; i++) {
+        cxt.beginPath()
+        cxt.arc(50 + i*100, 200, 20, 0, 2* Math.PI*(i+1)/ 10, true)
+        // cxt.closePath()
+        cxt.stroke()
+      }
+      // 使用 closePath 封闭路径
+      for(let i = 0; i< 10; i++) {
+        cxt.beginPath()
+        cxt.arc(50 + i*100, 300, 20, 0, 2* Math.PI*(i+1)/ 10)
+        cxt.closePath()
+        cxt.stroke()
+      }
+      // fill
+      for(let i = 0; i< 10; i++) {
+        cxt.beginPath()
+        cxt.arc(50 + i*100, 400, 20, 0, 2* Math.PI*(i+1)/ 10)
+        // cxt.closePath()
+        // cxt.stroke()
+        cxt.fill()
+      }
+      // fill
+      for(let i = 0; i< 10; i++) {
+        cxt.beginPath()
+        cxt.arc(50 + i*100, 500, 20, 0, 2* Math.PI*(i+1)/ 10, true)
+        // cxt.closePath()
+        // cxt.stroke()
+        cxt.fill()
+      }
+    }
+    
+    // 第二种绘制圆弧方式
+    // 三个不在一条直线的点绘成一条圆弧，需要一个起始点
+    // 圆弧会与三点构成点两线段相切
+    // moveTo(x0, y0) //开始点
+    // arcTo(
+    // x1, y1,  控制点
+    // x2, y2,  结束点
+    // radius)  
+    function drawArcT() {
+      cxt.beginPath()
+      cxt.moveTo(100, 100)
+      cxt.arcTo(300, 100, 300, 500 , 30)
+      cxt.stroke()
+    }
+
+    // translate(x, y) 从基坐标 图形偏移 (x, y),(连续偏移会相对于上一次偏移进行偏移，需要清除上一次偏移)
+    // rotate(deg)  图形旋转 deg
+    // scale(sx, sy) 相对于x轴缩放 sx 倍 ，相对于 y 轴缩放 sy 倍 (坐标偏移缩放，宽度缩放等,ps:副作用很大，需要小心使用)
+    // canvas 状态的保存和恢复 ，他俩同时出现
+    // cxt.save()  保存图形状态
+    // cxt.restore()  把之前修改的状态初始化回来
+    function translates() {
+      cxt.save()
+      cxt.fillStyle = '#f40'
+      cxt.translate(100, 100)
+      cxt.fillRect(0, 0, 100, 100)
+      cxt.restore()
+
+      cxt.save()
+      cxt.translate(200, 200)
+      // cxt.fillStyle = '#0ff'
+      cxt.fillRect(0, 0, 200, 200)
+      cxt.restore()
+    }
+    
+    function scales() {
+      cxt.lineWidth = 5
+      cxt.save()
+      cxt.strokeStyle = '#f40'
+      cxt.scale(1, 1)
+      cxt.strokeRect(100, 100, 100, 100)
+      cxt.restore()
+
+      cxt.save()
+      cxt.strokeStyle = '#0ff'
+      cxt.scale(2, 2)
+      cxt.strokeRect(100, 100, 100, 100)
+      cxt.restore()
+
+      cxt.save()
+      cxt.strokeStyle = '#000'
+      cxt.scale(3, 3)
+      cxt.strokeRect(100, 100, 100, 100)
+      cxt.restore()
+    }
+    
+    // 变换矩阵: transform(a, b, c, d, e, f)
+    // transform 多次用也会叠加效果
+    // cxt.setTransform(a, b, c, d, e, f) // 忽略掉前面掉 transform 变换，基于单位矩阵变换
+    // a c e
+    // b d f
+    // 0 0 1
+    // a, d 水平垂直方向缩放
+    // b, c 水平垂直方向倾斜
+    // e, f 水平垂直方向位移
+    function transforms() {
+      cxt.fillStyle = '#f40'
+      cxt.strokeStyle = '#000'
+      cxt.lineWidth = 10
+      cxt.save()
+      cxt.transform(1, 0, 0, 1, 100, 100)
+      cxt.transform(2, 0, 0, 2, 100, 100)
+      // cxt.setTransform(2, 0, 0, 2, 100, 100)
+      cxt.fillRect(0, 0, 100, 100)
+      cxt.strokeRect(0, 0, 100, 100)
+      cxt.restore()
+    }
+
+    // 线性渐变： 创建一条 渐变线
+    // cxt.createLinearGradient(x, y, x1, y1) // 起始坐标 x,y 终点坐标 x1, y1
+    function linearGradient() {
+      let linearGrad = cxt.createLinearGradient(0, 0, 0, 100)
+      linearGrad.addColorStop(0.0, '#eee')
+      linearGrad.addColorStop(0.4, '#eee')
+      linearGrad.addColorStop(0.4, '#0ff')
+      linearGrad.addColorStop(0.6, '#0ff')
+      linearGrad.addColorStop(0.6, '#000')
+      linearGrad.addColorStop(1.0, '#000')
+      cxt.fillStyle = linearGrad
+      cxt.fillRect(0, 0, 500, 500)
+    }
+    // 径向渐变： 创建 双圆 渐变范围 (待深入)
+    // cxt.createRadialGradient(x0, y0, r0, x1, y1, r1) // 双圆
+    function radialGradient() {
+      let grd = cxt.createRadialGradient(200, 200, 100, 0, 0, 0)
+      grd.addColorStop(0.0, '#f40')
+      grd.addColorStop(0.3, '#f40')
+      grd.addColorStop(0.3, '#eee')
+      grd.addColorStop(1.0, '#000')
+      cxt.fillStyle = grd
+      cxt.fillRect(0, 0, 800, 800)
+    }
+    
+    // 在canvas嵌入图片，canvas，video等
+    // ceratePattern(img, repeat-style)
+    // repeat-style: no-repeat, repeat-x , repeat-y, repeat
+
+    // 嵌入 image
+    function createPatternImage() {
+      const image = new Image()
+      image.src = './img/oip.png'
+      image.onload = function () {
+        const pattern =  cxt.createPattern(image, 'repeat-y')
+        cxt.fillStyle = (pattern)
+        cxt.fillRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+      }
+    }
+    // 嵌入canvas(动态创建canvas)
+    function createPatternCanvas() {
+      const backCanvas = document.createElement('canvas')
+      backCanvas.width = 80
+      backCanvas.height = 80
+      const bgCxt = backCanvas.getContext('2d')
+      drawFiveStar(bgCxt, 30, 20, 40, 40)
+      bgCxt.strokeRect(0, 0, 80, 80)
+      const pattern = cxt.createPattern(backCanvas, 'repeat')
+      cxt.fillStyle = pattern
+      cxt.fillRect(0,0,cxt.canvas.width, cxt.canvas.height)
+    }
+
+    // 二次贝塞尔曲线
+    // moveTo(x0, y0) 起始点
+    // quadraticCurveTo(
+    // x1, y1,  控制点
+    // x2, y2)  结束点
+    function quadraticCurveTo() {
+      cxt.beginPath()
+      cxt.moveTo(100, 100)
+      cxt.quadraticCurveTo(0, 200, 200, 200)
+      cxt.stroke()
+    }
+
+    // 三次贝塞尔曲线
+    // moveTo(x0, y0) 起始点
+    // bezierCurveTo(
+    // x1, y1,  控制点
+    // x2, y2,  控制点
+    // x3, y3)  结束点
+    function bezierCurveTo() {
+      cxt.beginPath()
+      cxt.moveTo(10, 100)
+      cxt.bezierCurveTo(200, -100, 200, 300, 500, 100)
+
+      cxt.moveTo(10, 100)
+      cxt.lineTo(800, 100)
+      cxt.stroke()
+    }
+
+    // 透明度
+    // cxt.globalAlpha 根据 css  
+    function globalAlphaF() {
+      // cxt.globalCompositeOperation = 'lighter'
+      for (let i = 0; i < 100; i++) {
+        const R = Math.floor(Math.random() * 255)
+        const G = Math.floor(Math.random() * 255)
+        const B = Math.floor(Math.random() * 255)
+        cxt.globalAlpha = Math.random()
+        cxt.fillStyle = `rgb(${R},${G},${B})`
+        cxt.beginPath()
+        cxt.arc(Math.random() * cxt.canvas.width, Math.random() * cxt.canvas.height, Math.random() * 90, 0, 2* Math.PI )
+        cxt.fill()
+      }
+    }
+  </script>
+</body>
+</html>

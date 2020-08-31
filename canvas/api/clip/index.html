@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>clip剪辑区域</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      margin: 0 auto;
+      /* height: 100%; */
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script src="../utils.js"></script>
+  <script>
+    // cxt.clip() 剪辑掉 规定区域外掉内容
+    let cxt = null
+    let obj = {
+      r: 100,
+      x: 100,
+      y: 100,
+      vx: 13,
+      vy: 15,
+      gy: 2,
+    }
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      canvas.width = 800
+      canvas.height = 800
+      cxt = canvas.getContext('2d')
+      // setInterval(()=>{
+      //   draw()
+      //   update(obj, cxt)
+      // },50)
+      // canvasBg() // 背景
+
+      circlePath(0, 180, '#085')
+      circlePath(180, 360, '#f40')
+      // clipPath() //剪切路径
+
+      // draw()
+    }
+    
+    function canvasBg() {
+      cxt.beginPath()
+      cxt.fillStyle = '#f40'
+      cxt.fillRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+    }
+    function clipPath() {
+      cxt.beginPath()
+      cxt.fillStyle = '#0ff'
+      cxt.arc(200, 200, 100, 0, 2*Math.PI)
+      cxt.fill()
+      cxt.clip()
+    }
+    function draw() {
+      cxt.beginPath()
+      cxt.font = 'bold 60px arial'
+      cxt.fillStyle = '#000'
+      cxt.fillText('我是小白', 200, 200)
+
+      // cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+
+      // cxt.save()
+      // cxt.fillStyle = '#000'
+      // cxt.fillRect(0, 0, 800, 800)
+
+      // cxt.save()
+      // cxt.translate(obj.x, obj.y)
+      // cxt.scale(obj.r, obj.r)
+      // cxt.fillStyle = '#fff'
+      // cxt.beginPath()
+      // cxt.arc(0, 0, 1, 0, 2*Math.PI)
+      // cxt.fill()
+      // cxt.restore()
+
+      // cxt.clip()
+
+      // cxt.fillStyle = '#f40'
+      // cxt.font = 'bold 60px Arial'
+      // cxt.fillText('ni hao ya la la la ', 100, 200)
+      // cxt.fillText('ni hao ya la la la ', 100, 300)
+      // cxt.fillText('ni hao ya la la la ', 100, 400)
+      // cxt.restore()
+
+    }
+    // cxt.fill() 和 cxt.save()  cxt.restore() 之前的问题
+
+    function locationSize() {
+      cxt.translate(100, 100)
+      cxt.scale(1, 1)
+    }
+    // 路径方向和剪纸效果（非零环绕原则（严谨定义百度）：从环绕区域引出一条射线，与路径相交，方向角度小于90度为正，就是内侧，大于就是外侧）
+    //  xp 画圆环 ==>(升级；分段不同色度值圆环)
+    // 必须确定路径方向
+    function circlePath(StartDeg = 0, denDeg = 180, fillStyle = '#085') {
+      cxt.save()
+      cxt.beginPath()
+      cxt.arc(400, 400, 300, StartDeg / 180 * Math.PI, denDeg / 180 * Math.PI, false)
+      cxt.arc(400, 400, 150, denDeg / 180 * Math.PI, StartDeg / 180 * Math.PI, true)
+      cxt.closePath()
+      cxt.fillStyle = fillStyle
+      cxt.strokeStyle = '#000'
+      cxt.lineWidth = 10
+      // cxt.shadowColor = '#000'
+      // cxt.shadowOffsetX = 10
+      // cxt.shadowOffsetY = 10
+      // cxt.shadowBlur = 10
+      cxt.fill()
+
+      cxt.stroke()
+      cxt.restore()
+
+    }
+  </script>
+</body>
+</html>

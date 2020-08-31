@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    let cxt = null
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      cxt = canvas.getContext('2d')
+    }
+  </script>
+</body>
+</html>

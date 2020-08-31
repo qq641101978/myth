@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      height: 100%;
+    }
+    .box{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .box>div{
+      flex: 1;
+      /* width: 100px; */
+      height: 100px;
+      background:#f40;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      const context = canvas.getContext('2d')
+      addLine(context)
+      
+    }
+    function addLine(cxt){
+      cxt.lineWidth = 5
+      cxt.strokeStyle = '#000'
+
+      var linearGradient= cxt.createRadialGradient(200, 200, 50, );
+      linearGradient.addColorStop(0,"skyblue")
+      linearGradient.addColorStop(1,"darkturquoise")
+      cxt.fillStyle = linearGradient
+      cxt.beginPath()
+      cxt.rect(100,100,200,300)
+      cxt.fillRect(100,100,200,200)
+      cxt.strokeRect(100,100,200,300)
+      cxt.closePath()
+      cxt.fill()
+      cxt.stroke()
+    }
+  </script>
+</body>
+</html>

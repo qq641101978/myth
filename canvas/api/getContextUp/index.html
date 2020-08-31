@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>getContextUp</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // getContext 高级应用
+    // 扩充 getContext
+    let cxt = null
+    CanvasRenderingContext2D.prototype.fillStar = function (R = 150, r = 60) {
+        this.beginPath()
+        for (let i = 0; i < 5; i++) {
+          this.lineTo(Math.cos((18 + i * 72) / 180 * Math.PI)* R, 
+                     -Math.sin((18 + i * 72) / 180 * Math.PI)* R
+          )
+          this.lineTo(Math.cos((54 + i * 72) / 180 * Math.PI)* r, 
+                     -Math.sin((54 + i * 72) / 180 * Math.PI)* r
+          )
+        }
+        this.closePath()
+        this.fill()
+      }
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      cxt = canvas.getContext('2d')
+      cxt.save()
+      cxt.fillStyle = '#058'
+      cxt.translate(400, 400)
+      cxt.rotate(30)
+      // cxt.scale(100, 100)
+      cxt.fillStar()
+      cxt.restore()
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>globalCompositeOperation</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      height: 100%;
+    }
+    .btn{
+      position: absolute;
+      bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .btn >div{
+      cursor: pointer;
+      margin: 0 0 10px 10px;
+      padding: 10px 20px;
+      border: 1px solid #000;
+      border-radius: 10px;
+    }
+    .btn>div:hover{
+      background: #f40;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div class="btn">
+    <div>source-over</div>
+    <div>source-atop</div>
+    <div>source-in</div>
+    <div>source-out</div>
+    <div>destination-over</div>
+    <div>destination-atop</div>
+    <div>destination-in</div>
+    <div>destination-out</div>
+    <div>lighter</div>
+    <div>copy</div>
+    <div>xor</div>
+  </div>
+  <script>
+    // 绘制的图像在重叠的时候产生的效果 (属性查文档)
+    // globalCompositeOperation = source-over(default:后绘制的图像压盖了前面绘制的图像)
+    let cxt = null
+    window.onload = function () {
+      let bnts = document.getElementsByClassName('btn')[0].getElementsByTagName('div')
+      for (let i = 0; i< bnts.length; i++) {
+        bnts[i].onclick = function () {
+          draw(this.innerText)
+        }
+      }
+      draw('source-over')
+    }
+    function draw(text) {
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      cxt = canvas.getContext('2d')
+      cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+      cxt.font = 'bold 40px Arial'
+      cxt.textAlign = 'center'
+      cxt.textBaseline = 'middle'
+      cxt.fillStyle = '#f40'
+      cxt.fillText(`globalCompositeOperation = ${text}`, cxt.canvas.width / 2, 100)
+      
+      cxt.save()
+      cxt.translate(cxt.canvas.width / 2 - 100,cxt.canvas.height / 2 - 100)
+      cxt.fillStyle = 'blue'
+      cxt.fillRect(0, 0, 200, 200)
+
+      cxt.globalCompositeOperation = text
+      cxt.fillStyle = '#f40'
+      cxt.beginPath()
+      cxt.moveTo(100 ,50)
+      cxt.lineTo(-100, 300)
+      cxt.lineTo(300, 300)
+      // cxt.closePath()
+      cxt.fill()
+      // cxt.restore()
+    }
+  </script>
+</body>
+</html>
