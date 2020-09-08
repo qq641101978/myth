@@ -53,16 +53,20 @@
     }
     // 文字渲染
     // cxt.font = default ('20px sans-serif') 文字样式指定(文字大小，类型，粗细等) 参考css 文字样式
-    // cxt.fillText(string, x, y, [maxlen]) 渲染的填充文字
-    // cxt.strokeText(string, x, y, [maxlen]) 渲染的边框文字
-    // maxlen  => 调整文字渲染的宽度
-    // 文本的度量
+    // cxt.fillText(text, x, y, [maxWidth]) 渲染的填充文字
+    // cxt.strokeText(text, x, y, [maxWidth]) 渲染的边框文字
+    // text：所要填充的字符串。
+    // x：文字起点的横坐标，单位像素。
+    // y：文字起点的纵坐标，单位像素。
+    // maxWidth：文本的最大像素宽度。该参数可选，如果省略，则表示宽度没有限制。如果文本实际长度超过这个参数指定的值，那么浏览器将尝试用较小的字体填充。
+    // 注意：fillText()方法不支持文本断行，所有文本一定出现在一行内。如果要生成多行文本，只有调用多次fillText()方法。
+    // strokeText()方法用来添加空心字符，它的参数与fillText()一致。
     // cxt.measureText(sting).width 获取文字宽度,宽度的值和 cxt.font 的配置有关
+    // cxt.direction：文本的方向，默认值为inherit。
     function renderTextF() {
       cxt.fillText('renderTextF', 400, 100)
       cxt.fillText('renderTextF', 400, 200, 100)
       cxt.strokeText('renderTextF', 400, 300)
-
     }
 
     // 水平对齐方式(相对于垂直基线)

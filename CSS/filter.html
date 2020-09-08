@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filter</title>
+  <style>
+    .image-box{
+      display: flex;
+      justify-content: space-around;
+    }
+    .image-box >img{
+      width: 500px;
+      height: 500px;
+    }
+    .btn-box{
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translate(-50%,0);
+    }
+    .btn-box >button{
+      margin-left: 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      min-width: 100px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="image-box">
+    <img src="../img/demo.png" alt="">
+    <img id="filterImage" src="../img/demo.png" alt="">
+  </div>
+  <div class="btn-box">
+    <button id="onGrayscale">grayscale 灰度</button>
+    <button id="onSepia">sepia 老照片</button>
+    <button id="onSaturate">saturate 饱和度</button>
+    <button id="onHueRotate">hue-rotate 色相</button>
+    <button id="onInvert">invert 反色</button>
+    <button id="onOpacity">opacity 不透明度</button>
+    <button id="onBrightness">brightness 明度</button>
+    <button id="onContrast">contrast 对比度</button>
+    <button id="onBlur">blur 模糊</button>
+    <button id="onDropShadow">drop-shadow 模糊</button>
+  </div>
+  <script>
+    // 灰度
+    onGrayscale.onclick = function () {
+      // filter: grayscale(1) default: 100% 
+      filterImage.style.filter = 'grayscale(1)'
+    }
+    // 老照片
+    onSepia.onclick = function () {
+      // filter: sepia(1) default: 100% 
+      filterImage.style.filter = 'sepia(1)'
+    }
+    // 饱和度
+    onSaturate.onclick = function () {
+      // filter: saturate(1)  default: 100% 
+      filterImage.style.filter = 'saturate(2)'
+    }
+    // 色相
+    onHueRotate.onclick = function () {
+      // filter: hue-rotate(90deg)  default: 0deg
+      filterImage.style.filter = 'hue-rotate(90deg)'
+    }
+    // 反色
+    onInvert.onclick = function () {
+      // filter: invert(1)  default: 100% 
+      filterImage.style.filter = 'invert(1)'
+    }
+    // 不透明度
+    onOpacity.onclick = function () {
+      // filter: opacity()  default: 100% 
+      filterImage.style.filter = 'opacity(0.4)'
+    }
+    // 明度
+    onBrightness.onclick = function () {
+      // filter: brightness()  default: 100% 
+      filterImage.style.filter = 'brightness(0.4)'
+    }
+    // 对比度
+    onContrast.onclick = function () {
+      // filter: contrast()  default: 100% 
+      filterImage.style.filter = 'contrast(2)'
+    }
+    // 模糊度
+    onBlur.onclick = function () {
+      // filter: blur()  default : 0
+      filterImage.style.filter = 'blur(10px)'
+    }
+    // 阴影
+    onDropShadow.onclick = function () {
+      // filter: drop-shadow()  default : 10px 10px 2px #aaa
+      filterImage.style.filter = 'drop-shadow(10px 10px 2px #aaa)'
+    }
+  </script>
+</body>
+</html>

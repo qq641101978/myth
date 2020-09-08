@@ -24,11 +24,7 @@
       canvas.width = document.body.clientWidth
       canvas.height = document.body.clientHeight
       cxt = canvas.getContext('2d')
-      globalAlphaF()
-      // quadraticCurveTo()
-      // drawMoon()
-      // bezierCurveTo()
-
+      linearGradient()
     }
     
     // 绘制线条
@@ -36,25 +32,29 @@
     // lineCap: butt(default), round(突出圆角), square(突出方头)
     // 线条交接出等样式
     // lineJoin: miter(default, miterLimit =10), bevel , round
+    // beginPath() 全新的绘制路径开启
     function drawLine(){
       cxt.lineWidth = 10
-      cxt.strokeStyle = '#f40'
-
+      // 下面执行了三次 stroke()，在没有beginPath()情况下，下面这条线段会被绘制三次，后一次覆盖在上一次上，所以最后看到的是同一颜色的线段
       cxt.beginPath()
       cxt.lineTo(100,100)
       cxt.lineTo(400,100)
+      cxt.strokeStyle = '#f40'
       cxt.lineCap = 'butt'
-      cxt.stroke()
+      //以上代码都是基于状态的设置
 
-      cxt.beginPath()
-      cxt.lineTo(100, 200)
+      cxt.stroke() //绘制出设置的状态
+      cxt.beginPath() 
+      cxt.moveTo(100, 200)
       cxt.lineTo(400,200)
+      cxt.strokeStyle = '#00f'
       cxt.lineCap = 'round'
       cxt.stroke()
 
       cxt.beginPath()
       cxt.lineTo(100,300)
       cxt.lineTo(400,300)
+      cxt.strokeStyle = '#0f0'
       cxt.lineCap = 'square'
       cxt.stroke()
 
@@ -134,8 +134,9 @@
     // rotate(deg)  图形旋转 deg
     // scale(sx, sy) 相对于x轴缩放 sx 倍 ，相对于 y 轴缩放 sy 倍 (坐标偏移缩放，宽度缩放等,ps:副作用很大，需要小心使用)
     // canvas 状态的保存和恢复 ，他俩同时出现
-    // cxt.save()  保存图形状态
-    // cxt.restore()  把之前修改的状态初始化回来
+    
+    // cxt.save()  将一个状态压入状态栈中
+    // cxt.restore()  将最前面的状态出栈，并设置到2d上下文中
     function translates() {
       cxt.save()
       cxt.fillStyle = '#f40'
@@ -145,11 +146,12 @@
 
       cxt.save()
       cxt.translate(200, 200)
-      // cxt.fillStyle = '#0ff'
+      cxt.fillStyle = '#0ff'
       cxt.fillRect(0, 0, 200, 200)
       cxt.restore()
     }
     
+    // scale() 作用于他之后都状态
     function scales() {
       cxt.lineWidth = 5
       cxt.save()
@@ -165,21 +167,25 @@
       cxt.restore()
 
       cxt.save()
-      cxt.strokeStyle = '#000'
+      cxt.translate(100, 100)
       cxt.scale(3, 3)
+      cxt.strokeStyle = '#000'
       cxt.strokeRect(100, 100, 100, 100)
       cxt.restore()
     }
     
-    // 变换矩阵: transform(a, b, c, d, e, f)
-    // transform 多次用也会叠加效果
+    // 变换矩阵: transform(a, b, c, d, e, f) transform 多次用也会叠加效果
     // cxt.setTransform(a, b, c, d, e, f) // 忽略掉前面掉 transform 变换，基于单位矩阵变换
-    // a c e
-    // b d f
+    // a:水平缩放(默认值1，单位倍数)
+    // b:水平倾斜(默认值0，单位弧度)
+    // c:垂直倾斜(默认值0，单位弧度)
+    // d:垂直缩放(默认值1，单位倍数)
+    // e:水平位移(默认值0，单位像素)
+    // f:垂直位移(默认值0，单位像素)
+    // 默认情况下是一个单位矩阵
+    // 1 0 0
+    // 0 1 0
     // 0 0 1
-    // a, d 水平垂直方向缩放
-    // b, c 水平垂直方向倾斜
-    // e, f 水平垂直方向位移
     function transforms() {
       cxt.fillStyle = '#f40'
       cxt.strokeStyle = '#000'
@@ -196,38 +202,39 @@
     // 线性渐变： 创建一条 渐变线
     // cxt.createLinearGradient(x, y, x1, y1) // 起始坐标 x,y 终点坐标 x1, y1
     function linearGradient() {
-      let linearGrad = cxt.createLinearGradient(0, 0, 0, 100)
-      linearGrad.addColorStop(0.0, '#eee')
-      linearGrad.addColorStop(0.4, '#eee')
-      linearGrad.addColorStop(0.4, '#0ff')
-      linearGrad.addColorStop(0.6, '#0ff')
-      linearGrad.addColorStop(0.6, '#000')
-      linearGrad.addColorStop(1.0, '#000')
+      let linearGrad = cxt.createLinearGradient(0, 0, 0, 500)
+      linearGrad.addColorStop(0.0, '#CE9FFC')
+      // linearGrad.addColorStop(0.4, '#eee')
+      // linearGrad.addColorStop(0.6, '#0ff')
+      // linearGrad.addColorStop(0.6, '#0ff')
+      // linearGrad.addColorStop(0.6, '#000')
+      linearGrad.addColorStop(1.0, '#7367F0')
       cxt.fillStyle = linearGrad
       cxt.fillRect(0, 0, 500, 500)
     }
     // 径向渐变： 创建 双圆 渐变范围 (待深入)
+    // 渐变发生在两个圆之间
     // cxt.createRadialGradient(x0, y0, r0, x1, y1, r1) // 双圆
     function radialGradient() {
-      let grd = cxt.createRadialGradient(200, 200, 100, 0, 0, 0)
-      grd.addColorStop(0.0, '#f40')
-      grd.addColorStop(0.3, '#f40')
-      grd.addColorStop(0.3, '#eee')
+      let grd = cxt.createRadialGradient(400, 400, 0, 400, 400, 400)
+      grd.addColorStop(0.0, '#CE9FFC')
+      grd.addColorStop(0.3, '#CE9FFC')
+      grd.addColorStop(0.3, '#7367F0')
       grd.addColorStop(1.0, '#000')
       cxt.fillStyle = grd
       cxt.fillRect(0, 0, 800, 800)
     }
     
     // 在canvas嵌入图片，canvas，video等
-    // ceratePattern(img, repeat-style)
-    // repeat-style: no-repeat, repeat-x , repeat-y, repeat
+    // ceratePattern(img, repetition)
+    // repetition: no-repeat, repeat-x , repeat-y, repeat
 
     // 嵌入 image
     function createPatternImage() {
       const image = new Image()
       image.src = './img/oip.png'
       image.onload = function () {
-        const pattern =  cxt.createPattern(image, 'repeat-y')
+        const pattern =  cxt.createPattern(image, 'repeat')
         cxt.fillStyle = (pattern)
         cxt.fillRect(0, 0, cxt.canvas.width, cxt.canvas.height)
       }

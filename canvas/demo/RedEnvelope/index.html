@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>filter</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+    }
+    #canvas{
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%,0);
+    }
+    img{
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      filter: blur(8px);
+    }
+  </style>
+</head>
+<body>
+  <img src="../../../img/demo.jpg" alt="">
+  <canvas id="canvas"></canvas>
+  <script>
+    let cxt = null
+    const image = new Image()
+    const clipPoint = {x: 0, y: 0, r: 40}
+    const copyClipPoint = JSON.parse(JSON.stringify(clipPoint))
+    let clickTimer = null
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      image.src = '../../../img/demo.jpg'
+      image.onload = function () {
+        canvas.width = image.width
+        canvas.height = image.height
+        cxt = canvas.getContext('2d')
+        // cxt.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height)
+      }
+    }
+    // 在 canvas 内 =>  显示清晰图像
+    canvas.onmousemove = function(e) {
+      e.preventDefault() 
+      if (clipPoint.r <= 40) {
+        clipPoint.r = copyClipPoint.r
+        const {x, y} = windowToCanvas(e.clientX, e.clientY)
+        clipPoint.x = x
+        clipPoint.y = y
+        drawClearImage()
+      }else {
+        console.log('已锁定')
+      }
+    }
+    // 鼠标移出，
+    canvas.onmouseout = function(e) {
+      console.log('鼠标移出')
+      cancelAnimationFrame(clickTimer)
+      e.preventDefault()
+      showBlurryImage()
+    }
+    function showBlurryImage() {
+      if (clipPoint.r <= 0) {
+        clipPoint.r = 0
+        drawClearImage()
+      } else {
+        clipPoint.r -= 20
+        drawClearImage()
+        requestAnimationFrame(showBlurryImage)
+      }
+    }
+    // 点击展示全图,关闭绘制功能
+    canvas.onclick = function () {
+      showFullImage()
+    }
+    function showFullImage() {
+      if (clipPoint.r >= 2*Math.max(canvas.width, canvas.height)) return 
+      clipPoint.r += 20
+      drawClearImage()
+      clickTimer = requestAnimationFrame(showFullImage)
+    }
+    function drawClearImage() {
+      cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+      const mr = clipPoint.r
+      const sx = clipPoint.x - mr
+      const sy = clipPoint.y - mr
+      const dx = clipPoint.x - mr
+      const dy = clipPoint.y - mr
+      cxt.save()
+      cxt.beginPath()
+      cxt.arc(clipPoint.x, clipPoint.y, mr, 0, Math.PI * 2)
+      cxt.fill()
+      cxt.lineWidth = 1
+      cxt.strokeStyle = '#069'
+      cxt.stroke()
+      cxt.clip()
+      cxt.drawImage(image, sx, sy, 2*mr, 2*mr, dx, dy, 2*mr, 2*mr)
+      cxt.restore()
+    }
+    // 获取 canvas画布中 真实距离
+    function windowToCanvas(x, y) {
+      const bbox = canvas.getBoundingClientRect() 
+      return {x: x - bbox.left , y: y - bbox.top}
+    }
+    // 项目实现缺点：图片大小不能调控,图片通过 canvas截取，会存在跨域问题，需要处理
+  </script>
+</body>
+</html>

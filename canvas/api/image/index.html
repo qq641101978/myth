@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>drawImage</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvas{
+      /* height: 100%; */
+    }
+    .range-item{
+      position: absolute;
+      width: 400px;
+      height: 50px;
+      top: 90%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  </style>
+</head>
+<body>
+  <input class="range-item" min="0.5" max="3" step="0.01" value="1.0" id="scale-range" type="range" />
+  <canvas id="canvas"></canvas>
+  <script>
+    // 鼠标和 canvas 交互
+    //cxt.drawImage(image, x, y) // 在 canvas 中 ，在左顶点 x，y 处出显示 图像
+    //cxt.drawImage(image, x, y, dw, dh) //在 canvas 中 ，在左顶点 x，y 处出显示，图像 图像的宽度为 dw ,高度为dh 
+    //cxt.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh) //（类似放大镜功能）对于原图像位于sx, sy 处， 宽高为sd, sh的图像部分， 展示在 canvas 的 dx, dy处，展示的宽高为 dw, dh
+
+    // 提升：cxt.drawImage(image, x, y) 中 image 可以变成其他的 canvas 对象（离屏 canvas 技术）
+    // 具体在 offscreenCanvas.html 中
+
+    // image：图像元素
+    // sx：图像内部的横坐标，用于映射到画布的放置点上。
+    // sy：图像内部的纵坐标，用于映射到画布的放置点上。
+    // sWidth：图像在画布上的宽度，会产生缩放效果。如果未指定，则图像不会缩放，按照实际大小占据画布的宽度。
+    // sHeight：图像在画布上的高度，会产生缩放效果。如果未指定，则图像不会缩放，按照实际大小占据画布的高度。
+    // dx：画布内部的横坐标，用于放置图像的左上角
+    // dy：画布内部的纵坐标，用于放置图像的右上角
+    // dWidth：图像在画布内部的宽度，会产生缩放效果。
+    // dHeight：图像在画布内部的高度，会产生缩放效果。
+    let cxt = null
+    let scale = 1
+    const slider = document.getElementById('scale-range')
+    const image = new Image()
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      canvas.width = document.body.clientWidth
+      canvas.height = document.body.clientHeight
+      cxt = canvas.getContext('2d')
+      image.src = 'demo.png'
+      image.onload = function() {
+        imageScale()
+      }
+    }
+    slider.oninput = function(e){
+      scale = e.target.valueAsNumber
+      imageScale()
+    }
+
+    let i = 10
+    function scaleMax () {
+      if(i < 30) {
+        i ++
+        imageScale(i/10)
+        requestAnimationFrame(scaleMax)
+      } else {
+        requestAnimationFrame(scaleMin)
+      }
+    }
+    function scaleMin () {
+      if(i > 10) {
+        i --
+        imageScale(i/10)
+        requestAnimationFrame(scaleMin)
+      } else {
+        requestAnimationFrame(scaleMax)
+      }
+    }
+    
+    function imageScale() {
+      cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+      const imageWidth = 690 * scale
+      const imageHeight = 460 * scale
+      const dx = cxt.canvas.width / 2 - imageWidth / 2
+      const dy = cxt.canvas.height / 2 - imageHeight / 2
+      cxt.drawImage(image, 0, 0, 690, 460, dx, dy, imageWidth, imageHeight)
+      // 水印添加
+      addWatermark(imageWidth, imageHeight)
+      
+    }
+    function addWatermark(imageWidth, imageHeight) {
+      const waterDx = cxt.canvas.width / 2 - imageWidth / 2
+      const waterDy = cxt.canvas.height / 2 - (imageHeight -100) / 2
+      cxt.save()
+      cxt.font = `${40* scale}px bold Arial`
+      cxt.globalAlpha = 0.1
+      cxt.fillText('小白水印', waterDx, waterDy)
+      cxt.restore()
+    }
+  </script>
+</body>
+</html>

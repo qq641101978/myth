@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>createImageData</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+    }
+    #canvas{
+      /* height: 100%; */
+      border:1px solid #000
+
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // ctx.createImageData(width, height)
+    // ctx.createImageData(imagedata)
+    // createImageData()方法的参数如下。
+    // width：ImageData 对象的宽度，单位为像素。
+    // height：ImageData 对象的高度，单位为像素。
+    // imagedata：一个现有的 ImageData 对象，返回值将是这个对象的拷贝。
+    let cxt = null
+    window.onload = function (){
+      const canvas = document.getElementById('canvas')
+      canvas.width = 800
+      canvas.height = 800
+      cxt = canvas.getContext('2d')
+      let imageData = cxt.createImageData(canvas.width, canvas.height)
+      let pixelData = imageData.data
+      for (let i = 0; i <= pixelData.length; i +=4) {
+        pixelData[i] = parseInt(Math.random() * 255)
+        pixelData[i + 1] = parseInt(Math.random() * 255)
+        pixelData[i + 2] = parseInt(Math.random() * 255)
+        pixelData[i + 3] = 255
+      }
+      console.log(pixelData)
+      cxt.putImageData(imageData, 0, 0, 0, 0, canvas.width, canvas.height)
+    }
+  </script>
+</body>
+</html>

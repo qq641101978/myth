@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      border:1px solid #000
+    }
+    #canvasA{
+      height: 400px;
+      width: 600px;
+      border: 1px solid #000;
+    }
+    #canvasB{
+      height: 400px;
+      width: 600px;
+      border: 1px solid #000;
+      /* filter: blur(10px); */
+    }
+    .btn-box{
+      position: absolute;
+      right: 100px;
+      top: 100px;
+    }
+    .btn-box >div{
+      margin-top: 20px;
+      width: 200px;
+      text-align: center;
+      line-height: 40px;
+      cursor: pointer;
+      border: 1px solid #000;
+      border-radius: 10px;
+      user-select: none;
+    }
+    .btn-box >div:hover{
+      background: #0ff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvasA"></canvas>
+  <canvas id="canvasB"></canvas>
+  <div class="btn-box"> 
+    <div id="btn" >原图</div>
+    <div id="grayscaleFilter" class="btn">灰色滤镜</div>
+    <div id="BAndWFilter" >黑白滤镜</div>
+    <div id="reverseColor" >反色滤镜</div>
+    <div id="blurFilter" >模糊滤镜</div>
+  </div>
+  <script src="imageSrc.js"></script>
+  <script src="../../utils.js"></script>
+  <script>
+    // 图片资源跨域解决,需要图片 资源在服务器上，并且设置了专门的请求头
+    // https://www.imooc.com/qadetail/123236
+    // https://www.zhangxinxu.com/wordpress/2018/02/crossorigin-canvas-getimagedata-cors/
+    // 另类解决方式：图片转换成 base64
+    cxtA = canvasA.getContext('2d')
+    cxtB = canvasB.getContext('2d')
+    const image = new Image()
+    window.onload = function (){
+      image.src = imageSrc
+      image.onload = function () {
+        cxtA.drawImage(image, 0, 0, canvasA.width, canvasA.height)
+      }
+    }
+    // 单纯渲染
+    btn.onclick = function () {
+      cxtB.clearRect(0, 0, canvasB.width, canvasB.height)
+      const imageData =  cxtA.getImageData(0, 0, canvasA.width, canvasA.height)
+      cxtB.putImageData(imageData, 0, 0, 0, 0, canvasB.width, canvasB.height)
+    }
+    // 灰色滤镜
+    grayscaleFilter.onclick = function () {
+      cxtB.clearRect(0, 0, canvasB.width, canvasB.height)
+      const imageData =  cxtA.getImageData(0, 0, canvasA.width, canvasA.height)
+      const pixelData = imageData.data
+      for (i = 0; i < pixelData.length; i += 4) {
+        const r = pixelData[i]
+        const g = pixelData[i + 1]
+        const b = pixelData[i + 2]
+        //灰度值
+        const grey = r*0.3 + g*0.59 + b*0.11
+        pixelData[i] = grey
+        pixelData[i + 1] = grey
+        pixelData[i + 2] = grey
+      }
+      cxtB.putImageData(imageData, 0, 0, 0, 0, canvasB.width, canvasB.height)
+    }
+    // 黑白滤镜
+    BAndWFilter.onclick = function () {
+      cxtB.clearRect(0, 0, canvasB.width, canvasB.height)
+      const imageData =  cxtA.getImageData(0, 0, canvasA.width, canvasA.height)
+      const pixelData = imageData.data
+      for (i = 0; i < pixelData.length; i += 4) {
+        const r = pixelData[i]
+        const g = pixelData[i + 1]
+        const b = pixelData[i + 2]
+        //灰度值
+        const grey = r*0.3 + g*0.59 + b*0.11
+        let v = 0
+        if (grey > (255 / 2)) {
+          v = 255
+        }else {
+          v = 0
+        }
+        pixelData[i] = v
+        pixelData[i + 1] = v
+        pixelData[i + 2] = v
+      }
+      cxtB.putImageData(imageData, 0, 0, 0, 0, canvasB.width, canvasB.height)
+    }
+    reverseColor.onclick = function () {
+      cxtB.clearRect(0, 0, canvasB.width, canvasB.height)
+      const imageData =  cxtA.getImageData(0, 0, canvasA.width, canvasA.height)
+      const pixelData = imageData.data
+      for (i = 0; i < pixelData.length; i += 4) {
+        const r = pixelData[i]
+        const g = pixelData[i + 1]
+        const b = pixelData[i + 2]
+        pixelData[i] = 255 - r
+        pixelData[i + 1] = 255 -g
+        pixelData[i + 2] = 255 - b
+      }
+      cxtB.putImageData(imageData, 0, 0, 0, 0, canvasB.width, canvasB.height)
+    }
+    // 高斯模糊：使周围的点都是平均值
+    // 推荐直接使用css 进行模糊 filter: blur(10px)
+    blurFilter.onclick = function () {
+      cxtB.clearRect(0, 0, canvasB.width, canvasB.height)
+      const imageData =  cxtA.getImageData(0, 0, canvasA.width, canvasA.height)
+      // const pixelData = imageData.data
+      
+      cxtB.putImageData(gaussBlur(imageData), 0, 0, 0, 0, canvasB.width, canvasB.height)
+    }
+  </script>
+</body>
+</html>

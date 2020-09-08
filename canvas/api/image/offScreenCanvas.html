@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>offScreenCanvas</title>
+  <style>
+    body{
+      box-sizing: border-box;
+      height: 98vh;
+      
+    }
+    #canvas{
+      border:1px solid #000
+      /* height: 100%; */
+    }
+    #offscreenCanvas{
+      position: absolute;
+      bottom: 10px;
+      left: 100px;
+      display: none;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <canvas id="offscreenCanvas"></canvas>
+  <script>
+    // 鼠标和 canvas 交互
+    // 提升：cxt.drawImage(image, x, y) 中 image 可以变成其他的 canvas 对象（离屏 canvas 技术）
+
+    const canvas = document.getElementById('canvas')
+    const cxt = canvas.getContext('2d')
+    const offCanvas = document.getElementById('offscreenCanvas')
+    const offCxt = offCanvas.getContext('2d')
+
+    let isMousedown = false
+    let scale = 2 //大图和小图到比例
+    const image = new Image()
+    window.onload = function (){
+      canvas.width = 690
+      canvas.height = 460
+     
+      image.src = 'demo.png'
+      
+      image.onload = function() {
+        // 手动把图片放大两杯
+        offCanvas.width = image.width * 2
+        offCanvas.height = image.height * 2
+        scale = offCanvas.width / canvas.width
+        cxt.drawImage(image, 0, 0, canvas.width, canvas.height)
+        offCxt.drawImage(image, 0, 0, image.width * 2, image.height * 2)
+      }
+    }
+    // 放大镜功能
+    function drawMagnifier(x = 0, y = 0) {
+      cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+      cxt.drawImage(image, 0, 0)
+      // 根据 cxt 上的坐标点 x,y 确定 offCxt 上图像的区域
+      // 放大区域大小
+      const mr = 80
+      // 对应到大图 x y 的位子
+      const lgCx = x * scale
+      const lgCy = y * scale
+      // 大图展示中心点
+      const sx = lgCx - mr
+      const sy = lgCy - mr
+      // 小图中心点
+      const dx = x - mr
+      const dy = y - mr
+      // 把放大镜弄成圆
+      cxt.save()
+      cxt.beginPath()
+      cxt.arc(x, y, mr, 0, Math.PI * 2)
+      cxt.fill()
+      cxt.lineWidth = 10
+      cxt.strokeStyle = '#069'
+      cxt.stroke()
+      cxt.closePath()
+      cxt.clip()
+      cxt.drawImage(offCxt.canvas, sx, sy, 2*mr, 2*mr, dx, dy, 2*mr, 2*mr)
+      cxt.restore()
+      
+    }
+    // 在 canvas 内 =>  显示放大镜
+    canvas.onmousemove = function(e) {
+      e.preventDefault()
+      const {x, y} = windowToCanvas(e.clientX, e.clientY)
+      drawMagnifier(x, y)
+    }
+    // canvas.onmousedown = function (e) {
+    //   isMousedown = true
+    //   e.preventDefault()
+    // }
+    // // 鼠标抬起
+    // canvas.onmouseup = function(e) {
+    //   isMousedown = false
+    //   e.preventDefault()
+    // }
+    // 鼠标移除 canvas
+    canvas.onmouseout = function(e) {
+      e.preventDefault()
+      console.log('鼠标移除 canvas')
+      isMousedown = false
+      cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height)
+      cxt.drawImage(image, 0, 0)
+    }
+    // 获取 canvas 真实距离
+    function windowToCanvas(x, y) {
+      const bbox = canvas.getBoundingClientRect() 
+      return {x: x - bbox.left , y: y - bbox.top}
+    }
+    
+  </script>
+</body>
+</html>
