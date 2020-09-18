@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>class</title>
+  <style>
+    .wap{
+      width: 120px;
+      height: 40px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px #0ff;
+      /* background: linear-gradient(to left, #f40,#00f);
+      display: flex;
+      justify-content: center;
+      justify-items: center; */
+    }
+    /* .tip{
+      width: 80px;
+      height: 35px;
+      background: #fff;
+    } */
+  </style>
+</head>
+<body>
+  <div class="wap">
+    你好
+    <!-- <div class="tip">122</div> -->
+  </div>
+  <!-- https://www.bookstack.cn/read/es6-3rd/spilt.1.docs-class.md -->
+  <script>
+    // JavaScript 语言中，生成实例对象的传统方法是通过构造函数。 ==>  通过构造函数 生成 实例对象
+    // es5 构造函数
+    // function Foo (bar) {
+    //   this.bar = bar; 
+    // }
+    // // 添加普通方法
+    // Foo.prototype.general = function () {
+    //   console.log('general')
+    // }
+    // // 静态方法添加
+    // Foo.staticFn = function() {
+    //   console.log('staticFn')
+    // }
+    // // 静态私有方法 
+    // Foo._staticFn = function() {
+    //   console.log('_staticFn')
+    // }
+    // // let p = new Foo(123)
+    // // p.general()
+    // //子类的__proto__属性，表示构造函数的继承，总是指向父类。
+    // console.log(Foo.__proto__ === Function.__proto__) 
+    // console.log(Function.__proto__ === Object.__proto__)
+    // // 子类 prototype 属性的__proto__属性，表示方法的继承，总是指向 父类的 prototype 属性。
+    // console.log(Foo.prototype.__proto__ === Object.prototype)
+    // console.log(Foo.prototype.__proto__ === Function.prototype) // 不等。
+    // 结论：Function 和 Object 的父类是同一个，但是原型不是同一个
+
+    // es6 class 语法糖 
+    // 类 相当于 实例对象 的原型，所有在类中定义的方法，都会被实例继承。
+    // 问题：在类定义的属性呢？
+    // class 不会提升，class需要先定义后使用
+    // class Foo {
+    //   constructor(bar) {
+    //     this.bar = bar;
+    //   }
+    //   general() {
+    //     console.log('general')
+    //   }
+    //   static staticFn() {
+    //     console.log('static staticFn')
+    //   }
+    // }
+    // let p = new Foo(123)
+    // p.general()
+
+    // 迭代
+    // class Foo {
+    //   constructor(...args) {
+    //     this.args = args;
+    //   }
+    //   * [Symbol.iterator]() {
+    //     for (let arg of this.args) {
+    //       yield arg;
+    //     }
+    //   }
+    // }
+    // let p = new Foo('hello', 'world')
+    
+    // for (let x of p) {
+    //   console.log(p, x);
+    // }
+    // hello
+    // world
+
+    // 如何解决 this 丢失问题(外部借用方法，this指向改变)
+    // class Foo {
+    //   printName(name = 'there') {
+    //     this.print(`Hello ${name}`);
+    //   }
+    //   print(text) {
+    //     console.log(text);
+    //   }
+    // }
+    // const foo = new Foo();
+    // const { printName } = foo;
+    // printName(); // TypeError: Cannot read property 'print' of undefined
+    // // 解决
+    // printName.call(foo)
+
+    // 静态方法：
+    // 如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”。
+    // class Foo {
+    //   static classMethod() {
+    //     return 'hello';
+    //   }
+    // }
+    // Foo.classMethod() // 'hello'
+    // var foo = new Foo();
+    // foo.classMethod() // TypeError: foo.classMethod is not a function
+
+    // 注意，如果静态方法包含this关键字，这个this指的是类，而不是实例。
+    // class Foo {
+    //   static bar() {
+    //     this.baz();
+    //   }
+    //   static baz() {
+    //     console.log('hello');
+    //   }
+    //   baz() {
+    //     console.log('world');
+    //   }
+    // }
+    // Foo.bar() // hello
+
+    // 实例属性的新写法
+    // 这种新写法的好处是，所有实例对象自身的属性都定义在类的头部，看上去比较整齐，一眼就能看出这个类有哪些实例属性。
+    // 实例属性除了定义在constructor()方法里面的this上面，也可以定义在类的最顶层。==>写法简洁
+    // class IncreasingCounter {
+    //   count = 0;
+    //   increment() {
+    //     this.count++;
+    //   }
+    // }
+    // let p = new IncreasingCounter()
+    // p.increment() // count = 1
+    // console.log(p.count)
+
+    // 静态属性指的是 Class 本身的属性，即 Class.propName，而不是定义在实例对象（this）上的属性。
+    // ES6 明确规定，Class 内部只有静态方法，没有静态属性。
+    // 现在有一个提案提供了类的静态属性，写法是在实例属性的前面，加上static关键字。
+    // 老写法
+    // class Foo {
+    //   // ...
+    // }
+    // Foo.prop = 1;
+    // // 新写法
+    // class Foo {
+    //   static prop = 1;
+    // }
+
+    // 私有方法和私有属性
+    // 私有方法和私有属性，是只能在类的内部访问的方法和属性，外部不能访问。
+    // 这是常见需求，有利于代码的封装，但 ES6 不提供，只能通过变通方法模拟实现。
+    // class Widget {
+    //   // 公有方法
+    //   foo (baz) {
+    //     this._bar(baz);
+    //   }
+    //   // 私有方法
+    //   _bar(baz) {
+    //     console.log('_bar', baz)
+    //   }
+    //   // ...
+    // }
+    // 上面代码中，_bar方法前面的下划线，表示这是一个只限于内部使用的私有方法。
+    // 但是，这种命名是不保险的，在类的外部，还是可以调用到这个方法。
+
+    // 还有一种方法是利用Symbol值的唯一性，将私有方法的名字命名为一个Symbol值。
+    // const bar = Symbol('bar');
+    // class myClass{
+    //   // 公有方法
+    //   foo(baz) {
+    //     this[bar](baz);
+    //   }
+    //   // 私有方法
+    //   [bar](baz) {
+    //     console.log('_bar', baz)
+    //   }
+      
+    // };
+    // let p = new myClass()
+    // console.log(p)
+    // p.foo('hello')
+    // console.log(Reflect.ownKeys(myClass.prototype))
+    // console.log(Reflect.ownKeys(myClass))
+    // 上面代码中，bar 是Symbol值，一般情况下无法获取到它们，因此达到了私有方法和私有属性的效果。
+    // 但是也不是绝对不行，Reflect.ownKeys()依然可以拿到它们。
+
+    // 私有属性的提案:目前，有一个提案，为class加了私有属性。方法是在属性名之前，使用 # 表示。
+    // 由于井号 # 是 属性名 的一部分，使用时必须带有 # 一起使用，所以 #x 和 x 是两个不同的属性。
+    // 下面代码中，#count就是私有属性，只能在类的内部使用（this.#count）。如果在类的外部使用，就会报错。
+    // class IncreasingCounter {
+    //   #count = 0;
+    //   increment() {
+    //     this.#count++;
+    //     console.log(this.#count)
+    //   }
+    // }
+    // const counter = new IncreasingCounter();
+    // counter.increment()
+    // console.log(counter.#count)
+
+    // 这种写法不仅可以写私有属性，还可以用来写私有方法。
+    // class Foo {
+    //   #a
+    //   x = 2
+    //   constructor(a = 1) {
+    //     this.#a = a;
+    //     this.x = a
+    //   }
+    //   #sum() {
+    //     return this.#a++
+    //   }
+    //   printSum() {
+    //     this.#sum()
+    //   }
+    // }
+    // let p = new Foo(33)
+    // p.printSum()
+    // console.log(p.x)
+    // console.log(Reflect.ownKeys(p)) // []
+    
+    // 私有的静态方法和属性
+    // class GetNickname {
+    //   static name = 'byf'
+    //   static #Nickname= 'xbb'
+    //   static #getNickname() {
+    //     return GetNickname.#Nickname;
+    //   }
+    //   static verification() {
+    //     console.log('外部访问昵称')
+    //     return GetNickname.#getNickname();
+    //   }
+    // }
+    // console.log(GetNickname.name)
+    // GetNickname.verification()
+    // GetNickname.#getNickname // 报错
+    // GetNickname.#getNickname() // 报错
+    // 上面代码中，#Nickname 是私有属性，#getNickname()是私有方法，只能在FakeMath这个类的内部调用，外部调用就会报错。
+
+    // new.target 属性: 这个属性可以用来确定构造函数是怎么调用的。
+    // function Person(name) {
+    //   if (new.target !== undefined) {
+    //     this.name = name;
+    //   } else {
+    //     throw new Error('必须使用 new 命令生成实例');
+    //   }
+    // }
+    // 另一种写法
+    // function Person(name) {
+    //   if (new.target === Person) {
+    //     this.name = name;
+    //   } else {
+    //     throw new Error('必须使用 new 命令生成实例');
+    //   }
+    // }
+    // var person = new Person('张三'); // 正确
+    // var notAPerson = Person.call(person, '张三');  // 报错
+    //上面代码确保构造函数只能通过new命令调用。
+
+    // Class 内部调用new.target，返回当前 Class。
+    // class Rectangle {
+    //   constructor(length, width) {
+    //     console.log(new.target === Rectangle)
+    //     this.length = length;
+    //     this.width = width;
+    //   }
+    // }
+    // var obj = new Rectangle(3, 4); // 输出 true
+
+    // 小结：class的创建。（概念还有点混乱，待明确）
+    // 普通的属性：挂载this（实例）上
+    // 普通的方法：挂载在原型上
+    // 静态的方法和属性：挂载在类上，
+    // 私有的方法和属性：挂载在原型上
+    // 静态私有的方法和属性：挂载在类上
+    // 注意：私用属性和静态私用属性不能同key会报错(原理不明白), => Error Identifier '#name' has already been declared
+    // class Foo {
+    //   name = 'name'
+    //   #name = '#name'
+    //   static name = 'static name'
+    //   static #name1 = 'static #name1'
+    //   constructor() {
+    //     console.log(this.name)
+    //     console.log(this.#name)
+    //     console.log(Foo.name)
+    //     console.log(Foo.#name1)
+    //   }
+    //   getName() {
+    //     console.log(this) 
+    //     console.log(this.name) //没 new 访问不了属性
+    //     console.log('getName')
+    //   }
+    // }
+    // Foo.prototype.getName() // this指向类
+    // let p = new Foo()
+    // console.log(new Foo()) 
+    // console.log(Object.keys(p))
+    // console.log(Reflect.ownKeys(p))
+
+    // class GetName {
+    //   name = 'name'
+    //   #name = '#name'
+    //   static name = 'staticName'
+    //   static #name1 = 'staticName1'
+    //   constructor(targetName = 'ddb') {
+    //     // this.name = targetName  // 内部读写 普通属性 
+    //   }
+    //   //普通方法 挂载在原型上
+    //   getName() {
+    //     console.log(this.name)
+    //   }
+    //   // 静态方法 挂载在类上, 这里获取到的是 类的name
+    //   static getName() {
+    //     console.log(this.name)
+    //   }
+    //   // 私有方法 
+    //   #getName() {
+    //     console.log(this.#name)
+    //   }
+    //   // 私有静态方法 
+    //   static #getName1() {
+    //     console.log(this.#name1)
+    //   }
+    //   // 通过实例 去访问 私有属性和方法
+    //   privateGetName() {
+    //     this.#getName()
+    //   }
+    //   // 通过类 去访问 私有静态属性和方法
+    //   static privateGetName() {
+    //     this.#getName1()
+    //   }
+    // }
+
+
+
+
+    // class 继承
+    // 关键词: extends, super
+    // Class 可以通过 extends 关键字实现继承，这比 ES5 的通过修改原型链实现继承，要清晰和方便很多。
+    // ES5 的继承，实质是先创造子类的实例对象 this，然后再将父类的方法添加到this上面（Parent.apply(this)）。
+    // ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this。
+    
+    // 如果子类没有定义 constructor 方法，这个方法会被默认添加，代码如下。也就是说，不管有没有显式定义，任何一个子类都有 constructor 方法。
+    // class Point {
+    // }
+    // class ColorPoint extends Point {
+    // }
+    // // 等同于
+    // class ColorPoint extends Point {
+    //   constructor(...args) {
+    //     super(...args);
+    //   }
+    // }
+
+    // 另一个需要注意的地方是，在子类的构造函数中，子类必须在constructor方法中调用super方法，否则新建实例时会报错。
+    // 这是因为子类自己的this对象，必须先通过父类的构造函数完成塑造，得到与父类同样的实例属性和方法，然后再对其进行加工，加上子类自己的实例属性和方法。
+    // 如果不调用super方法，子类就得不到this对象。
+    // class Point {
+    //   x
+    //   y
+    //   constructor(x, y) {
+    //     this.x = x
+    //     this.y = y
+    //   }
+    //   static staticFn() {
+    //     console.log('staticFn')
+    //   }
+      
+    // }
+    // class ColorPoint extends Point {
+    //   color
+    //   constructor(x, y, color) {
+    //     // this.color = color // Error 不能在 super 前面调用 this, 因为 this 没有确定
+    //     super(x, y)
+    //     this.color = color
+    //   }
+    // }
+    // let p =  new ColorPoint(1,2, '#f40')
+    // console.log(p)
+    // console.log(p instanceof ColorPoint)
+    // console.log(p instanceof Point)
+    // // 子类继承父类的静态方法
+    // ColorPoint.staticFn()
+
+    // 判断类的继承从属 （谁是你爸爸）
+    // Object.getPrototypeOf 方法可以用来从子类上获取父类。
+    // console.log(Object.getPrototypeOf(ColorPoint) === Point)
+
+    // super 关键字
+    // super这个关键字，既可以当作函数使用，也可以当作对象使用。在这两种情况下，它的用法完全不同。
+    // 第一种情况，super作为函数调用时 super() ==> A.prototype.constructor.call(this)
+    // 第二种情况，super作为对象的时候 super ==> A.prototype
+
+    // 第一种情况，super作为函数调用时，代表父类的构造函数。ES6 要求，子类的构造函数必须执行一次super函数。
+    // 注意：作为函数只能在构造函数中调用。
+    // class A {}
+    // class B extends A {
+    //   constructor() {
+    //     super() // ==> A.prototype.constructor.call(this)
+    //   }
+    // }
+    // 注意，super虽然代表了父类A的构造函数，但是返回的是子类B的实例，即super内部的 this 指的是B的实例，
+    // 因此super()在这里相当于A.prototype.constructor.call(this)。
+    
+    // class A {
+    //   constructor() {
+    //     console.log('this', this)
+    //     console.log(new.target.name);
+    //   }
+    // }
+    // class B extends A {
+    //   constructor() {
+    //     super();
+    //   }
+    // }
+    // new A() // A
+    // new B() // B => new B 的时候 super() 执行 A 改变了 this 指向
+
+    // 第二种情况，super 作为对象时，在普通方法中，指向父类的原型对象。在静态方法中，指向父类。
+    // super 调用后的 this 指向都是子类
+    // 子类也访问不了父类的私有属性和方法（老父亲还是要有自己隐私的2333～）
+    // class A {
+    //   foo = 'foo'
+    //   #foo = '#foo'
+    //   static foo = 'static foo'
+    //   getFoo() {
+    //     console.log(this)
+    //     console.log('getFoo')
+    //   }
+    //   static getFoo() {
+    //     console.log(this)
+    //     console.log('static getFoo')
+    //   }
+    //   #getFoo() {
+    //     console.log('#getFoo')
+    //   }
+    // }
+    // class B extends A {
+    //   // 构造器的 super 访问的也是 父类的原型 ==> super = A.prototype
+    //   constructor() {
+    //     super()
+    //     // super.getFoo() // =>A.prototype.getFoo()
+    //     console.log('super.foo', super.foo) 
+    //     console.log(B.foo)
+    //   }
+    //   // super 只能访问 父类的原型对象属性和方法
+    //   getFoo() {
+    //     console.log('B getFoo()')
+    //     // super.getFoo()
+    //   }
+    //   // super 只能访问 父类对静态属性和方法
+    //   static getFoo() {
+    //     console.log('B static getFoo()')
+    //     // super.getFoo()
+    //   }
+    // }
+    // let p = new B()
+    // p.getFoo()
+    // B.getFoo()
+    
+    // ES6 规定，在子类普通方法中通过super调用父类的方法时，方法内部的this指向当前的子类实例。
+    // class A {
+    //   constructor() {
+    //     this.x = 1;
+    //   }
+    //   print() {
+    //     console.log(this.x);
+    //   }
+    // }
+    // class B extends A {
+    //   constructor() {
+    //     super();
+    //     this.x = 2;
+    //   }
+    //   m() {
+    //     super.print(); ==> super.print.call(this)
+    //   }
+    // }
+    // let b = new B();
+    // b.m() // 2
+    // b.print()
+    
+    // 由于this指向子类实例，所以如果通过super对某个属性赋值，这时super就是this，赋值的属性会变成子类实例的属性。
+    // class A {
+    //   constructor() {
+    //     this.x = 1;
+    //   }
+    //   static #foo = 23
+
+    // }
+    // A.prototype.x = 1
+    // class B extends A {
+    //   static #bar = 123
+    //   constructor() {
+    //     super();
+    //     this.x = 2;
+    //     super.x = 3; // 改变不了父类的属性,修改的是子类（子类没有就创建）
+    //     console.log(super.x); // A.prototype.x  => 1
+    //     console.log(this.x); // 3
+    //   }
+    // }
+    // let b = new B();
+    // console.log(b)
+
+    // 这里需要注意，由于super指向父类的原型对象，所以定义在父类实例上的方法或属性，是无法通过super调用的。
+    // 都继承父类都属性方法了。。为啥还要访问父类都属性？直接访问自己都不就OK了么？？？
+    // class A {
+    //   constructor() {
+    //     this.p = 2;
+    //   }
+    // }
+    // class B extends A {
+    //   get m() {
+    //     return super.p;
+    //   }
+    // }
+    // let b = new B();
+    // console.log(b)
+    // console.log(b.m) // undefined
+
+    // 最后，由于对象总是继承其他对象的，所以可以在任意一个对象中，使用super关键字。
+    // const obj = {
+    //   toString() {
+    //     return "MyObject: " + super.toString();
+    //   }
+    // };
+    // console.log(obj.toString())// MyObject: [object Object]
+
+    // 类的 prototype 属性和__proto__属性
+
+    // 大多数浏览器的 ES5 实现之中，每一个对象都有__proto__属性，指向对应的构造函数的prototype属性。
+    // Class 作为构造函数的语法糖，同时有 prototype 属性和 __proto__ 属性，因此同时存在两条继承链。
+    //（1）子类的 __proto__ 属性，表示构造函数的继承，总是指向 父类。
+    //（2）子类 prototype 属性的 __proto__ 属性，表示方法的继承，总是指向 父类的 prototype 属性。
+
+    // class A {
+    //   foo(){}
+    // }
+    // class B extends A {
+    // }
+    // console.log(B.__proto__ === A)
+    // console.log(B.prototype.__proto__ === A.prototype)
+
+    // class A {
+    //   foo(){
+    //     console.log('foo')
+    //   }
+    // }
+    // class B {
+    // }
+    // // B 的实例继承 A 的实例
+    // Object.setPrototypeOf(B.prototype, A.prototype); // ==> b.prototype.__proto__ = A.prototype
+    // // B 继承 A 的静态属性
+    // Object.setPrototypeOf(B, A);// ==> B.__proto__ = A; 
+    // const b = new B();
+    // console.log(b)
+
+    // 《对象的扩展》一章给出过Object.setPrototypeOf方法的实现。
+    // Object.mySetPrototypeOf = function (obj, proto) {
+    //   obj.__proto__ = proto; 
+    //   return obj;
+    // }
+    // extends关键字后面可以跟多种类型的值。
+    // 原因：只要包含 prototype 属性的对象或者函数，都能作为 *被继承* 的对象
+    // function foo() {
+    //   this.x = 1
+    // }
+    // class bar extends foo {
+
+    // }
+    // let p = new bar()
+    // console.log(p)
+
+    // 下面，讨论两种情况。第一种，子类继承 Object 类。
+    // class A extends Object {
+    // }
+    // console.log(A.__proto__ === Object) // true
+    // console.log(A.prototype.__proto__ === Object.prototype) // true
+    // 这种情况下，A其实就是构造函数 Object 的复制，A 的实例就是 Object 的实例。
+
+    // 第二种情况，不存在任何继承。
+    // class A {
+    // }
+    // console.log(A.__proto__ === Function.prototype)
+    // console.log(A.prototype.__proto__ === Object.prototype)
+    // 这种情况下，A作为一个基类（即不存在任何继承），就是一个普通函数，所以直接继承 Function.prototype。
+    // 但是，A调用后返回一个空对象（即Object实例），所以 A.prototype.__proto__ 指向构造函数（Object）的 prototype 属性。
+    
+    // 实例的 __proto__ 属性
+    // 子类实例的__proto__属性的__proto__属性，指向父类实例的__proto__属性。也就是说，子类的原型的原型，是父类的原型。
+    // 理解：子类 被构造。首先有自己的实例属性（原型），再有父级的原型
+    // class A{}
+    // class B extends A{
+
+    // }
+    // let a = new A()
+    // let b  = new B()
+    // console.log(b.__proto__ ===  a.__proto__) // false
+    // console.log(b.__proto__.__proto__ === a.__proto__) //true
+    // 上面代码中，ColorPoint继承了Point，导致前者原型的原型是后者的原型。
+    // 因此，通过子类实例的b.__proto__.__proto__属性，可以修改父类实例的行为 (这种操作，在实际中是不允许的)
+    // // Object.freeze(a.__proto__) // 冻结 a 的原型，就不能修改了
+    // b.__proto__.__proto__.printName = function () {
+    //   console.log('Ha');
+    // };
+    // a.printName()
+    
+    // 原生构造器：原生构造函数是指语言内置的构造函数，通常用来生成数据结构。ECMAScript 的原生构造函数大致有下面这些。
+    // Boolean() Number() String() Array() Date() Function() RegExp() Error() Object()
+    // 构造函数，内部调用 Array
+    // function MyArray() {
+    //   Array.apply(this, arguments);
+    // }
+    // // MyArray类的原型指向修改
+    // MyArray.prototype = Object.create(Array.prototype, {
+    //   constructor: {
+    //     value: MyArray,
+    //     writable: true,
+    //     configurable: true,
+    //     enumerable: true
+    //   }
+    // });
+    // let p = new MyArray()
+    // p[0] = 0
+    // p.push(1)
+    // console.log(p)
+    // console.log(p.length) // 出现错误输出。
+    // p.length = 0
+    // console.log(p[0])
+    // call 也不是万能的
+    // 之所以会发生这种情况，是因为子类无法获得原生构造函数的内部属性，通过Array.apply()或者分配给原型对象都不行。
+    // 原生构造函数会忽略apply方法传入的this，也就是说，原生构造函数的this无法绑定，导致拿不到内部属性。
+
+    // ES5 是先新建子类的实例对象this，再将父类的属性添加到子类上，由于父类的内部属性无法获取，导致无法继承原生的构造函数。比如，Array构造函数有一个内部属性[[DefineOwnProperty]]，用来定义新属性时，更新length属性，这个内部属性无法在子类获取，导致子类的length属性行为不正常。
+
+    // ES6 允许继承原生构造函数定义子类，因为 ES6 是先新建父类的实例对象this，然后再用子类的构造函数修饰this，使得父类的所有行为都可以继承。下面是一个继承Array的例子。
+    // class A extends Array {
+    //   constructor(...arg) {
+    //     super(...arg)
+    //   }
+    // }
+    // let arr = new A()
+    // arr[0] = 1
+    // console.log(arr, arr.length)
+    // arr.length = 0
+    // console.log(arr[0])
+    
+    // 构造一个带有版本功能的数组
+    // class VersionedArray extends Array {
+    //   constructor() {
+    //     super();
+    //     this.history = [[]]; //  第一个空，是为了第一次 push 后直接 revert
+    //   }
+    //   commit() {
+    //     this.history.push(this.slice());
+    //   }
+    //   revert() {
+    //     // 删除最新暂存，然后添加上一次提交
+    //     this.splice(0, this.length, ...this.history[this.history.length - 1]);
+    //   }
+    // }
+    // var x = new VersionedArray();
+    // x.push(1);
+    // x.commit();
+    // x.push(2)
+    // x.commit()
+    // x.push(3)
+    // x.commit()
+    // console.log(x.history)
+    // console.log(x)
+    // x.push(4)
+    // console.log(x)
+    // x.revert()
+
+
+
+    // 扩展
+    // Mixin 模式的实现
+    // Mixin 指的是多个对象合成一个新的对象，新对象具有各个组成成员的接口。
+    //它的最简单实现如下。
+    // const a = {
+    //   a: 'a'
+    // };
+    // const b = {
+    //   b: 'b'
+    // };
+    // const c = {...a, ...b}; // {a: 'a', b: 'b'}
+    // 上面代码中，c对象是a对象和b对象的合成，具有两者的接口。
+
+    // 下面是一个更完备的实现，将多个类的接口“混入”（mix in）另一个类。
+    // function mix(...mixins) {
+    //   class Mix {
+    //     constructor() {
+    //       for (let mixin of mixins) {
+    //         copyProperties(this, new mixin()); // 拷贝实例属性
+    //       }
+    //     }
+    //   }
+    //   for (let mixin of mixins) {
+    //     copyProperties(Mix, mixin); // 拷贝静态属性
+    //     copyProperties(Mix.prototype, mixin.prototype); // 拷贝原型属性
+    //   }
+    //   return Mix;
+    // }
+    // function copyProperties(target, source) {
+    //   for (let key of Reflect.ownKeys(source)) {
+    //     // console.log(key)
+    //     if ( key !== 'constructor'
+    //       && key !== 'prototype'
+    //       && key !== 'name'
+    //     ) {
+    //       // 查找出属性 挂载到 target 上
+    //       let desc = Object.getOwnPropertyDescriptor(source, key);
+    //       Object.defineProperty(target, key, desc);
+    //     }
+    //   }
+    // }
+    // // 上面代码的mix函数，可以将多个对象合成为一个类。使用的时候，只要继承这个类即可。
+    // class A {
+    //   a = 'a'
+    //   foo() {
+    //     console.log('foo A')
+    //   }
+    // }
+    // class B {
+    //   static b = 'b'
+    //   static foo() {
+    //     console.log('static foo B')
+    //   }
+    // }
+    // class C extends mix(A, B) {
+
+    // }
+    // console.log(new C())
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Object.defineProperty</title>
+</head>
+<body>
+  <script>
+    // Object.defineProperty()方法
+    // Object.defineProperty(obj, prop, descriptor)
+    // 会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象。
+    const obj = {
+      foo:123
+    }
+    // 该方法允许精确地添加或修改对象的属性。 =>属性 增 和 删
+    Object.defineProperty(obj, 'bar', {value: 'bbb'})
+    console.log(obj)
+    // 通过赋值操作添加的普通属性是可枚举的，在枚举对象属性时会被枚举到（for...in 或 Object.keys 方法），
+    // 可以改变这些属性的值，也可以删除这些属性。 => 就是原本具有的属性，用Object.defineProperty() 进行赋值，还保留属性原本的能力。
+    Object.defineProperty(obj, 'foo', {value: 'fff'})
+    console.log(obj)
+    // 这个方法允许修改默认的额外选项（或配置）。 => 可配置参数
+    Object.defineProperty(obj, 'baz', {value: 'zzz', configurable:false })
+    // 默认情况下，使用 Object.defineProperty() 添加的属性值是不可修改（immutable）的。 => 不可以修改，不可以枚举
+    console.log(Object.keys(obj))
+  
+    // 参数
+    // configurable:false 该属性默认不允许改变
+    // enumerable:false 该属性默认不会被枚举
+    // writable:false   该属性默认不能赋值运算符改变
+    // value: undefined 该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）
+
+    // get 属性的 getter 函数，如果没有 getter，则为 undefined。当访问该属性时，会调用此函数。
+    // 执行时不传入任何参数，但是会传入 this 对象（由于继承关系，这里的this并不一定是定义该属性的对象）。该函数的返回值会被用作属性的值。
+    // 默认为 undefined。
+
+    // set 属性的 setter 函数，如果没有 setter，则为 undefined。当属性值被修改时，会调用此函数。
+    // 该方法接受一个参数（也就是被赋予的新值），会传入赋值时的 this 对象。
+    // 默认为 undefined。
+
+    // 如果同时拥有 value 或 writable 和 get 或 set 键，则会产生一个异常。 
+    
+    // 详细：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+  </script>
+</body>
+</html>

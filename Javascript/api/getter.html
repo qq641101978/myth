@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>getter</title>
+</head>
+<body>
+  <script>
+    // get语法将对象属性绑定到 查询该属性时 将被调用的函数 
+    // 智能 / 自我复写/ 懒加载 getters
+    // Getters 给你一种方法来定义一个对象的属性，但是在访问它们之前不会计算属性的值。 
+    // getter 延迟计算值的成本，直到需要此值，如果不需要，您就不用支付成本。
+    // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get
+    // 类似vue中的计算属性
+    const obj = {
+      arr: [1,2,3,4,5],
+      get arrMaxItem(){
+        console.log('get执行')
+        if(this.arr.length) return Math.max(...this.arr)
+      }
+    }
+    console.log(obj)
+    console.log(Reflect.ownKeys(obj))
+    console.log(Object.keys(obj))
+    console.log(obj.arrMaxItem)
+    obj.arr.push(121)
+    console.log(obj.arrMaxItem)
+
+    // 使用delete操作符删除 getter
+    // delete obj.arrMaxItem
+    // console.log(obj)
+
+    // 要随时将 getter 添加到现有对象，使用 Object.defineProperty().
+    // 可以结合使用getter和setter来创建一个伪属性，
+    // 当使用 get 关键字时，属性将被定义在实例的原型上，
+    // 当使用Object.defineProperty()时，属性将被定义在实例自身上。
+    // Object.defineProperty(obj, 'arrMinItem',{get(){ return Math.min(...this.arr)}})
+    // console.log(obj)
+    // console.log(Object.keys(obj)) //实例属性可以遍历
+    // console.log(Reflect.ownKeys(obj)) //遍历全部
+    
+    // 使用计算出的属性名
+    // let expr = 'foo';
+    // const obj = {
+    //   get [expr]() { return 'bar'; }
+    // };
+    // console.log(obj[expr]); // "bar"
+    // console.log(obj['foo']); // "bar"
+
+    
+
+  </script>
+
+</body>
+</html>

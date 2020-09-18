@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>setter</title>
+</head>
+<body>
+  <script>
+    // 在对象初始化时定义 setter
+    // 当尝试 设置 属性时，set语法将对象属性绑定到要调用的函数（函数必须有参数）
+    // 在 javascript 中，如果试着改变一个属性的值，那么对应的 setter 将被执行。
+    // setter 经常和 getter 连用以创建一个伪属性。不可能在具有真实值的属性上同时拥有一个 setter 器。
+    // const obj = {
+    //   foo:[],
+    //   set pushFoo(params = 'herder') {
+    //     this.foo.push(params)
+    //   }
+    // }
+    // console.log(obj.pushFoo = 112, obj)
+
+    // 用 delete 操作符移除一个 setter
+    // delete obj.pushFoo
+    // console.log(obj)
+
+    // 使用 defineProperty 为当前对象定义 setter
+    // Object.defineProperty(obj,'unshiftFoo',{set(value){ this.foo.unshift(value)}})
+    // console.log(obj.pushFoo = 123)
+    // console.log(obj.unshiftFoo = 1)
+    // console.log(obj)
+
+    // 使用计算属性名
+    // const expr = "foo";
+    // const obj = {
+    //   baz: "bar",
+    //   set [expr](v) { this.baz = v; }
+    // };
+
+    // console.log(obj.baz); // "bar"
+    // obj['foo'] = "baz";      // run the setter
+    // console.log(obj.baz); // "baz"
+    // obj[expr] = "baa";      // run the setter
+    // console.log(obj.baz); // "baz"
+  </script>
+</body>
+</html>
