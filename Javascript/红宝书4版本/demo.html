@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script defer src="./demo.js"></script>  
+  <script>
+    // console.log(foo) // 获取不到 foo
+    window.onload = function () {
+      console.log(foo) // 加载完可以获取
+    }
+  </script>
+</body>
+</html>
