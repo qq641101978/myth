@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>textPath</title>
+  <style>
+    svg{
+      border:2px solid #000;
+    }
+    #control-box{
+      position: absolute;
+      top: 100px;
+      right: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div id="control-box">
+    x:<input id="x"   min="0" max="100" step="10" value="1" type="range" />
+    y:<input id="y"   min="0" max="100" step="10" value="1" type="range" />
+  </div>
+  <!-- textPath:路径文本 -->
+  <!-- 使用方法： -->
+  <svg xmlns="http://www.w3.org/2000/svg"  width=1000 height=600>
+    <path id="path1" d="M 100 200 Q 200 100 300 200 T 500 200" stroke="#000" fill="none"></path>
+    <g fill="#f40">
+      <circle cx="100" cy="200" r="5"/>
+      <circle cx="300" cy="200" r="5"/>
+      <circle cx="500" cy="200" r="5"/>
+    </g>
+    <text id="textPath" style="font-size: 24px;" text-anchor="middle" x="0">
+      
+      <textPath xlink:href="#path1" startOffset="0%">布局原理</textPath>
+    </text>
+  </svg>
+  <br/>
+  布局原理：文字逐个 外切 于路径
+  定位属性 x, y, dx, dy 的作用：x：控制着文字在路径上的位子; y 无效 ;dx 和x类似 dy：控制文字偏移路径 
+  text-anchor:控制文字的对齐方式 start middle end
+  脚本控制：可以 通过 x 和 startOffset 来控制文字动态展示
+  <script>
+    function update() {
+      
+    }
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0-alpha.2/dist/echarts.min.js"></script>
+  <style>
+    #chart{
+      border: 1px solid #0ff;
+      width: 100%;
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <div id="chart"></div>
+  <script>
+    let timer = null
+    let chartDom = echarts.init(chart)
+    const xAxisData = ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+    const seriesData = [100, 200, 300, 400, 500, 600]
+    const options = {
+      grid:{
+        top: 100,
+        left: 100,
+        bottom:100,
+        right: 100,
+      },
+      xAxis: {
+        data: xAxisData
+      },
+      yAxis: {},
+      series:{
+        type:'bar',
+        data:seriesData
+      }
+    }
+    chartDom.setOption(options)
+    // 浏览器大小发生变化，canvas需要重绘
+    window.onresize = function (e) {
+      clearTimeout(timer)
+      timer = setTimeout(()=>{
+        chartDom.resize()
+        console.log(chartDom)
+        // chartDom = echarts.init(chart)
+        // chartDom.setOption(options)
+        // xAxisData.push(`袜子${timer}`)
+        // seriesData.push(600+ timer)
+        // chartDom.setOption(options)
+        // console.log('执行')
+      }, 200)
+    }
+  </script>
+</body>
+</html>

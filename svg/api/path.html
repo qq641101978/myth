@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>svg-path</title>
+  <style>
+    .input-box{
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 500px;
+      height: 50px;
+    }
+    input{
+      width: 400px;
+      height: 40px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="input-box">
+  输入路径path:<input id="inp" type="text" >
+  </div>
+  <script>
+    const svgNs = 'http://www.w3.org/2000/svg'
+    const svg = document.createElementNS(svgNs, 'svg')
+    svg.setAttribute('width', 800)
+    svg.setAttribute('height', 600)
+    document.body.appendChild(svg)
+    let path = 'M 0 0 L 100 100'
+    inp.onkeydown = function(e){
+      svg.innerHTML = `<path d="${e.target.value}" fill="rgba(255 ,255, 255, 0)" stroke="#f40" stroke-width="10">`
+
+      // console.log(e.keyCode)
+      // console.log(e.target.value)
+      // if(e.keyCode == 13){
+      //   path = e.target.value
+      // }
+      
+    }
+  </script>
+</body>
+</html>
