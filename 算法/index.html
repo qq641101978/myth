@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>algorithm</title>
+</head>
+<body>
+  <script>
+  // 将数组逆序
+  // const foo = [1, 2, 3, 4, 5]
+
+  // 暴力解决
+  // const reverseFoo = []
+  // for (let i = 0; i < foo.length; i ++ ) {
+  //   reverseFoo.push(foo.length - i)
+  // }
+  // 以上例子：创建了一个新的数组 reverseFoo 空间复杂度为  O(n) ,经过一个for循环，时间复杂度为 O(n)
+  // 优化
+  // let temp = ''
+  // for (let i = 0; i < foo.length / 2; i ++ ) {
+  //   temp = foo[i]
+  //   console.log(temp)
+  //   foo[i] = foo[(foo.length - 1) - i]
+  //   foo[(foo.length - 1) - i] = temp
+  // }
+  // console.log(foo)
+  // 以上例子：创建了一个新的字符 temp 空间复杂度为  O(1) ,经过一个for循环，时间复杂度为 O(n) 
+
+  // 第 1 个例子，假设有任意多张面额为 2 元、3 元、7 元的货币，现要用它们凑出 100 元，求总共有多少种可能性。
+  // 暴力
+  // for(let i = 0; i < 100 / 7; i++) {
+
+  // }
+  // 找出下列数组中出现次数最多的元素。
+  // const arr = [1,2,3,4,5,6,7,8,1,2,3,4,5,1,1,2,2]
+  //分析：需要的操作：
+  // 1、遍历数组,需要的时间复杂度为 O(n)
+  // 2、记录元素出现的次数实现: 记录当前元素，查找数组是否还有重复元素。
+  // ps:前端常用的数据结构，数组，对象。这里用数组记录的话，会创建两个空间，并且记录时空间复杂度变为 O(n^2)
+  // 3、记录元素的数据结构：能在O(1)完成查找记录的数据结构只有对象 k-v 结构。
+  // const obj = {}
+  // arr.map(item => {
+  //   if (!obj[item]){
+  //     obj[item] = 1 
+  //   }else {
+  //     obj[item] += 1 
+  //   }
+  // })
+  // console.log(obj)
+
+  // 判断 {[()()]} 是否有效需要左右对应 => 栈的应用
+  // let str = '{[()()]}'
+  // // console.log('{'.codePointAt(), '}'.codePointAt())
+  // // console.log('['.charCodeAt(), ']'.charCodeAt())
+  // // console.log('('.charCodeAt(), ')'.charCodeAt())
+  // function deepStr(str) {
+  //   let stack = [str[0]]
+  //   let current = str[0]
+
+  //   for(let i = 1; i< str.length; i++) {
+
+  //     if (str[i].charCodeAt() - current.charCodeAt() <= 2) {
+  //       stack.pop() //遇到匹配 出栈
+  //     } else {
+  //       stack.push(str[i]) // 没匹配上 进栈
+  //       current = stack[stack.length - 1] // 获取最后一个元素
+  //     }
+  //   }
+  //   if (stack.length) return true
+  //   return false
+  // }
+  // console.log(deepStr(str))
+
+
+  
+
+
+  // 模拟顺序队列
+  // let queueList = [{},{},{},{},{}]
+  // let header = 0
+  // let footer = 0
+  
+  // // 队列元素添加,尾端添加
+  // function addQueue(data) {
+  //   // 条件：当面 footer 位子为空，能赋值
+  //   if(footer === queueList.length) {
+  //     console.error('越界');
+  //     return
+  //   }
+  //   queueList[footer].data = data // 赋值
+  //   footer ++ //指针下移
+  // }
+  // // 队列元素删除，头部删除
+  // function deleteQueue(index) {
+  //   delete queueList[header].data
+  //   header ++
+  // }
+  // addQueue(1)
+  // addQueue(2)
+  // addQueue(3)
+  // addQueue(4)
+  // addQueue(5)
+  // // deleteQueue()
+  // addQueue(6) //报错 溢出了
+  //  console.log(header)
+  // console.log(footer)
+  // console.log(queueList)
+
+
+  // // 粗暴解决：
+  // // 1、 消耗O(n) 复杂度去移动队列
+  // // 2、增加新的存储空间，保证不会越界
+ 
+
+  // 循环队列解决越界
+  // 条件：首先判断队列是否满了，不满就将新元素赋值给队尾， 然后让 header 指针向后移动一个位子
+  // 模拟循环队列
+  // circularQueueList = [{}, {}, {}, {}, {}]
+  // let header = 0
+  // let footer = 0
+  // function add(data) {
+    
+  //   // footer到尾部，重新指向头部
+  //   if (footer === circularQueueList.length) footer = 0
+
+  //   // 条件：当面 footer 位子为空，能赋值
+  //   if(!circularQueueList[footer].data) {
+  //     circularQueueList[footer].data = data 
+  //     footer ++ //指针下移
+  //   } else {
+  //     console.error('越界');
+  //   }
+  // }
+
+  // function dele() {
+  //   delete circularQueueList[header].data 
+  //   header ++ //指针下移
+  // }
+  // add(1)
+  // add(2)
+  // add(3)
+  // add(4)
+  // add(5)
+  // dele()
+  // dele()
+  // add(6)
+  // add(7)
+  // console.log(footer)
+  // // console.log(header)
+  // console.table(circularQueueList)
+
+  // 链式队列：单链表
+  // 同时真加头指针和尾指针，头指针不存储数据，用来辅助标识
+  // 新增数据时：将拥有数值的data的新节点 s，赋值给原队尾的后继，即 footer.next，尾指针指向 s
+  // 删除数据时：删除的是头指针的后继节点（头指针仅仅用来标识），头节点指向删除节点的后继，即 .next
+  // 注意：当元素被删除完时候。需要将尾指针指向头节点。让他有意义
+  // 实现
+  // const chainQueueList = [{next:1, data:''}]  //相当于头指针了
+  // let footer = 0
+
+  // // 新增节点
+  // function add() {
+  //   chainQueueList.push({
+  //     data: `data${chainQueueList.length}`,
+  //     next: chainQueueList.length,
+  //   })
+  //   footer ++
+  // }
+
+  // //删除节点
+  // function dele() {
+  //   if (chainQueueList.length === 1) {
+  //     console.error('队列以空')
+  //     return
+  //   }
+  //   chainQueueList.splice(1,1)
+  //   chainQueueList[0].next = (chainQueueList[1] && chainQueueList[1].next) || 1
+  //   footer -- 
+    
+  // }
+  // add()
+  // add()
+  // dele()
+  // dele()
+  // console.log(footer)
+  // console.table(chainQueueList)
+
+  // 应用：约瑟夫环
+  // 约瑟夫环是一个数学的应用问题，具体为，已知 n 个人（以编号 1，2，3...n 分别表示）围坐在一张圆桌周围。
+  // 从编号为 k 的人开始报数，数到 m 的那个人出列；他的下一个人又从 1 开始报数，数到 m 的那个人又出列；
+  // 依此规律重复下去，直到圆桌周围的人全部出列。这个问题的输入变量就是 n 和 m，即 n 个人和数到 m 的出列的人。
+  // 输出的结果： n 个人出列的顺序。
+  // 暴力解法
+  // let n = 10
+  // const list = new Array(n).fill('').map((item, index) => index + 1);
+  // let listLen = list.length
+  // let k = 3
+  // let m = 4
+  // let arr = []
+  // function findQueue() {
+  //   let p = m % list.length
+
+  //   arr.push(...list.splice(p - 1, 1))
+  //   list.push(...list.splice(0, p - 1))
+  // }
+  // for(let i = 0; i < listLen; i++) {
+  //   console.log(list)
+  //   let p = 0
+  //   if (i == 0) {
+  //     if ((k + m) > listLen) {
+  //       p = (k + m) % listLen
+  //     } else {
+  //       p = k + m
+  //     }
+  //     arr.push(...list.splice(p - 1, 1))
+  //     list.push(...list.splice(0, p - 1))
+      
+  //   } else {
+  //     findQueue()
+  //   }
+  // }
+  // console.log(arr)  // [7, 1, 5, 10, 6, 3, 2, 4, 9, 8]
+
+  // 优化 模拟循环队列
+  let n = 10
+  const list = new Array(n).fill('').map((item, index) => index + 1);
+  let listLen = list.length
+  let k = 3
+  let m = 4
+  let p = 0 // 前进的步数（开始没走）0 表示走了一步 - -
+  let arr = []
+  function findQueue() {
+
+    p = (p + m - 1) % list.length
+    console.log(p) 
+
+    arr.push(...list.splice(p, 1))
+  }
+  for(let i = 0; i < listLen; i++) {
+    console.log(list)
+    if (i == 0) {
+      if ((k + m) > listLen) {
+        p = (k + m) % listLen - 1
+      } else {
+        p = k + m - 1
+      }
+      arr.push(...list.splice(p, 1))
+    } else {
+      findQueue()
+    }
+  }
+  console.log(arr)  //[7, 1, 5, 10, 6, 3, 2, 4, 9, 8]
+  </script>
+</body>
+</html>
