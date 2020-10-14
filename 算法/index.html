@@ -188,69 +188,63 @@
 
   // 应用：约瑟夫环
   // 约瑟夫环是一个数学的应用问题，具体为，已知 n 个人（以编号 1，2，3...n 分别表示）围坐在一张圆桌周围。
-  // 从编号为 k 的人开始报数，数到 m 的那个人出列；他的下一个人又从 1 开始报数，数到 m 的那个人又出列；
+  // 从编号为 1 的人开始报数，数到 m 的那个人出列；他的下一个人又从 1 开始报数，数到 m 的那个人又出列；
   // 依此规律重复下去，直到圆桌周围的人全部出列。这个问题的输入变量就是 n 和 m，即 n 个人和数到 m 的出列的人。
   // 输出的结果： n 个人出列的顺序。
-  // 暴力解法
-  // let n = 10
+  // 暴力解法 时间复杂度：O(n^2)，空间复杂度：O(n)
+  // let n = 10 
   // const list = new Array(n).fill('').map((item, index) => index + 1);
   // let listLen = list.length
-  // let k = 3
   // let m = 4
   // let arr = []
   // function findQueue() {
-  //   let p = m % list.length
+  //   console.log(list)
+  //   let p = (m -1) % list.length // 报数到 m 到前一个人的索引位子，标记为 p
 
-  //   arr.push(...list.splice(p - 1, 1))
-  //   list.push(...list.splice(0, p - 1))
+  //   arr.push(...list.splice(p, 1)) // 取出 出列的人，存在出列数组
+  //   list.push(...list.splice(0, p))  // 截取出 0 到 p 位子到人，push 到 list 中
+  // }
+  // for(let i = 0; i < listLen; i++) { // n
+  //   findQueue()
+  // }
+  // console.log(arr)  // [4, 8, 2, 7, 3, 10, 9, 1, 6, 5]
+
+  // 优化 时间复杂度：O(n^2)，空间复杂度：O(n)
+  // let n = 10
+  // const list = new Array(n).fill('').map((item, index) => index + 1);
+  // let listLen = list.length
+  // let m = 4
+  // let p = 0 // 前进的步数。
+  // let arr = []
+  // function findQueue() {
+  //   p = (p + m - 1) % list.length  //在原来到位子 p，再走 m-1 步 ，下一步就是出列的人
+  //   arr.push(...list.splice(p, 1))
   // }
   // for(let i = 0; i < listLen; i++) {
-  //   console.log(list)
-  //   let p = 0
-  //   if (i == 0) {
-  //     if ((k + m) > listLen) {
-  //       p = (k + m) % listLen
-  //     } else {
-  //       p = k + m
-  //     }
-  //     arr.push(...list.splice(p - 1, 1))
-  //     list.push(...list.splice(0, p - 1))
-      
-  //   } else {
-  //     findQueue()
-  //   }
+  //   findQueue()
   // }
-  // console.log(arr)  // [7, 1, 5, 10, 6, 3, 2, 4, 9, 8]
+  // console.log(arr)  // [4, 8, 2, 7, 3, 10, 9, 1, 6, 5]
 
-  // 优化 模拟循环队列
+  // 递归优化解法 时间复杂度：O(n) 空间复杂度：O(n)
+  // 递归思路：每次我们出列一个人之后，我们就对这些人重新编号，然后我们的难点就是找出 出列前 和 出列后 人编号的映射关系。
+  // 定义函数：f(n, m) 函数返回的是出列人的编号数组，
+  // 当 n = 1时：f(n, m) = [1]
+  // 当 n = n时 [1, 2, 3,....n-3, n-2, n-1, n]
   let n = 10
+  const m = 4
+  let p = 0
   const list = new Array(n).fill('').map((item, index) => index + 1);
-  let listLen = list.length
-  let k = 3
-  let m = 4
-  let p = 0 // 前进的步数（开始没走）0 表示走了一步 - -
-  let arr = []
-  function findQueue() {
+  const arr = []
+  function f(list, m, p) {
+    if(list.length === 1)  return arr.push(list[0]) //出口
 
     p = (p + m - 1) % list.length
-    console.log(p) 
+    arr.push(list[p])
+    list.splice(p, 1)
 
-    arr.push(...list.splice(p, 1))
+    if(list.length) f(list, m, p)
   }
-  for(let i = 0; i < listLen; i++) {
-    console.log(list)
-    if (i == 0) {
-      if ((k + m) > listLen) {
-        p = (k + m) % listLen - 1
-      } else {
-        p = k + m - 1
-      }
-      arr.push(...list.splice(p, 1))
-    } else {
-      findQueue()
-    }
-  }
-  console.log(arr)  //[7, 1, 5, 10, 6, 3, 2, 4, 9, 8]
+  f(list, m, p)
   </script>
 </body>
 </html>

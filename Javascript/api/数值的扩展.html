@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .header{
+      width: 100px;
+      height: 200px;
+      border: 2px solid #000;
+      overflow: scroll;
+    }
+    .scroll-item{
+      margin: 20px ;
+      width: 50px;
+      height: 600px;
+      background: #f40;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="scroll-item"></div>
+  </div>
+  <script>
+    const {log} = console
+    // 二进制和八进制表示
+    // ES6 提供了二进制和八进制数值的新的写法，分别用前缀0b（或0B）和0o（或0O）表示。
+    // log(0b1 === 1)
+    // log(0o1 === 1)
+
+    // 从 ES5 开始，在严格模式之中，八进制就不再允许使用前缀0表示，ES6 进一步明确，要使用前缀0o表示。
+    // 非严格模式
+    // (function() {
+    //   log(0o11 === 011);
+    // })() // true
+    // // 严格模式
+    // (function() {
+    //   'use strict';
+    //   log(0o11 === 011);
+    // })() // Uncaught SyntaxError: Octal literals are not allowed in strict mode.
+
+    // 将二进制和八进制转化为十进制
+    // log(Number(0b1))
+    // log(Number(0o1))
+
+    // Number 的静态方法
+    // Number.isFinite()用来检查一个数值是否为有限的（finite），即不是Infinity。
+    // 注意，如果参数类型不是数值，Number.isFinite一律返回false
+    // log(Number.isFinite(15)) // true
+    // log(Number.isFinite(0.8)) // true
+    // log(Number.isFinite(NaN)) //false
+    // log(Number.isFinite(Infinity)) // false
+    // log(Number.isFinite(-Infinity)) // false
+    // log(Number.isFinite('foo')) // false
+    // log(Number.isFinite('15')) // false  ==> 不会帮你转换
+    // log(Number.isFinite(true)) // false
+
+    // Number.isNaN() //用来检查一个值是否为NaN。
+    // 如果参数类型不是NaN，Number.isNaN一律返回false。
+    // Number.isNaN(NaN) // true
+    // Number.isNaN(15) // false
+    // Number.isNaN('15') // false
+    // Number.isNaN(true) // false
+    // Number.isNaN(9/NaN) // true
+    // Number.isNaN('true' / 0) // true
+    // Number.isNaN('true' / 'true') // true
+
+    // 它们与传统的全局方法isFinite()和isNaN()的区别在于，传统方法先调用Number()将非数值的值转为数值，再进行判断，
+    // 而这两个新方法只对数值有效，Number.isFinite()对于非数值一律返回false, Number.isNaN()只有对于NaN才返回true，
+    // 非NaN一律返回false
+    // isFinite(25) // true
+    // isFinite("25") // true
+    // Number.isFinite(25) // true
+    // Number.isFinite("25") // false
+    // isNaN(NaN) // true
+    // isNaN("NaN") // true
+    // Number.isNaN(NaN) // true
+    // Number.isNaN("NaN") // false
+    // Number.isNaN(1) // false
+
+    // ES6 将全局方法parseInt()和parseFloat()，移植到Number对象上面，行为完全保持不变。
+    // 目的：逐步减少全局性方法，使得语言逐步模块化。
+
+    // ES5的写法
+    // parseInt('12.34') // 12
+    // parseFloat('123.45#') // 123.45
+    // // ES6的写法
+    // Number.parseInt('12.34') // 12
+    // Number.parseFloat('123.45#') // 123.45
+
+    // Number.isInteger()用来判断一个数值是否为整数。
+    // Number.isInteger(25) // true
+    // Number.isInteger(25.1) // false
+
+    // JavaScript 内部，整数和浮点数采用的是同样的储存方法，所以 25 和 25.0 被视为同一个值。
+    // Number.isInteger(25) // true
+    // Number.isInteger(25.0) // true
+
+    // 如果参数不是数值，Number.isInteger返回false。
+    // 注意，由于 JavaScript 采用 IEEE 754 标准，数值存储为64位双精度格式，
+    // 数值精度最多可以达到 53 个二进制位（1 个隐藏位与 52 个有效位）。
+    // 如果数值的精度超过这个限度，第54位及后面的位就会被丢弃，这种情况下，Number.isInteger可能会误判。
+    // Number.isInteger(3.0000000000000002) // true
+
+    // 上面代码中，Number.isInteger的参数明明不是整数，但是会返回true。
+    // 原因就是这个小数的精度达到了小数点后16个十进制位，转成二进制位超过了53个二进制位，导致最后的那个2被丢弃了。
+    // 类似的情况还有，如果一个数值的绝对值小于Number.MIN_VALUE（5E-324），
+    // 即小于 JavaScript 能够分辨的最小值，会被自动转为 0。这时，Number.isInteger也会误判。
+    // 总之，如果对数据精度的要求较高，不建议使用Number.isInteger()判断一个数值是否为整数。
+
+    // Number.EPSILON 实际上是 JavaScript 能够表示的最小精度。误差如果小于这个值，就可以认为已经没有意义了，即不存在误差了。
+    // 引入一个这么小的量的目的，在于为浮点数计算，设置一个误差范围。我们知道浮点数计算是不精确的。
+
+    // Number.EPSILON可以用来设置“能够接受的误差范围”。比如，误差范围设为 2 的-50 次方（即Number.EPSILON * Math.pow(2, 2)），
+    // 即如果两个浮点数的差小于这个值，我们就认为这两个浮点数相等。
+    // 5.551115123125783e-17 < Number.EPSILON * Math.pow(2, 2)// true
+
+    // Math.trunc方法用于去除一个数的小数部分，返回整数部分。
+    // Math.trunc(4.1) // 4
+    // Math.trunc(4.9) // 4
+    // Math.trunc(-4.1) // -4
+    // Math.trunc(-4.9) // -4
+    // Math.trunc(-0.1234) // -0
+
+    // 对于非数值，Math.trunc内部使用Number方法将其先转为数值。
+    // Math.trunc('123.456') // 123
+    // Math.trunc(true) //1
+    // Math.trunc(false) // 0
+    // Math.trunc(null) // 0
+
+    // 指数运算符:ES2016 新增了一个指数运算符（**）。
+    // 2 ** 2 // 4
+    // 2 ** 3 // 8
+    
+    // 这个运算符的一个特点是右结合，而不是常见的左结合。多个指数运算符连用时，是从最右边开始计算的。
+    // 相当于 2 ** (3 ** 2)  
+    // 2 ** 3 ** 2 // 512
+
+    // 指数运算符可以与等号结合，形成一个新的赋值运算符（**=）。
+    // let a = 1.5;
+    // a **= 2;
+    // // 等同于 a = a * a;
+    // let b = 4;
+    // b **= 3;
+    // // 等同于 b = b * b * b;
+
+    // 关于精度丢失的一个解决方案：bigInt 数据类型(大整数)
+  </script>
+
+</body>
+</html>

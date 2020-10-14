@@ -70,7 +70,7 @@
     // }
     // let {a:{b:{c:{d:foo}}}} = obj
     // let {a,a:{b:newB}} = obj
-    // let {aa:{b}} = obj //err aa不存在，取 aa下的b 必然报错
+    // let {aa:{b}} = obj //err aa不存在为undefined，取 aa 下的 b 必然报错
     // console.log(foo)
     // console.log(newB)
     // {a:{b:{c:{d:foo}}}} : 前面的都是匹配模式，找到对应的 val
@@ -118,7 +118,7 @@
     // 上面代码中，数值和布尔值的包装对象都有toString属性，因此变量s都能取到值。
     
     
-    // 函数参数的解构赋值
+    // 函数参数的解构赋值：坐标系常用
     // [[1, 2], [3, 4]].map(([a, b], index) =>{
     //   console.log(a,b, index)
     // });
