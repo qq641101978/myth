@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <img src="../../../img/demo.jpg" alt="">
+  <img src="./demo.jpg" alt="">
   <canvas id="canvas"></canvas>
   <script>
     let cxt = null
@@ -33,7 +33,7 @@
     let clickTimer = null
     window.onload = function (){
       const canvas = document.getElementById('canvas')
-      image.src = '../../../img/demo.jpg'
+      image.src = './demo.jpg'
       image.onload = function () {
         canvas.width = image.width
         canvas.height = image.height
