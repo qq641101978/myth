@@ -13,12 +13,17 @@
     // 某个参数指定默认值以后，预期传入的参数个数就不包括这个参数了。
     // (function(a,b,c){}).length // 3
     // (function(a=1,b=2,c){}).length // 1
-
+  // let foo = 'foo'
   // function bar(func = () => foo) {
   //   let foo = 'inner';
   //   console.log(func());
   // }
   // bar() // ReferenceError: foo is not defined
+  // 执行顺序：
+  // 1、函数声明提升
+  // 2、执行函数
+  // 3、默认参数解析（函数默认参数作用域）
+  // 4、执行函数内部
   // 上面代码中，匿名函数里面的foo指向函数外层，但是函数外层并没有声明变量foo，所以就报错了
 
   // var x = 1;
