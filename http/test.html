@@ -21,7 +21,83 @@
   <!-- jsonp 跨域 script img link 等标签-->
   <!-- <script src="/script.js"></script> -->
   <script>
-    console.log(document.cookie)
+    const list = [
+      {
+        id: 1,
+        pid: 0
+      },
+      {
+        id: 2,
+        pid: 0
+      },
+      {
+        id: 3,
+        pid: 0
+      },
+      {
+        id: 4,
+        pid: 1
+      },
+      {
+        id: 5,
+        pid: 1
+      },
+      {
+        id: 6,
+        pid: 1
+      },
+      {
+        id: 7,
+        pid: 1
+      },
+      {
+        id: 8,
+        pid: 6
+      },
+      {
+        id: 9,
+        pid: 6
+      },
+      {
+        id: 10,
+        pid: 6
+      },
+      {
+        id: 11,
+        pid: 3
+      },
+      {
+        id: 12,
+        pid: 3
+      },
+    ]
+    const obj = {}
+    // 创建 pid 为 obj key 的数组 并整合相同的 pid 
+    list.map(item =>{
+      if(!obj[item.pid]) {
+        obj[item.pid] = []
+      } 
+      obj[item.pid].push(item)
+    })
+    list.map(item => {
+      if(obj[item.id]){
+        item.children = obj[item.id]
+      }
+    })
+    const router = list.filter(item => item.pid === 0)
+    console.log(list)
+
+
+    // 遍历对象  obj[el.id] 存在就挂载
+    // for(let key in obj){
+    //   obj[key].map(el => {
+    //     if (obj[el.id]){
+    //       el.children = obj[el.id]
+    //     }
+    //   })
+    // }
+    // console.log(obj)
+    // const router = obj['0']
   </script>
 </body>
 </html>

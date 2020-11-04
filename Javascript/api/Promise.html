@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise</title>
+</head>
+<body>
+  <script >
+    // Promise对象有以下两个特点。
+    //（1）对象的状态不受外界影响。
+    //（2）一旦状态改变，就不会再变，任何时候都可以得到这个结果。
+
+    // 缺点。
+    //（1）无法取消Promise，一旦新建它就会立即执行，无法中途取消。
+    //（2）其次，如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。
+    //（3）第三，当处于pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
+    // Promise.resolve('foo')
+    // 等价于
+    // new Promise(resolve => resolve('foo'))
+
+    // 参数：
+    //（1）参数是一个 Promise 实例：如果参数是 Promise 实例，那么Promise.resolve将不做任何修改、原封不动地返回这个实例。
+    //（2）参数是一个thenable对象：thenable对象指的是具有then方法的对象。
+
+    // Promise.resolve方法会将这个对象转为 Promise 对象，然后就立即执行thenable对象的then方法。
+    // let thenable = {
+    //   then: function(resolve, reject) {
+    //     resolve(42);
+    //   }
+    // };
+    // let p = Promise.resolve(thenable).then(val => {console.log(val)})
+    // console.log(p)
+
+    //（3）参数不是具有then方法的对象，或根本就不是对象:如果参数是一个原始值，或者是一个不具有then方法的对象，则Promise.resolve方法返回一个新的 Promise 对象，状态为resolved。
+    // let p = Promise.resolve('bai')  // 同步操作
+    // console.log(p)
+    // p.then(val => {console.log(val)})
+
+    //（4）不带有任何参数：Promise.resolve()方法允许调用时不带参数，直接返回一个 resolved 状态的 Promise 对象。
+    // 所以，如果希望得到一个 Promise 对象，比较方便的方法就是直接调用Promise.resolve()方法。
+
+    // Promise.reject()
+    // Promise.reject(reason)方法也会返回一个新的 Promise 实例，该实例的状态为rejected。
+
+    // const p = Promise.reject('出错了');
+    // 等同于
+    // const p = new Promise((resolve, reject) => reject('出错了'))
+    // p.then(null, function (s) {
+    //   console.log(s) // 出错了
+    // });
+    
+ 
+    // Promise.try() 管理同步和移步，待了解
+ 
+    // 基本用法：ES6 规定，Promise对象是一个构造函数，用来生成Promise实例。
+    // 下面代码创造了一个Promise实例。
+    // const promise = new Promise((resolve, reject)=> {
+    //   // setTimeout(()=>{
+    //   //   resolve('ok');
+    //   // },0)
+    //   // setTimeout(()=>{
+    //   //   reject('err');
+    //   // },0)
+    // });
+    // promise.then(val => {
+    //   console.log(val)
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+
+    // 下面是一个Promise对象的简单例子。
+    // function timeout(ms) {
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(resolve, ms, 'done'); // 'done'为附加参数，一旦定时器到期，它们会作为参数传递给resolve
+    //   });
+    // }
+    // timeout(100).then((value) => {
+    //   console.log(value);
+    // });
+
+    // 下面是异步加载图片的例子。
+    // function loadImageAsync(url) {
+    //   return new Promise((resolve, reject)=>{
+    //     const image = new Image();
+    //     image.onload = function() {
+    //       resolve(image);
+    //     };
+    //     image.onerror = function() {
+    //       reject(new Error('Could not load image at ' + url));
+    //     };
+    //     image.src = url;
+    //   });
+    // }
+
+    // 下面是一个用Promise对象实现的 Ajax 操作的例子。
+    // const getJSON = function(url) {
+    //   const promise = new Promise((resolve, reject)=>{
+    //     const handler = function() {
+    //       if (this.readyState !== 4) {
+    //         return;
+    //       }
+    //       if (this.status === 200) {
+    //         resolve(this.response);
+    //       } else {
+    //         reject(new Error(this.statusText));
+    //       }
+    //     };
+    //     const client = new XMLHttpRequest();
+    //     client.open("GET", url);
+    //     client.onreadystatechange = handler;
+    //     client.responseType = "json";
+    //     client.setRequestHeader("Accept", "application/json");
+    //     client.send();
+    //   });
+    //   return promise;
+    // };
+    // getJSON("/posts.json").then((json) =>{
+    //   console.log('Contents: ' + json);
+    // }, (error) =>{
+    //   console.error('出错了', error);
+    // });
+  </script>
+
+</body>
+</html>
