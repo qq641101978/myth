@@ -56,17 +56,33 @@
 - 不足，Expires过期了，但是 f.js 没有修改，需要避免这种资源浪费的情况
 - 优化：Last-Modified 和 if-Modified-Since 一组资源修改时间标识，
 - 服务器给浏览器了响应头 Expires 的同时给了 Last-Modified， Expires过期了，请求资源，服务器会对比 Last-Modified 和 if-Modified-Since，判断 f.js 是否修改，
+![缓存工作场景二](./img/缓存工作场景二.jpg)
+
 - 不足，由于 Last-Modified 和 if-Modified-Since 时间只能精确到秒，在一些极端情况下，获取不到最新资源
-- 优化：增加文件内容对比标记：Etag 和 if-None-Match,Expires 不稳定 ，再加入一个 max-age 代替
+- 优化：增加文件内容对比标记：Etag 和 if-None-Match，Expires 不稳定 ，再加入一个 max-age 代替
 - 在之前的基础上新增了 文件内容标识， 这样就可以判断资源内容有没有变了
+![缓存工作场景三](./img/缓存工作场景三.jpg)
+
 - 上诉方案都存在一个问题：都是被动的去判断资源是否修改，做不到主动判断。
-- 改进方案（修改文件路径）：md5/hash 缓存 通过不缓存 html ，为静态文件添加md5或者hash标识，解决浏览器无法跳过缓存过期时间，主动去感知文件变化问题。
+- 修改文件路径
+- 改进方案：md5/hash 缓存 通过不缓存 html ，为静态文件添加md5或者hash标识，解决浏览器无法跳过缓存过期时间，主动去感知文件变化问题。
+> CDN也能解决缓存问题
 - 前端缓存：![浏览器操作对HTTP缓存的影响](./img/浏览器操作对HTTP缓存的影响.jpg)
 
 ### 内容协商方式
-- ps: 国际化用到，不同国家对应不同语言的网站
-- 客户端驱动：客户端发起请求，服务端发送可选项列表，客户端选择后在发送第二次请求。
+- ps: 国际化用到很多，不同国家对应不同语言的网站
+- 请求头 req
+- Accept：告诉服务器自己能接受的媒体类型
+- Accept-Language: 能接受的语言 (用的最多)
+- Accept-Charset: 能接受的字符集(unicode)
+- Accept-Encoding: 能接受的编码方式(utf-8)
+- 响应头 res
+- Content-Type
+- Content-Language
+- Content-Encoding
 
+- 三种方式：
+- 客户端驱动：客户端发起请求，服务端发送可选项列表，客户端选择后在发送第二次请求。
 - 服务端驱动：服务器检查客户端的请求头部集，决定提供哪些版本的页面。 
 ![协商缓存头部集](./img/协商缓存头部集.jpg)
 
