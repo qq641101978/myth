@@ -3,22 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>http and nginx</title>
 </head>
 <body>
-  <h1>跨域demo</h1>
-  <!-- <script>
+  <h1>http and nginx 配置</h1>
+  <h2 id="req">接口请求：pending</h2>
+  <button id="btn"> click</button>
+  <script>
     // const xhr =new XMLHttpRequest()
     // xhr.open('GET','http://127.0.0.1:8882/')
     // xhr.send()
-    fetch('http://127.0.0.1:8882/',{
-      method:'PUT',
-      headers:{
-        'X-Test-Cors': '123'
-      }
-    })
-  </script> -->
+    // 跨域请求server2.js的服务
+    // fetch('http://127.0.0.1:8882/',{
+    //   method:'PUT',
+    //   headers:{
+    //     'X-Test-Cors': '123'
+    //   }
+    // })
+    // 缓存代理接口
+    let index = 0
+    
+    const btn =document.getElementById('btn')
+    btn.addEventListener('click',reqs)
+    function reqs () {
+      req.innerHTML = '接口请求：pending'
+      fetch('/data',{
+        headers:{
+          'X-Test-Cache':index++
+        }
+      }).then(resp => {
+        return resp.text()
+      }).then(text=>{
+        console.log(text)
+        req.innerHTML = `接口请求：${text}`
+      })
+    }
+    console.log(document.cookie)
+  </script>
   <!-- jsonp 跨域 script img link 等标签-->
-  <!-- <script src="/script.js"></script> -->
+  <!-- <script src="./script.js"></script> -->
 </body>
 </html>

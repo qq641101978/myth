@@ -95,6 +95,7 @@
 - application/msword: Word格式
 - application/octet-stream: 二进制数据（常见的文件下载）
 - application/x-www-form-urlencoded : 表单提交 
+- multipart/form-data
 - 等等
 
 - 我们最终是要获取响应报文的响应体 

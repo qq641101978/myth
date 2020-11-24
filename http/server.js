@@ -2,8 +2,16 @@ const http = require('http')
 const fs = require('fs')
 const port  = 8881
 
+const wait = (seconds) => {
+  return new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+      resolve()
+    },seconds * 1000)
+  })
+}
+// 创建服务
 http.createServer((request,response)=>{
-  console.log('request come:',request.url)
+  console.log('request come:',request.headers.host)
   if  (request.url === '/'){
     const html = fs.readFileSync('http/test.html','utf8')
     response.writeHead(200,{
@@ -33,6 +41,16 @@ http.createServer((request,response)=>{
       })
       response.end('console.log("javascript load")')
     }
+  }
+  // 代理缓存接口
+  if(request.url === '/data') {
+    wait(2).then(()=> {
+      response.writeHead(200,{
+        'Cache-Control':'max-age=20',
+        // 'Vary': 'X-Test-Cache'
+      })
+      response.end('success')
+    })
   }
   
 }).listen(port)

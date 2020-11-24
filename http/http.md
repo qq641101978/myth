@@ -97,14 +97,13 @@ text/plain
 multipart/form-data
 application/x-www-form-urlencoded
 
-Cache-Control 的含义和使用 （只是限制性的作用，没有强制的约束力）
+Cache-Control 的含义和使用（只是限制性的作用，没有强制的约束力）
 客户端缓存
 可缓存性：
 public：任何地方都允许缓存
-private：请求的网页允许缓存
+private：请求的网页允许缓存（代理服务器不能缓存）
 no-cache：允许本地缓存，需要发起服务器端的验证
-到期：
-max-age=<seconds> 缓存到期时间
+到期：max-age=<seconds> 缓存到期时间
 
 重新验证：
 must-revalidate 
@@ -113,9 +112,15 @@ proxy-revalidate
 no-store: 不允许缓存
 no-transform: 不允许资源转换
 
-Cache-Control : max-age 配置
+配置浏览器缓存： Cache-Control: max-age=20 
 如果浏览器请求的 url 没有改变，且缓存配置的时间没有到期，他不会去请求新资源（不经过服务端的验证）
 目前处理方式，url跟上hash值。表示这次的更新，去请求新资源
+
+配置代理服务器缓存的：Cache-Control: s-maxage=20
+
+请求头判别缓存：
+Vary:'X-Test-Cache' 
+下一次请求，如果有 X-Test-Cache 请求头，且字段相同，就可以调用缓存
 
 缓存验证 Last-Modified 和 Etag 的使用
 资源验证：
@@ -163,6 +168,10 @@ User-Agent: 浏览器的内核版本（很混乱的一个属性） 判断端（p
 Content-Type:返回的数据类型（text/html:主类型/分支类型）
 Content-Encoding: 用什么数据压缩方式
 Content-language:返回的语言类型
+
+Redirect: 重定向
+302:临时，服务器能控制
+301:服务器不能控制，需要浏览器清除缓存才能访问新的
 
 
 ![内容安全策略](https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP)

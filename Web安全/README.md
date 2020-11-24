@@ -32,7 +32,7 @@
  - 端口相同
 
 限制范围
- - cookie、localstorage和 indexDB无法读取
+ - cookie、localstorage 和 indexDB无法读取
  - DOM 无法获得
  - Ajax 请求不能发送
 
