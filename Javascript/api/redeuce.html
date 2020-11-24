@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const arr = [1,2,3,4,5,6,5,4,3,2,1]
+    // reduce累加
+    let total = arr.reduce((prev, item) => {
+      return prev + item
+    }, 0)
+    // console.log(total)
+    // 求数组项最大值
+    let max =  arr.reduce((prev, item) => {
+      return Math.max(prev,item)
+    }, 0)
+    // console.log(max)
+    // 数组去重,
+    const uniqueArr = arr.reduce((prev, cur) => {
+        prev.indexOf(cur) === -1 && prev.push(cur)
+        return prev;
+    },[]);
+    // console.log(uniqueArr)
+
+    // 高级用法 使用reduce方法可以完成多维度的数据叠加
+    const scores = [
+      { name: 'math', score: 88 },
+      { name: 'chinese', score: 95 },
+      { name: 'english', score: 80 }
+    ]
+    const dis = {
+      math: 0.5,
+      chinese: 0.3,
+      english: 0.2
+    }
+    const sum = scores.reduce((prev, item) => prev + item.score * dis[item.name], 0)
+    // console.log(sum)
+
+    // 高级用法 递归利用reduce处理tree树形
+    const data = [
+      {
+        id: 1,
+        name: "办公管理",
+        pid: 0,
+        children: [
+          {
+            id: 2,
+            name: "请假申请",
+            pid: 1,
+            children: [{ id: 4, name: "请假记录", pid: 2 }],
+          },
+          { id: 3, name: "出差申请", pid: 1 },
+        ]
+      },
+      {
+        id: 5,
+        name: "系统设置",
+        pid: 0,
+        children: [{
+          id: 6,
+          name: "权限管理",
+          pid: 5,
+          children: [
+            { id: 7, name: "用户角色", pid: 6 },
+            { id: 8, name: "菜单设置", pid: 6 },
+          ]            
+        }]
+      }
+    ];
+    // 转化成
+    let newArr = [
+      {"id":1,"name":"办公管理","pid":0,"children":[]},
+      {"id":2,"name":"请假申请","pid":1,"children":[]},
+      {"id":4,"name":"请假记录","pid":2,"children":[]},
+      {"id":3,"name":"出差申请","pid":1,"children":[]},
+      {"id":5,"name":"系统设置","pid":0,"children":[]},
+      {"id":6,"name":"权限管理","pid":5,"children":[]},
+      {"id":7,"name":"用户角色","pid":6,"children":[]},
+      {"id":8,"name":"菜单设置","pid":6,"children":[]}
+    ]
+    const arr11 = data.reduce((pre, item) => {
+      const callee = arguments.callee
+      pre.push(item)
+      if(item.children && item.children.length > 0) item.children.reduce(callee,pre);
+      return pre;
+    },[])
+    console.log(arr11)	
+  </script>
+</body>
+</html>
