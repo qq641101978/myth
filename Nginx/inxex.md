@@ -2,6 +2,7 @@
 > [理论](https://zhuanlan.zhihu.com/p/34943332)
 > [实践](https://juejin.im/post/6844904129987526663#comments)
 > [实践](https://juejin.im/post/6844904135951646733)
+> [nginx中文文档](https://www.nginx.cn/doc/)
 
 # Nginx
 >nginx学习：“Nginx是一款轻量级的HTTP服务器，采用事件驱动的异步非阻塞处理方式框架，这让其具有极好的IO性能，时常用于服务端的反向代理和负载均衡。
@@ -84,6 +85,7 @@ backup 文件备份
 ### Nginx虚拟主机基于host域名的配置(本地)：
 - mac：需要权限，sudo su -
 - vim etc/hosts 编辑hosts问题，添加域名
+- sudo vi /etc/hosts
 - ping 对应的域名是否联通
 - 配置 nginx.conf 文件
 
@@ -104,7 +106,7 @@ Syntax: 配置语法
 Default:默认配置
 Content: 限制范围
 
-### stub_status 模块:Nginx的客户端状态
+### http_stub_status_module 模块:Nginx的客户端状态
 Syntax: stub_status; 输入字段，直接打开功能
 Default: -;没有默认配置
 Content: server,location; 范围限制在 server 和 location 中
@@ -171,10 +173,250 @@ Default: -;
 Content: http, server, location;
 
 ### http_access_module:访问控制
-Syntax: allow address |CIDR | unix: | all;
+Syntax: allow address | CIDR | unix: | all;
 Default: -;
 Content: http, server, location, limit_except;
 
-Syntax: deny address |CIDR | unix: | all;
+Syntax: deny address | CIDR | unix: | all;
 Default: -;
 Content: http, server, location, limit_except;
+- 局限性：中间层有代理，识别不到真正的客户端ip地址
+- 解决办法：
+- 方法一：http_x_forwarded_for = Client IP,Proxy(1)IP,Proxy(2)IP,Proxy(3)IP
+- 方法二：结合geo模块
+- 方法三：通过http自定义变量传递
+
+### http_auth_basic_module: nginx用户登录认证
+<!-- 该模块可以使你使用用户名和密码基于 HTTP 基本认证方法来保护你的站点或其部分内容。 -->
+Syntax: auth_basic string | off;
+Default: auth_basic off;
+Content: http, server, location, limit_except;
+
+<!-- 存储用户账号密码的文件 -->
+Syntax: auth_basic_usr_file file; 
+Default: -;
+Content: http, server, location, limit_except;
+- 局限性：用户信息依赖文件方式，操作管理机械，效率低下
+- 解决方式：
+- 方法一：nginx结合LUA实现高效验证
+- 方法二：nginx和 LDAP 打通，利用 http_auth_ldap 模块
+
+## 场景实践篇
+
+### 静态资源WEB服务
+- 静态资源类型：js，html，css，图片，视频，文件，
+
+- 文件读取 sendfile
+Syntax: sendfile on | off; 
+Default: sendfile off;
+Content: http, server, location, if in location;
+
+>ps:扩展 with_file_aio 异步文件读取
+
+- 优化网络包传输效率 tcp_nopush
+Syntax: tcp_nopush on | off; 
+Default: tcp_nopush off;
+Content: http, server, location;
+
+- 实时发送：tcp_ondelay
+Syntax: tcp_ondelay on | off; 
+Default: tcp_ondelay off;
+Content: http, server, location;
+- 作用：keepalive链接下，提高网络包的传输实时性
+
+- 配置语法：压缩
+Syntax: gzip on | off; 
+Default: gzip off;
+Content: http, server, location, if in location;
+
+- 压缩比例
+Syntax: gzip_comp_level level; 
+Default: gzip_comp_level 1;
+Content: http, server, location;
+> ps：压缩需要消耗服务端的性能，合理配置比例
+
+- 压缩的http版本
+Syntax: gzip_http_version 1.0| 1.1; 
+Default: gzip_http_version 1.1;
+Content: http, server, location;
+
+- 扩展Nginx 压缩模块：
+- http_gzip_static_module - 预读gzip功能
+- 读取是否有现成的压缩文件
+
+- http_gunzip_module -应用支持gunzip的压缩方式
+> ps:很少用到，在gzip失效的情况下用
+
+
+### 浏览器缓存
+- HTTP协议定义的缓存机制（如：Expires，Cache-control 等）
+- 浏览器无缓存：浏览器发起请求——> 无缓存 ——> 请求 WEB 服务器 ——> 请求响应，协商——>呈现
+- 浏览器有缓存：浏览器发起请求——> 有缓存 ——> 校验过期。。。 ——> 呈现
+- 配置语法 - expires
+Syntax: expires[modified]time; expires epoch |max|off;
+Default: expires off;
+Content: http, server, location,if in location;
+
+- 跨站访问
+- 为什么浏览器禁止跨站访问：不安全，容易出现跨站脚本攻击（CSRF）
+- 为什么需要打开：服务上的需要 Access-Control-Allow-Origin
+- 语法配置:允许哪个站点跨站访问
+Syntax: add_header name value[always];
+Default: -;
+Content: http, server, location,if in location;
+
+- 防盗链
+- 目的：防止资源被盗用
+- 使用 referer 信息判断
+
+### 代理服务
+- 按应用场景：正向代理，反向代理
+- 正向代理：翻墙，代理对象是客户端，为客户端服务(不能支持https协议)
+- 反向代理：代理对象是服务端，为服务端服务
+
+- Nginx支持的代理协议：HTTP, websocket, HTTPS（深度学习的）, GRPC 等等
+![nginx支持的代理协议](./img/nginx支持的代理协议.jpg)
+location / {
+  #跳转配置 proxy_redirect 在后端返回301的时候需要做一些调试
+  proxy_pass http://47.97.64.134:80;
+  proxy_redirect default;
+
+  #发送给后端设置的头信息，发送host 真实用户ip信息等
+  proxy_set_header Host $http_host;
+  proxy_set_header X-Real-IP $remote_addr;
+  
+  #超时限制
+  proxy_connect_timeout 30;
+  proxy_send_timeout 60;
+  proxy_read_timeout 60;
+  
+  #缓冲区配置
+  proxy_buffer_size 32k;
+  proxy_buffering on;
+  proxy_buffers 4 128k;
+  proxy_busy_buffers_size 256k;
+  proxy_max_temp_file_size 256k;
+}
+- 缓存服务：目的减少后端的压力
+- 客户端，服务端，代理端，都能缓存
+- nginx清除缓存：rm -rf 直接删除缓存文件，第三方模块ngx_cache_purge
+- 实现部分页面不缓存问题：
+#### 不能缓存的url路径
+if ($request_uri ~ ^/(url3|login|register|password\/reset)) {
+    set $cookie_nocache 1;
+}
+location / {
+    proxy_no_cache $cookie_nocache $arg_nocache $arg_comment;
+    proxy_no_cache $http_pragma $http_authorization;
+}
+-  缓存命中分析：
+- 方式一：通过设置 response 的头信息 Nginx-Cache：add_header Nginx-Cache "$upstream_cache_status";
+- 方式二：通过设置 log_format，打印日志分析
+![缓存命中](./img/缓存命中.jpg)
+- 缓存命中率：HIT次数 / 总请求次数
+- 实现方式：分析 Nginx里的 Access 日志：awk命令
+
+- 大文件的分片请求
+Syntax: slice size;
+Default:slice 0;
+Content: http, server, location;
+
+### 实现 ws 代理（websocket）
+- websocket 实现在 HTTP 链接的基础上，并通过 HTTP 中的 Upgrade 协议头将链接从 HTTP 升级到 Websocket 。这样就可以实现多次双向通讯，直到协议被关闭
+![websocket通信](./img/websocket通信.jpg)
+![websocket代理过程](./img/websocket代理过程.jpg)
+- 客户端测试工具：wscat
+- nginx 实现 websocket 场景
+- 1、部署 nodejs 环境
+- 2、配置 nginx 配置文件
+- 3、测试
+> ps 阿里云服务器安装 ws 和 wscat 有问题。。实现失败
+### 负载均衡调度器SLB
+- 切换到能用到服务器
+范围分类
+- GSLB：影响范围国家到省级为单位做负载均衡
+![GSLB](./img/GSLB.jpg)
+
+- SLB：影响范围小，但是实时行高
+![SLB](./img/SLB.jpg)
+
+- 网络模型分类
+- 四层负载均衡： TCP/IP 协议层负载均衡，包的转发实现负载均衡
+- 七层负载均衡：应用层负载均衡，可以改写 http信息，安全应用规则控制，转发等等，比四层能做更多的事
+
+- 实现方式
+- 通过 proxy_pass 转发到 upstream_server（服务器组） 组实现。
+![负载均衡实现方式](./img/负载均衡实现方式.jpg)
+配置语法:
+Syntax: upstream name {...};
+Default:-;
+Content: http;
+
+- upstream 参数：
+![upstream参数](./img/upstream参数.jpg)
+![负载均衡调度算法参数](./img/负载均衡调度算法.jpg)
+
+## nginx 深入了解
+
+### 动静分离
+- 通过中间件，将动态请求和静态请求分离
+![动静分离的原因](./img/动静分离的原因.jpg)
+
+### nginx rewrite 规则
+- 实现 url 重写 以及重定向：依赖正则
+- 场景：
+- 1、url访问跳转，支持开发设计，页面跳转，兼容性支持，展示效果（url精简）等
+- 2、SEO 优化 
+- 3、维护：后台维护，流量转发等
+- 4、安全：伪静态
+- rewrite 配置:regex 匹配需要改写到正则或者路径，replacement 需要替换的
+- Syntax: rewrite regex replacement [flag];
+- Default:-;
+- Content: server, location, if;
+
+- eg： rewrite ^(.*)$ /pages/maintain.html break; 
+- 把所有请求，重定向到 /pages/maintain.html 页面
+
+- 终端命令测试正则，pcretest
+
+- 规则中的 flag参数：
+- last 停止 rewrite 检测：last会新建请求，带上新的uri 
+- break 停止 rewrite 检测：匹配到会去访问目录下查找文件，找不到返回 404
+- redirect 返回 302 临时重定向，地址栏会显示跳转后的地址：会重新发起请求
+- permanent 返回 301 永久重定向，地址栏会显示跳转后的地址：不会重新发起请求
+
+### secure_link_module 模块
+- 1、指定并允许检查请求的链接的真实性以及保护资源免遭未经授权的访问
+- 2、限制链接生效周期
+- 配置语法一:
+- Syntax: secure_link expression;
+- Default: -;
+- Content: http, server, location;
+
+- 配置语法二:
+- Syntax: secure_link md5 expression;
+- Default: -;
+- Content: http, server, location;
+
+## nginx 架构篇
+### nginx 常见问题
+
+#### 相同 server_name 多个虚拟主机优先级访问：同域名，同端口
+- 按照文件顺序读取，先读取先访问。
+
+
+#### location 匹配优先级
+- = 进行普通字符精确匹配，也就是完全匹配 优先级1
+- ^~ 表示普通字符匹配，使用前缀匹配 优先级1
+- ～\~* 表示执行一个正则匹配（） 优先级2
+
+#### try_files 使用
+- 按顺序检查文件是否存在
+- 场景：去查找缓存文件存不存在，不存在才去做别的
+- 寻找 uri 存不存在，不存在， 重定向 uri/ 查找文件存不存在  
+location / {
+    try_files $uri $uri/ /index.php
+}
+
+- nginx 的 alias 和 root 区别
+- 用什么方法传递用户真实IP
