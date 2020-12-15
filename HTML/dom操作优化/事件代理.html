@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件代理</title>
+  <style>
+    ul{
+      background: #409EFF;
+      width: 200px;
+    }
+    li{
+      list-style: none;
+      padding: 20px;
+      border: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <ul id="container">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+    <li>10</li>
+  </ul>
+  <body>
+
+  <button>click</button>
+
+</body>
+
+<script>
+document.querySelector('button').addEventListener('click', function () {
+
+  console.log('capture')
+
+}, true)
+document.querySelector('button').addEventListener('click', function () {
+
+  console.log('bubble')
+
+})
+
+</script>
+
+  <script>
+    container.addEventListener('click', onClick)
+    function onClick (e) { 
+       e.stopPropagation();
+      console.log(e.target)
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  /* 考虑css不加载情况 */
+  html, body{
+    margin: 0;
+    padding: 0;
+  }
+  .wrap {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+  }
+  .main {
+    flex: 1;
+    order: 1;
+    background: #409EFF;
+  }
+
+  .header{
+    order: 0;
+    min-height: 100px;
+    background: #67C23A;
+  }
+  .footer {
+    order: 2;
+    min-height: 100px;
+    background: #67C23A;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="main">主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器主要布局容器</div>
+    <div class="header">header</div>
+    <div class="footer">footer</div>
+  </div>
+</body>
+</html>

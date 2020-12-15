@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖</title>
+    <style>
+      #container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #409EFF;
+        font-size: 90px;
+        text-align: center;
+        line-height: 100vh;
+        color: #fff;
+        user-select: none;
+      }
+    </style>
+</head>
+<body>
+  <div id="container">0</div>
+  <script>
+    let count = 0
+    // 防抖：
+    // ps：在不间断的触发下，且每次触发间隔小于 wait，停止触发后，函数只会执行一次。
+    // 一代：简单实现
+    function debounce1(fn, wait) {
+      let timeout
+      return function () {
+        clearTimeout(timeout)
+        timeout = setTimeout(fn, wait)
+      }
+    }
+    // 防抖二代：添加正确 this 指向和 携带 参数
+    // ps 这里 return 不能用箭头函数，该知道的也知道了。
+    function debounce2(fn, wait) {
+      let timeout
+      return function () {
+        clearTimeout(timeout)
+        timeout = setTimeout(()=>{ fn.apply(this, arguments) }, wait)
+      }
+    }
+
+    // 防抖三代，触发就能执行，再触发就需要等待 wait 秒时间。
+    function debounce3(fn, wait, immediate = false) {
+      let timeout
+      return function() {
+        if(timeout)clearTimeout(timeout)
+        if(immediate) {
+          if (!timeout)fn.apply(this, arguments)
+          // 等到 wait 时间后，timeout 为 null 才能重新执行
+          timeout = setTimeout(()=>{
+            timeout = null
+          }, wait)
+          
+        }else{
+          timeout = setTimeout(()=>{ fn.apply(this, arguments)}, wait)
+        }
+      }
+    }
+    
+    
+    // 四代，getUserAction 函数 可能需要返回值，
+    function debounce4(fn, wait, immediate) {
+      let timeout, result
+      return function() {
+        if(timeout)clearTimeout(timeout)
+        if(immediate) {
+          if (!timeout) result = fn.apply(this, arguments)
+          timeout = setTimeout(()=>{ timeout = null }, wait)
+        }else{
+          timeout = setTimeout(()=>{ fn.apply(this, arguments)}, wait)
+        }
+        return result
+      }
+    }
+
+    // 五代：具有取消功能
+    function debounce5(fn, wait, immediate) {
+      let timeout, result
+      const debounced = function() {
+        if(timeout)clearTimeout(timeout)
+        if(immediate) {
+          if (!timeout) result = fn.apply(this, arguments)
+          timeout = setTimeout(()=>{ timeout = null }, wait)
+        }else{
+          timeout = setTimeout(()=>{ fn.apply(this, arguments)}, wait)
+        }
+        return result
+      }
+      debounced.cancel = function() {
+        clearTimeout(timeout)
+        timeout = null
+      }
+      return debounced
+    }
+    // 使用 async await 确保传入函数异步时能正常执行
+    const debounce = (func, wait = 0) => {
+      let timeout = null
+      function debounced() {
+        if(timeout) {
+          clearTimeout(timeout)
+          timeout = null
+        }
+        // 以Promise的形式返回函数执行结果
+        return new Promise((res, rej) => {
+          timeout = setTimeout(async () => {
+            try {
+              const result = await func.apply(this, arguments)
+              res(result)
+            } catch(e) {
+              rej(e)
+            }
+          }, wait)
+        })
+      }
+      // 允许取消
+      function cancel() {
+        clearTimeout(timeout)
+        timeout = null
+      }
+      // 允许立即执行
+      function flush() {
+        cancel()
+        return func.apply(this, args)
+      }
+      debounced.cancel = cancel
+      debounced.flush = flush
+      return debounced
+    }
+
+    const debounced = debounce(getUserAction, 1000)
+    container.addEventListener('mousemove', debounced)
+    function getUserAction(e) {
+      console.log(e)
+      count++
+      container.innerHTML = count
+      return count
+    }
+    </script>
+</body>
+</html>

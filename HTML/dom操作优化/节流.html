@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节流</title>
+    <style>
+      #container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #409EFF;
+        font-size: 90px;
+        text-align: center;
+        line-height: 100vh;
+        color: #fff;
+        user-select: none;
+      }
+    </style>
+</head>
+<body>
+  <div id="container">0</div>
+  <script>
+    // 节流：
+    // 关于节流的实现，有两种主流的实现方式，一种是使用时间戳，一种是设置定时器
+    // 时间戳：无需蓄力的技能
+    // 定时器：需要蓄力的技能
+    // 时间戳版本: 超过了 wait 时间，就能立即执行。
+    // prev 为 0 触发就会立即执行一次，如果第一次需要延时，可以设置为 +new Date()
+    function throttle1(fn, wait) {
+      let prev = 0
+      return function() {
+        let now = +new Date()
+        if(now - prev > wait) {
+          fn.apply(this, arguments)
+          prev = now
+        }
+      }
+    }
+    // 定时器版本：
+    function throttle2(fn, wait) {
+      let timeout
+      return function() {
+        if (!timeout) {
+          timeout = setTimeout(() => {
+            timeout = null
+            fn.apply(this, arguments)
+          }, wait)
+        }
+      }
+    }
+    // 升级需求：需要能立即执行，又需要最后能延迟执行一次（时间戳 + 定时器）
+    // ps:二段技能，一段瞬发困敌，二段蓄力重击（蓄力可被打断）
+    // 主体采用时间戳
+    // 存在问题：第一次执行，停留 wait 时间，蓄力执行了，然后在小于时间戳的时间内再次触发，技能在 cd 中，不会立即触发
+    function throttle3(fn, wait) {
+      let prev = 0
+      let timeout
+      return function() {
+        let now = + new Date()
+        if(now - prev > wait) {
+          fn.apply(this, arguments)
+          prev = now
+          clearTimeout(timeout)
+          timeout = setTimeout(()=>{ 
+            // 定时器执行后，prev 赋值当前时间
+            prev = + new Date()
+            fn.apply(this, arguments) 
+          }, wait)
+        }
+      }
+    }
+    // 再优化，第一次触发可延迟或不延迟，最后一次触发，可再次执行或不执行
+    // 问题：最后一次触发，再次执行，下一次在触发就会 cd 状态
+    function throttle4(fn, wait, option = {}) {
+      // 解决参数不全导致的问题
+      // 默认第一次不立即执行
+      // 默认最后一次不会再次执行
+      const options = {
+        leading: false,
+        trailing: false,
+        ...option
+      }
+      let prev = options.leading ? 0 : + new Date()
+      let timeout
+      return function() {
+        let now = + new Date()
+        if(now - prev > wait) {
+          console.log(options)
+          fn.apply(this, arguments)
+          prev = now
+          if (options.trailing) {
+            clearTimeout(timeout)
+            timeout = setTimeout(()=>{ 
+              // 定时器执行后，prev 赋值当前时间
+              prev = + new Date()
+              fn.apply(this, arguments) 
+            }, wait)
+          }
+        }
+      }
+    }
+    //关于 节流的取消功能：打断蓄力，回城。
+    function throttle5(fn, wait, option = {}) {
+      const options = {
+        leading: false,
+        trailing: false,
+        ...option
+      }
+      let prev = options.leading ? 0 : + new Date()
+      let timeout
+      const throttled =  function() {
+        let now = + new Date()
+        if(now - prev > wait) {
+          console.log(options)
+          fn.apply(this, arguments)
+          prev = now
+          if (options.trailing) {
+            clearTimeout(timeout)
+            timeout = setTimeout(()=>{ 
+              prev = + new Date()
+              fn.apply(this, arguments) 
+            }, wait)
+          }
+        }
+      }
+      throttled.cancel = function() {
+        clearTimeout(timeout)
+        timeout = null
+      }
+      return throttled
+    }
+
+    container.addEventListener('mousemove', throttle5(getUserAction, 3000, { leading: true, trailing: true }))
+    let count = 0
+    function getUserAction(e) {
+      count++
+      container.innerHTML = count
+    }
+    </script>
+</body>
+</html>
