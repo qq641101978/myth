@@ -34,27 +34,19 @@
   <button>click</button>
 
 </body>
-
-<script>
-document.querySelector('button').addEventListener('click', function () {
-
-  console.log('capture')
-
-}, true)
-document.querySelector('button').addEventListener('click', function () {
-
-  console.log('bubble')
-
-})
-
-</script>
-
   <script>
+    // 事件的冒泡和捕获都能代理
     container.addEventListener('click', onClick)
     function onClick (e) { 
        e.stopPropagation();
       console.log(e.target)
     }
+    document.querySelector('button').addEventListener('click', function () {
+      console.log('capture')
+    }, true)
+    document.querySelector('button').addEventListener('click', function () {
+      console.log('bubble')
+    })
   </script>
 </body>
 </html>
