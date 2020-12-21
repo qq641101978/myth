@@ -47,11 +47,19 @@
 
 - HTTP缓存头部字段2：![HTTP缓存头部字段2](./img/HTTP缓存头部字段2.jpg)
 - Etag 响应头：资源标识，服务器告诉浏览器
-- if-None-Match 请求头：缓存资源标识（响应头的Etag），浏览器告诉服务器，和 Etag 进行对比
+- if-None-Match 请求头：缓存资源标识（响应头的 Etag），浏览器告诉服务器，和 Etag 进行对比
 
 ![浏览器缓存校验](./img/浏览器缓存校验.jpg)
 > CDN：浏览器与服务器的临时站点（服务器的小弟，也能缓存），分流，访问加速
 
+#### 强制缓存：缓存的有效期内直接使用缓存
+- http1.0 的 Expires, http1.1 的 cache-control
+
+#### 协商缓存：询问服务器资源是否有变化
+- http1.1 的 Last-Modified 和 if-Modified-Since，文件修改时间判断
+- 因为文件修改时间存在精度问题，所以有了优化的使用文件的hash值判断，对应请求头：Etag 和 if-None-Match（存在计算成本）
+
+> ps：关于浏览器 serviceWorker（实现离线缓存） 的使用，实现原理：拦截浏览器请求，返回缓存这资源文件
 场景模拟：
 - 场景：服务器给浏览器了一个 Expires 响应头，Expires过期了。请求服务器。获取资源
 - 不足，Expires过期了，但是 f.js 没有修改，需要避免这种资源浪费的情况

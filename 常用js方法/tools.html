@@ -1,23 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
-  <style>
-  .demo{
-      position: absolute;
-      right: 0px;
-  }
-  .demo1{
-      position: absolute;
-      top: 100px;
-      right: 0px;
-      font-size: 12px;
-  }
-  </style>
 </head>
+
 <body>
   <script>
     // 这用来修改现有对象部分的属性就很方便了。
@@ -33,18 +23,18 @@
     unique([1, 1, 2, 3, 3]); // => [1, 2, 3]
 
     // 对象数组去重
-    function sortFn(arr,b) {
-        let p = []
-        b.forEach(el => {
-            p.push(arr[el])
-        })
-        arr.unshift(...p)
-        const obj = {};
-        arr = arr.reduce((item, next)=> {
-            obj[next.id] ? '' : obj[next.id] = true && item.push(next);
-            return item;
-        }, []);
-        console.log(obj)
+    function sortFn(arr, b) {
+      let p = []
+      b.forEach(el => {
+        p.push(arr[el])
+      })
+      arr.unshift(...p)
+      const obj = {};
+      arr = arr.reduce((item, next) => {
+        obj[next.id] ? '' : obj[next.id] = true && item.push(next);
+        return item;
+      }, []);
+      console.log(obj)
 
     }
     // sortFn(arr, b)
@@ -54,18 +44,18 @@
     //result：1235asd
     //这个方法有原生的方案代替，但是考虑到有时候开发PC站需要兼容IE8，所以就还是继续保留
     function trim(str, type = 1) {
-        switch (type) {
-            case 1:
-                return str.replace(/\s+/g, "");
-            case 2:
-                return str.replace(/(^\s*)|(\s*$)/g, "");
-            case 3:
-                return str.replace(/(^\s*)/g, "");
-            case 4:
-                return str.replace(/(\s*$)/g, "");
-            default:
-                return str;
-        }
+      switch (type) {
+        case 1:
+          return str.replace(/\s+/g, "");
+        case 2:
+          return str.replace(/(^\s*)|(\s*$)/g, "");
+        case 3:
+          return str.replace(/(^\s*)/g, "");
+        case 4:
+          return str.replace(/(\s*$)/g, "");
+        default:
+          return str;
+      }
     }
     // 对数字的某个位子添加数据
     const ThousandNum = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -98,12 +88,12 @@
     // 精确小数
     const RoundNum = (num, decimal) => Math.round(num * 10 ** decimal) / 10 ** decimal;
     const num1 = RoundNum(1.6939, 3);
-    
+
     // 可判断类型：undefined、null、string、number、boolean、array、object、symbol、date、regexp、function、asyncfunction、arguments、set、map、weakset、weakmap
     // 判断数据类型
     function DataType(tgt, type) {
-        const dataType = Object.prototype.toString.call(tgt).replace(/\[object /g, "").replace(/\]/g, "").toLowerCase();
-        return type ? dataType === type : dataType;
+      const dataType = Object.prototype.toString.call(tgt).replace(/\[object /g, "").replace(/\]/g, "").toLowerCase();
+      return type ? dataType === type : dataType;
     }
     DataType("young"); // "string"
     DataType(20190214); // "number"
@@ -119,11 +109,11 @@
     // const obj = {};
     // const flag = DataType(obj, "object") && !Object.keys(obj).length;
     // flag => true
-    
+
     // 满足条件时执行（思路：在计算监听属性中写判断执行条件）
     const flagA = true; // 条件A
     const flagB = false; // 条件B
-    function Func(){}
+    function Func() { }
     (flagA || flagB) && Func(); // 满足A或B时执行
     (flagA || !flagB) && Func(); // 满足A或不满足B时执行
     flagA && flagB && Func(); // 同时满足A和B时执行
@@ -133,28 +123,28 @@
     const arr = [0, 1, 1, 2, 2, 2];
     // 方法1
     const count = arr.reduce((t, c) => {
-        t[c] = t[c] ? ++ t[c] : 1;
-        return t;
+      t[c] = t[c] ? ++t[c] : 1;
+      return t;
     }, {});
     // count => { 0: 1, 1: 2, 2: 3 }
     // 方法2
     const count1 = new Set(arr)
     // console.log(count1.size)
 
-    
+
     const dev = 'name'
     const link = {
-        name: 'byf',
-        age: 13
+      name: 'byf',
+      age: 13
     }[dev]
     // console.log(link)
 
     // 一次性函数
     function Func() {
-        // console.log("x");
-        Func = function() {
-            // console.log("y");
-        }
+      // console.log("x");
+      Func = function () {
+        // console.log("y");
+      }
     }
     // 调试页面元素边界时使用
     // [].forEach.call($("*"), dom => {
@@ -166,22 +156,22 @@
     // console.log(str.length - 'kl'.length)
 
     // 节流（保证了函数会在第一时间执行，后面才需要时间间隔）
-    function throttle(func, gapTime){
-        if(typeof func !== 'function') {
-            // throw new TypeError('need a function');
-            throw Error('need a function')
+    function throttle(func, gapTime) {
+      if (typeof func !== 'function') {
+        // throw new TypeError('need a function');
+        throw Error('need a function')
+      }
+      // 1000
+      gapTime = +gapTime || 0;
+      let lastTime = 0;
+      return function () {
+        let time = + new Date();
+        if (time - lastTime > gapTime || !lastTime) {
+          func();
+          // 返回上一次时间，形成时间间隔
+          lastTime = time;
         }
-        // 1000
-        gapTime = +gapTime || 0;
-        let lastTime = 0;
-        return function() {
-            let time = + new Date();
-            if(time - lastTime > gapTime || !lastTime) {
-                func();
-                // 返回上一次时间，形成时间间隔
-                lastTime = time;
-            }
-        }
+      }
     }
     // 执行节流 10ms 执行一次 实际上是 1s打印一次
     // setInterval(throttle(() => {
@@ -189,25 +179,25 @@
     // }, 1000),10)
     // 我的debounce 实现
     function my_debounce(func, wait) {
-        if(typeof func !== 'function') {
-            throw new TypeError('need a function');
+      if (typeof func !== 'function') {
+        throw new TypeError('need a function');
+      }
+      wait = +wait || 0;
+      let timeId = null;
+      return function () {
+        // console.log('滚动了滚动了');  // 测试时可放开
+        const self = this;
+        const args = arguments;
+        if (timeId) {
+          clearTimeout(timeId);   // 清除定时器，重新设定一个新的定时器
         }
-        wait = +wait || 0;
-        let timeId = null;
-        return function() {
-            // console.log('滚动了滚动了');  // 测试时可放开
-            const self = this;
-            const args = arguments;
-            if(timeId) {
-                clearTimeout(timeId);   // 清除定时器，重新设定一个新的定时器
-            }
-            timeId =  setTimeout(() => {
-                func.apply(self, args); // arguments 是传给函数的参数，这里是 event  对象
-            }, wait);
-        }
+        timeId = setTimeout(() => {
+          func.apply(self, args); // arguments 是传给函数的参数，这里是 event  对象
+        }, wait);
+      }
     }
     function onScroll_1() {
-        console.log('执行滚动处理函数啦');  
+      console.log('执行滚动处理函数啦');
     }
     window.addEventListener('scroll', my_debounce(onScroll_1, 1000));
     // 从上面的分析来看，这个单纯的 防抖函数还是有个硬伤的，是什么呢？
@@ -215,12 +205,69 @@
     // 防抖函数一直重新设置定时器，就是不执行，频繁的延迟会导致用户迟迟得不到响应，
     // 用户同样会产生“这个页面卡死了”的观感
 
-    //防抖，你已经是一个成熟的函数了。不要动不动就假死好吗
-    
+    //防抖，你已经是一个成熟的函数了。不要动不动就假死好吗 参考 HTML文件中的 dom操作优化
+
     // 解构取值:事实上，只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值。
-    let [foo, ...bar] = [1,2,3,4]
+    let [foo, ...bar] = [1, 2, 3, 4]
     console.log(foo, bar)
 
+    // 数字千分位添加逗号
+    let arr = '1234567890'.split('').reverse()
+    // 预期 1，234，567，890
+    let len = arr.length
+    let tag = 0 // 计数逗号
+    for (let i = 0; i < len; i++) {
+      if (i % 3 === 0 && i !== 0 && i !== len) {
+        arr.splice(i + tag, 0, ',')
+        tag++
+      }
+    }
+    console.log(arr.reverse().join(''))
+
+    // 克隆
+    function clone(data) {
+      let result = {}
+      // Object.getOwnPropertyNames()方法返回一个由指定对象的所有自身属性的属性名（包括不可枚举属性但不包括Symbol值作为名称的属性）组成的数组。
+      // ps 这个不会遍历到原型链上的属性，for in 会
+      const keys = [...Object.getOwnPropertyNames(data), ...Object.getOwnPropertySymbols(data)]
+      console.log(keys)
+      if (!keys.length) return data
+      keys.forEach(key => {
+        let item = data[key]
+        console.log('item', item)
+        if (typeof item === 'object' && item) {
+          result[key] = clone(item)
+        } else {
+          result[key] = item
+        }
+      })
+      return result
+    }
+    clone(arr)
+
+    //升级版本，考虑嵌套引用，使用 WeakMap 弱引用解决
+    function clone(obj) {
+      let map = new WeakMap()
+      function deep(data) {
+        let result = {}
+        const keys = [...Object.getOwnPropertyNames(data), ...Object.getOwnPropertySymbols(data)]
+        if (!keys.length) return data
+        const exist = map.get(data)
+        if (exist) return exist
+        map.set(data, result)
+        keys.forEach(key => {
+          let item = data[key]
+          if (typeof item === 'object' && item) {
+            result[key] = deep(item)
+          } else {
+            result[key] = item
+          }
+        })
+        return result
+      }
+      return deep(obj)
+    }
   </script>
 </body>
+
 </html>

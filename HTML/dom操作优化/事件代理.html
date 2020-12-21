@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>事件代理</title>
   <style>
-    ul{
+    ul {
       background: #409EFF;
       width: 200px;
     }
-    li{
+
+    li {
       list-style: none;
       padding: 20px;
       border: 1px solid #eee;
     }
   </style>
 </head>
+
 <body>
   <ul id="container">
     <li>1</li>
@@ -29,16 +32,17 @@
     <li>9</li>
     <li>10</li>
   </ul>
+
   <body>
 
-  <button>click</button>
+    <button>click</button>
 
-</body>
+  </body>
   <script>
     // 事件的冒泡和捕获都能代理
     container.addEventListener('click', onClick)
-    function onClick (e) { 
-       e.stopPropagation();
+    function onClick(e) {
+      e.stopPropagation();
       console.log(e.target)
     }
     document.querySelector('button').addEventListener('click', function () {
@@ -47,6 +51,41 @@
     document.querySelector('button').addEventListener('click', function () {
       console.log('bubble')
     })
+    let arr = {
+      a: {
+        b: { c: 1 }
+      }
+    }
+
+
+
+    function add(...args) {
+      let arr = args
+      function fn(...newArgs) {
+        arr = [...arr, ...newArgs]
+        return fn;
+      }
+      fn.toString = fn.valueOf = function () {
+        return arr.reduce((acc, cur) => acc + parseInt(cur))
+      }
+      return fn
+    }
+    add(1, 2)
+
+    requestAnimationFrame(() => {
+      console.log(222)
+    })
+    setTimeout(() => {
+      console.log(333)
+    }, 0);
+
+    (function () {
+      console.log(444)
+      Promise.resolve().then(() => {
+        console.log(555)
+      })
+    })()
   </script>
 </body>
+
 </html>
