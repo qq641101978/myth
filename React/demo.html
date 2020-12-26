@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="reactRoot"></div>
+    <!-- crossorigin 跨域报错可以看到详细信息 -->
+    <!-- 核心库 与宿主环境无关 -->
+    <!-- 提供对象： React.createElement -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <!-- 依赖核心库，将核心库的功能与页面结合 -->
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <!-- 编译JSX的babel -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+    
+    <!-- <script>
+        // 创建一个 p 元素
+        let span = React.createElement('span',{}, '我是一个span')
+        // 创建 h1元素
+        console.log(span)
+        let h1 = React.createElement('h1', {
+            title:'h1'
+        }, '321', span)
+        console.log(h1)
+        // 生成真实节点
+       ReactDOM.render(h1,document.getElementById('reactRoot'))
+    </script> -->
+
+    <script type="text/babel">
+        let h1 = <h1>我是和<span>我是一个span</span></h1>
+        console.log(h1)
+        ReactDOM.render(h1,document.getElementById('reactRoot'))
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+#root{
+  width: 520px;
+  height: 400px;
+  margin: 0 auto;
+  border: 2px solid;
+}
+img{
+  width: 100%;
+}
