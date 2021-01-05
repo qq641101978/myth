@@ -1,3 +1,6 @@
+/**
+ * 图片轮播demo
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css'
@@ -28,5 +31,5 @@ function stop() {
   console.log('stop')
   clearInterval(timer)
 }
-content.onmouseenter = stop
-content.onmouseleave = start
+content.addEventListener('mouseenter', stop)
+content.addEventListener('mouseleave', start)

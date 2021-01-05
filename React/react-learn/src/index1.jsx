@@ -1,3 +1,6 @@
+/**
+ * 一些不会显示在页面的属性
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
 let a = 111,

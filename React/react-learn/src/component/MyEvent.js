@@ -31,7 +31,7 @@ export default class MyEvent extends Component {
     return (
       <>
         <h1>计时：{this.state.num }</h1>
-        <button onClick={this.handleClick.bind(this)}>  点我暂停</button>
+        <button onClick={this.handleClick}>  点我暂停</button>
       </>
     )
   }
