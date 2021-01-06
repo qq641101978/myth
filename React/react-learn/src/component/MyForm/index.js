@@ -81,6 +81,7 @@ export default class index extends Component {
           选择城市：{this.citys()}
         </p>
         <p>
+          兴趣爱好：
         {this.checkeds()}
         </p>
         <p>

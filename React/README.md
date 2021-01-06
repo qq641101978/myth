@@ -1,6 +1,6 @@
 # 令人心动的 React 开始拉
 > 由 facebook 研发的，解决 UI 复杂度的开源 JavaScript 项目
-### html 页面 js 引入
+## html 页面 js 引入
 ```js
 // <!-- crossorigin 跨域报错可以看到详细信息 -->
 // <!-- 核心库 与宿主环境无关 -->
@@ -12,7 +12,7 @@
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
 ```
 
-### React.createElement()
+## React.createElement()
 - 创建一个 React 元素。称作虚拟dom，本质是一个对象（内置组件）
 - 参数1：元素类型，如果是字符串，则是一个普通的 html 元素
 - 参数2：元素的属性，一个对象，如class，id等等
@@ -33,6 +33,7 @@ let h1 = React.createElement('h1', {
 // 生成真实节点
 ReactDOM.render(h1,document.getElementById('reactRoot'))
 ```
+
 ### JSX 语法如何转化成真实的 DOM
 - JS的扩展语法，需要使用 babel 进行转译，
 - 目的：方便我们书写代码
@@ -65,7 +66,7 @@ ReactDOM.render(h1,document.getElementById('reactRoot'))
 
 ## 开发
 
-### 什么是JSX
+## 什么是JSX
 - Facebook 起草的 jS 扩展语法
 - 本质是一个 JS 对象，会被 babel 编译，最终被转换成 createElement
 - 每个 JSX 表达式，有且仅有一个根节点
@@ -119,7 +120,7 @@ ReactDOM.render(div,document.getElementById('root'))
 
 ### React中的哲学：数据属于谁，谁才有权利改动。
 
-### 组件
+## 组件
 - 组件大驼峰规则
  - 如果首字母不大写，会解析成普通的 React 元素，会报错 
 - 函数组件：返回一个 react 元素
@@ -150,7 +151,7 @@ ReactDOM.render(div,document.getElementById('root'))
 - state：组件自身创建，所有权属于自身，组件自身有权改变。
 
 
-### 事件：这种操作，我爱了
+## 事件：这种操作，我爱了
 - 在 React中，组件的事件，本质就是一个属性
 - 按照之前 React 对组件对约定， 由于事件本质上是一个属性：也需要用小驼峰命名
 - 内置组件事件与DOM元素事件保持一致
@@ -192,10 +193,10 @@ this.setState(cur=>{
 
 - React 会对异步的 setState 进行优化，将多次的 setState 进行合并（将多次状态改变完成后，再统一对 state 进行改变，然后触发 render）
 
-# 生命周期
+## 生命周期
 - 生命周期仅存在类组件中，函数组件每次调用都是重新运行函数，旧对组件即刻被销毁
 
-## 旧版生命周期： React < 16.0.0
+### 旧版生命周期： React < 16.0.0
 ![旧生命周期](./img/旧生命周期.jpg)
 
 ### 初始化阶段
@@ -242,9 +243,10 @@ this.setState(cur=>{
   2. 通常在该函数中，销毁一些组件依赖的资源，比如计时器
 
 
-## 新版生命周期 React > 16.0.0
+### 新版生命周期 React > 16.0.0
 ![生命周期](./img/生命周期.jpg)
 constructor -> static getDerivedStateFromProps -> componentDidMount 挂载三步走
+
 ### 初始化阶段
 1. constructor：初始化阶段，初始化属性和状态
   1. 同一个组件对象只会创建一次
@@ -352,3 +354,46 @@ export default class MyRef extends Component {
   }
 }
 ```
+
+## Context：上下文：表示做一些事的环境
+- React 中上下文的特点
+  1. 当某个组件创建了上下文后，上下文中的数据，会被所以后代组件共享
+  2. 如果某个组件依赖上下文，会导致组件不再纯粹（外部数据仅来自于props）
+  3. 一般情况下，用于第三方组件（通用组件）
+
+### 旧API
+![旧的上下文 API](./react-learn/src/component/OldContext.js)
+> 只有类组件才可以创建上下文
+- **创建上下文**
+  1. 给类组件书写静态属性 childContextTypes，使用该属性对上下文中的数据类型进行约束
+  2. 添加实例方法 getChildContext，该方法返回的对象，即为上下文中的数据，该数据必须满足类型约束，该方法会在 render 之后运行，（第一次会在 constructor 时候运行）
+
+- **使用上下文**
+- 要求：如果要使用上下文中的数据，组件必须有一个静态属性 contextTypes，该属性描述了需要获取的上下文中的数据类型
+  1. 可以在组件的构造函数中，通过第二个参数，获取上下文数据
+  2. **从组件的 coontext 属性中获取**
+  3. 在函数组件中，通过第二个参数，获取上下文数据
+
+- **上下文中的数据变化**：上下文中的数据不可以直接变化，最终都是状态改变
+> ps: 如果上下文重复，组件会拿到最近一级的上下文（就近原则）
+
+
+### 新的API(真像 vue bus)
+![新的上下文 API](./react-learn/src/component/NewContext.js)
+- 旧版 API 存在效率和滥用问题
+- **创建上下文**
+  1. 上下文是一个独立于组件的对象，该对象通过 React.createCoontext(默认值) 创建，返回的是一个包含两个属性的对象
+    1. Provider属性：生产者，一个组件，该组件会创建一个上下文
+      1. 该属性有一个 value 属性，通过该属性，可以为其他数据赋值
+      2. 同一个 Provider，不要用到多个组件，如果需要在其他组件中使用该数据，应该考虑将数据提升到更高到层次
+    2. Comsumer属性：消费者，
+
+- **使用上下文**
+  1. 在类组件中，直接使用 this.context 获取上下文数据
+    1. 要求：必须拥有静态属性 contextType，应赋值为创建的上下文对象
+  2. 在函数组件中，需要使用 Comsumer 来获取上下文数据（类也可以使用这种方式）
+    1. Comsumer 是一个组件
+    2. 它到子节点。是一个函数（它的 props.children 需要传递一个函数）
+
+- **注意细节**
+  1. 如果，上下文提供者（Context.Provider）中的 value 更新，会导致使用该上下文的所有后代元素全部重新渲染。无论该子元素是否有优化（无论 shoouldComponentUpdata 函数返回什么结果（强制更新））
