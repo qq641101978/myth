@@ -213,7 +213,7 @@ this.setState(cur=>{
   2. render 可能不止运行一次，只要需要重新渲染，就会重新执行
   3. 严禁使用 setState
 
-4. **componentDidMount** 虚拟 DOM 挂载，成为真实 DOM
+4. **componentDidMount** 虚拟 DOM 挂载，成为真实 DOM之前
   1. 只会执行一次，挂载完成 
   2. 可以使用 setState
   3. 通常情况下，会将网络请求，定时器等等操作写在这里
@@ -609,6 +609,7 @@ HOOK：React16.8.0之后出现
 - 获取上下文数据
 - 针对于 React.createCoontext ，创建上下文和使用上下文，会增加组件的嵌套。所以有了 useContext,
 - 他减少了一层消费者（上下文的使用者）的嵌套
+>疑问：自组件怎么获取 上下文对象
 
 ### Callback Hook
 [UseCallback](./react-learn/src/component/Hook/UseCallback.js)
@@ -619,7 +620,7 @@ HOOK：React16.8.0之后出现
   2. 记录依赖项
 - 该函数返回固定的函数引用地址
 
-### Memo Hook
+### Memo Hook：相当于 vue 的计算属性
 [UseMemo](./react-learn/src/component/Hook/UseMemo.js)
 - 函数名：useMemo
 - 用于保持一些比较稳定的数据，通常用于性能优化
@@ -632,3 +633,52 @@ HOOK：React16.8.0之后出现
 - React.crateRef() 在函数组件中每次创建，都是一个新的 ref
 - 在useRef的使用下，保证了每次都是使用一个相同的 ref
 > 可以做很多优化，比如 全局变量（timer）固定
+
+### ImperativeHandle Hook
+- 函数组件中使用 ref 
+- useImperativeHandle(ref,()=>{
+  return {
+    ... 需要的方法数据
+  }
+})
+
+### layoutEffect
+- 执行时间点：和类组件生命周期 componentDidMount,componentDidUpdate 一致
+- 主要处理真实DOM的操作，和 useEffect 操作一致
+- 尽量使用 useEffect 这样不会阻塞渲染，如果出现问题，再考虑 layoutEffect
+
+### DebugValue Hook
+- useDebugValue: 将某个数据显示到调试栏
+- 如果创建的自定义 Hook 通用型比较高，可以进行选择使用 useDebugValue 方便调试
+### 遵循 28 原则，使用最多的 Hook 还是 useState 和 useEffect
+
+## React 动画：参考 vue 的动画
+- React动画库：react-transition-group 
+[react-transition-group](https://reactcommunity.org/react-transition-group/transition)
+### CSSTransition
+- 自定义样式，根据对应当样式名
+- 当进入时，发生
+  1. 为 CSSTransition 内部的 DOM 根元素添加样式 enter 
+  2. 在下一帧（enter样式已经完全应用到了元素），立即为该元素添加样式 enter-active
+  3. 当 timeout 结束后哦，去掉之前当样式，添加样式 enter-done
+
+- 当退出时，发生
+  1. 为 CSSTransition 内部的 DOM 根元素添加样式 exit
+  2. 在下一帧（exit样式已经完全应用到了元素），立即为该元素添加样式 exit-active
+  3. 当 timeout 结束后哦，去掉之前当样式，添加样式 exit-done
+### . . . 具体官方操作学习
+
+
+## React Router：参考 vue-router
+
+- 无论是使用 Vue， 还是 React，开发单页面应用程序，可能只是该站点单一部分（某一个功能块）
+- 一个单页面里，可能划分为多个页面（几乎完全不同的页面效果）（组件）
+- 如果要在单页面应用中完成组件的切换，需要实现以下两个功能
+  1. 根据不同页面地址，展示不同的组件（核心）
+  2. 完成无刷新的地址切换
+- 以上功能实现的插件，称之为路由
+
+- react-router：路由核心库，包含诸多和路由功能相关的核心代码
+- react-router-dom：利用路由核心库，结合实际的页面，实现根页面路由密切相关的功能
+- 如果是在页面中实现路由，需要安装 react-router-dom 库
+

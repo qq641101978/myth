@@ -1,4 +1,4 @@
-import React, { useRef,useState } from 'react'
+import React, { useEffect, useRef,useState } from 'react'
 window.arr = []
 // export default function UseRef() {
 //   console.log('render')
@@ -42,4 +42,21 @@ export default function UseRef() {
       />
     </div>
   )
+}
+/**
+ * 这里不管函数运行多少次，nRef的值都不会重置
+ */
+export  function TimerRef() {
+  const [n, setN] = useState(10)
+  const nRef = useRef(n)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nRef.current-- 
+      setN(nRef.current)
+      if(nRef.current === 0) clearInterval(timer)
+    }, 1000);
+    return () => {
+      clearInterval(timer)
+    }
+  })
 }
