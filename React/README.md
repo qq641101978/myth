@@ -519,7 +519,7 @@ export default class MyRef extends Component {
 - 创建新加入的节点
 - 卸载多余的旧节点
 
-## HOOK
+## HOOK:真香
 HOOK：React16.8.0之后出现
 组件：无状态组件（函数组件），类组件
 类组件的麻烦：
@@ -558,7 +558,7 @@ HOOK：React16.8.0之后出现
     1. 类组件：使用 forceUpdate 函数
     2. 函数组件：使用一个空对象的 useState 
   7. **如果某些状态直接没有必然联系。应分化为不同状态，而不要合并成一个对象**
-  8. 和类组件的状态一样，函数组件中改变状态，可能是异步的（在DOM 事件中），多个状态变化会合并，此时不能信任当前状态，如果状态变化使用到之前的状态，尽量传递函数
+  8. 和类组件的状态一样，函数组件中改变状态，可能是异步的（在 DOM 事件中），多个状态变化会合并，此时不能信任当前状态，如果状态变化使用到之前的状态，尽量传递函数
 
 
 
@@ -592,5 +592,43 @@ HOOK：React16.8.0之后出现
       1. 副作用函数仅在第一次渲染后运行
       2. 清理函数仅在卸载组件后运行
     5. 使用空数组作为依赖项：则副作用函数，仅在挂载的时候运行一次
-    6. 副作用函数中，如果使用了函数上下文中的变量
-                                                                                                                                                                                                               
+    6. 副作用函数中，如果使用了函数上下文中的变量，由于闭包影响，会导致副作用函数中的变量不会实时变化
+
+### 自定义 Hook
+[useList](./react-learn/src/component/myHook/useList.js)
+- 自定义 Hook：将一些常用的，跨越多个组件的 Hook 功能，抽离出去形成一个函数，该函数就是自定义 Hook 
+
+### Reducer Hook 真好用！！！
+[useReducer](./react-learn/src/component/myHook/useReducer.js)
+[reducerHook](./react-learn/src/component/myHook/reducerHook.js)
+
+
+### Context Hook
+[UseContext](./react-learn/src/component/Hook/UseContext.js)
+- 函数名：useContext
+- 获取上下文数据
+- 针对于 React.createCoontext ，创建上下文和使用上下文，会增加组件的嵌套。所以有了 useContext,
+- 他减少了一层消费者（上下文的使用者）的嵌套
+
+### Callback Hook
+[UseCallback](./react-learn/src/component/Hook/UseCallback.js)
+- 函数名：useCallback
+- 通常用于性能优化
+- 该函数有两个参数
+  1. 函数，useCallback会固定该函数的引用，只要依赖没有发生改变，则始终返回该函数地址
+  2. 记录依赖项
+- 该函数返回固定的函数引用地址
+
+### Memo Hook
+[UseMemo](./react-learn/src/component/Hook/UseMemo.js)
+- 函数名：useMemo
+- 用于保持一些比较稳定的数据，通常用于性能优化
+- 保持高开销的计算结果
+- **如果React元素本身的引用没发生变化，一定不会重新渲染**
+
+### Ref Hook
+[UseRef](./react-learn/src/component/Hook/UseRef.js)
+
+- React.crateRef() 在函数组件中每次创建，都是一个新的 ref
+- 在useRef的使用下，保证了每次都是使用一个相同的 ref
+> 可以做很多优化，比如 全局变量（timer）固定

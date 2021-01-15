@@ -36,7 +36,7 @@ function MovebleBlock(props) {
       if(curTimes === 100) clearInterval(timer)
     }, 10)
     return () => {
-      console.log('清理函数：下一次副作用函数执行之前 和 组件销毁后执行')
+      console.log('清理函数：下一次副作用函数执行之前 和 组件销毁后 执行')
       clearInterval(timer)
       timer = null
     }
