@@ -1,0 +1,15 @@
+.aside-content li{
+  list-style-type: none;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+}
+.aside-content li:hover{
+  background: #fff;
+  color: #008c8c;
+}
+.aside-content li a{
+  color: inherit;
+  text-decoration: none;
+}

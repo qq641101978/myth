@@ -6,7 +6,10 @@ import React, { Component } from 'react'
 // import Demo from './component/HOOK/UseCallback'
 // import Demo from './component/HOOK/UseMemo'
 // import Demo from './component/HOOK/UseRef'
-import Demo from './component/react-transition-group/Transition'
+// import Demo from './component/react-transition-group/Transition'
+// import Demo from './component/router/Router'
+import Demo from './component/router/RouterData'
+// import Demo from './component/ManagementSystem'
 export default class App extends Component {
   render() {
     return (
@@ -16,14 +19,3 @@ export default class App extends Component {
     )
   }
 }
-// import useList from './component/myHook/useList'
-// export default function App() {
-//   const stus = useList()
-//   const list = stus.map(it => (
-//     <p key={it}>{it }</p>
-//   ))
-//   console.log('渲染了',stus)
-//   return (
-//     <div>{list }</div>
-//   )
-// }

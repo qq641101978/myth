@@ -1,0 +1,33 @@
+html body{
+  margin: 0;
+  padding: 0;
+}
+.container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.container .hearder{
+  height: 60px;
+  width: 100%;
+  background: #515151;
+  color: #fff;
+}
+.container .middle{
+  width: 100%;
+  height: calc(100% - 60px);
+  display: flex;
+}
+.middle .aside{
+  width: 210px;
+  height: 100%;
+  overflow: scroll;
+  background: #008c8c;
+  color: #fff;
+}
+
+.middle .main{
+  flex: 1;
+  height: 100%;
+  background: #fff;
+}
