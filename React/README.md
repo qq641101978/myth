@@ -689,7 +689,7 @@ HOOK：React16.8.0之后出现
   3. 多了一个 # 
 
 - **Borswer history Router 浏览器历史记录路由**
-  1. html5 新增 API，浏览器拥有了改变浏览器路径不刷新
+  1. html5 新增 API，浏览器拥有了改变浏览器路径不刷新功能
   2. history.pushState：当前历史记录中加入一条新的记录
     1. 参数1：附加数据，自定义数据，可以是任何类型
     2. 参数2：页面标题，目前大部分浏览器不支持
@@ -704,7 +704,7 @@ HOOK：React16.8.0之后出现
 - React-Router 为我们提供了两个重要的组件
 
 ### Router 组件
-- 它本身不做任何展示，仅提供路由配置，另外，该组件会产生一个上下文，上下文会提供一些实用的对象和方法，提供它相关组件的使用
+- 它本身不做任何展示，仅提供路由配置，另外，该组件会产生一个上下文，上下文会提供一些实用的对象和方法
   1. HashRouter：该组件，使用 hash 模式匹配
   2. BrowserRouter：该组件，使用 Browser 模式匹配
 
@@ -712,7 +712,7 @@ HOOK：React16.8.0之后出现
 - 根据不同的地址，展示不同的组件
 - 重要属性：
   1. path：匹配路径
-    1. 默认情况下，不区分大小写，可以设置 sensitive属性为true，区分大小写
+    1. 默认情况下，不区分大小写，可以设置 sensitive 属性为 true，区分大小写
     2. 默认情况下，只匹配初始目录，如果要精确匹配，配置 exact，精确匹配后   /a/b 不会匹配到 a 路径的组件
     3. 不写 path，则会任意匹配
   2. component:匹配成功后要显示的组件
@@ -723,34 +723,35 @@ HOOK：React16.8.0之后出现
 ### Switch 组件
 - 写到 Switch 组件中的 Route 组件，当匹配到第一个  Route 组件后，会立即停止匹配
   1. Switch 组件会循环所有子元素，让每个子元素完成匹配，若匹配到，则渲染该组件，停止循环。
-  2. 不能在 Switch的子元素不能使用Route 之外的组件
+  2. 不能在 Switch的子元素不能使用 Route 之外的组件
 
 ### 路由信息
 [RouterData](./react-learn/src/component/router/RouterData.js)
-- Router 组件会创建一个上下文，并且，向上下文注入一些信息
-- **为什么没有直接用 window.histroy 对象**
+- Router 组件会创建一个上下文，并且向上下文注入一些信息
+- **为什么没有直接用 window.history 对象**
   1. React-Router中有两种模式：当模式切换的时候，还需要去改对应的代码，用了 React 合成对象，就避免了麻烦
-  2. 当使用 window.histroy.pushState 方法时，没有收到任何通知，将导致 React 无法知道地址变化，无法刷新组件
+  2. 当使用 window.history.pushState 方法时，不会收到任何通知，将导致 React 无法知道地址变化，将无法刷新组件
 
-- 该上下文对开发者是隐藏的，Route 组件若匹配到了地址，则会将这些上下文信息作为属性传给对应到组件
-  1. **histroy**：React的合成对象，不是 window.histroy, 用于地址跳转
+- 该上下文对开发者是隐藏的，Route 组件若匹配到了地址，则会将这些上下文信息作为属性传给对应的组件
+  1. **history**：React的合成对象，不是 window.history, 用于地址跳转
     1. push:将某个新地址入栈（历史记录栈）
       1. 参数1：新的地址
       2. 参数2：可选，附带的状态数据
     2. replace：将某个新的地址替换掉当前栈中的地址
-    3. go：用法与 window.histroy 一致
-    4. forward：用法与 window.histroy 一致
-    5. back：window.histroy 一致
+    3. go：用法与 window.history 一致
+    4. forward：用法与 window.history 一致
+    5. back：window.history 一致
 
   2. **location** 获取地址相关信息
-    1. 与 histroy.location 完全一致，但与 window.location  不一致
+    1. 与 history.location 完全一致，但与 window.location  不一致
     2. 通常使用第三方库```query-string```，解析地址栏中的数据
 
   3. **match** 该对象保存了路由匹配的相关信息
-    1. params 信息...
+    1. params 信息等等
+
 - 非路由组件获取路由信息的两种方式
   1. 将路由信息一层一层的传递到对应的组件
-  2. 使用 react-router提供的高阶组件 withRouter，包装使用的组件，该高阶组件返回一个新组件，新组件提供组件注入的路由信息
+  2. 使用 react-router 提供的高阶组件 withRouter，包装使用的组件，该高阶组件返回一个新组件，新组件提供组件注入的路由信息
 
 ### Link组件：参考vue的 router-link
 - 生成一个无刷新跳转的 a 元素
@@ -764,7 +765,7 @@ HOOK：React16.8.0之后出现
     -  replace：bool,表示是否替换当前地址，默认false(采用push)
 
 ### NavLink组件
-- 特色的Link：Link组件具备的，他都有
+- 特色的 Link：Link 组件具备的，他都有
 - 额外属性：根据当前链接和地址链接，决定该链接的样式 （帮创建 calss='active' ）
 - activeClassName：匹配时候用的类名
 - activeStyle: 匹配时候用的内联样式
@@ -781,7 +782,7 @@ HOOK：React16.8.0之后出现
 - Router：BrowserRouter，HashRouter
 - Route
 - Switch
-- 高阶组件： withRouter
+- 高阶组件：withRouter
 - Link
 - NavLink
 - Redirect
@@ -791,3 +792,87 @@ HOOK：React16.8.0之后出现
 - 嵌套路由配置
 - 权限页面：封装权限的高阶路由组件，统一处理权限
 - 封装配置式 router （vue-router）
+
+### 路由守卫：参考vue
+[RouterGuard](./react-learn/src/component/router/RouterGuard.js)
+[NewRouterGuard](./react-learn/src/component/router/NewRouterGuard.js)
+- history对象
+  - listen：添加一个监听器，监听地址变化，当地址发生变化时，会调用传递的回调函数
+    - 运行时间点：在页面跳转之前
+    - 参数：函数
+      - 函数参数1：location 对象，记录当前的地址信息
+      - 函数参数2：action，一个字符串，表示进入该地址的方式
+        - POP：出栈
+          - 通过点击浏览器后退，前进
+          - 调用 history.go
+          - 调用 history.goBack
+          - 调用 history.goForward
+        - PUSH：入栈
+          - 调用 history.push
+          - 点击超链接
+        - REPLAC：替换
+          - 调用 history.replace
+    - 返回结果：回调函数。取消监听 
+  - block：设置一个阻塞，并同时设置阻塞消息，页面发生跳转时，会进入阻塞，并将阻塞消息传递到路由根组件的 getUserConfirmation 方法。
+    - 返回一个方法，用于取消阻塞
+- 路由根组件
+  - getUserConfirmation
+    - 参数：函数
+      - 参数1:阻塞消息
+      - 函数：函数返回一个字符串
+        - 函数参数： location，action
+      - 参数2:回调函数，调用该函数并传递 true，表示进入新页面，否则不做任何操作
+
+### 路由切换动画设置
+- 借助 react-transition-group 三方库实现
+- 不能应用 Switch 组件，否则动画失效
+- Route 不能直接设置动画，需要借助他的 chilren 属性
+
+## Redux：参考 vuex
+
+- 数据的解决方案
+
+### action
+1. action 是一个 plain-object
+  1. 他的 __proto__ 指向 Object.prototype
+2. action 中必须有 type 属性，该属性用于描述操作的类型 
+  1. 但是没有对 type 的类型做出要求
+  2. 通常，使用 payload 属性表示附加数据（没有强制要求）
+3. 在大型项目中，由于操作类型非常多，为了避免硬编码，会将 action 的类型存放到一个或者一些单独的文件中（样板代码）
+4. 为了方便传递 action，通常会使用 action 创建函数来创建 cation
+  1. actio 创建函数应为无副作用的纯函数
+    - 不能以任何形式改动参数
+    - 不可以有异步
+    - 不可以对外部环境中的数据造成影响
+5. 为了方便利用 action 创建函数来分发（触发）action，redux 提供了一个函数``` bindActionCreators ```
+  - 该函数用于增强 action 函数的功能，不仅自动创建 action ，并且创建后自动完成分发
+>ps: 不管 action 玩成什么花样，最终得到的还是一个 type 值的对象
+
+
+### Reducer: 用于改变数据的函数
+1. 一个数据仓库，有且仅有一个 reducer。并且通常情况下，一个工程只有一个仓库，因此，一个系统，只有一个 reducer 
+2. 为了方便管理，通常会将 reducer 放在单独的文件夹
+3. reducer 被调用的时候
+  1. 通过 store.dispatch，分发一个 action
+  2. 当创建一个 store
+    1. 利用这一点，用 reducer 初始化仓库
+    2. 创建仓库时，不传递任何默认状态
+    3. 将 reducer 参数设置一个默认值
+4. reducer 内部通常用 switch 来判断 type 值
+5. **reducer 必须是一个无副作用的纯函数**
+  1. 有利于测试和调试
+  2. 有利于还原数据
+  3. 有利于将来和 react 结合时的优化
+6. 对于复杂化的场景，需要生成多个reducer，然后在合并成一个
+  1. redux 提供了一个方法帮助我们合并 combineReducers
+
+
+### store
+- 对象成员
+  1. dispatch：分发一个 action
+  2. getState：得到仓库中当前的状态
+  3. replaceReducer：替换掉当前的 reducer
+  4. subscribe：注册一个监听器，无参数，在分发 action 之后运行
+
+### 源码实现
+![createStore](./react-learn/src/_redux/createStore.js)

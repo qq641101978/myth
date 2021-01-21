@@ -8,8 +8,10 @@ import React, { Component } from 'react'
 // import Demo from './component/HOOK/UseRef'
 // import Demo from './component/react-transition-group/Transition'
 // import Demo from './component/router/Router'
-import Demo from './component/router/RouterData'
+// import Demo from './component/router/RouterData'
 // import Demo from './component/ManagementSystem'
+// import Demo from './component/router/RouterGuard'
+import Demo from './component/router/NewRouterGuard'
 export default class App extends Component {
   render() {
     return (
