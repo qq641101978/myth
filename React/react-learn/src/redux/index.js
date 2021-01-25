@@ -1,21 +1,21 @@
-
-import { createStore, bindActionCreators } from '../_redux'
-// import { createStore, bindActionCreators } from 'redux'
-import * as  numberActions from './action/number-action'
+import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducer'
+import logger from 'redux-logger'
+import thunk from 'redux-thunk'
+
+//第三方中间件的使用
+
+// const store = createStore(reducer, applyMiddleware(thunk, logger))
+
+// // 使用 bindActionCreators
+// const boundActiions =  bindActionCreators(numberActions, store.dispatch )
+// boundActiions.getIncreaseAction()
+// boundActiions.getIncreaseAction()
 
 
-const store = createStore(reducer, 10) //获得当前仓库，并调用一次 reducer
-
-
-store.subscribe(() => {
-  console.log('状态变化了', store.getState())
-})
-// store.dispatch(numberActions.getDecreaseAction())
-// console.log(bindActionCreators)
-// 使用 bindActionCreators
-const boundActiions =  bindActionCreators(numberActions, store.dispatch )
-console.log(boundActiions)
-
-boundActiions.getSetAction(20)
-boundActiions.getIncreaseAction()
+export default createStore(reducer,
+  applyMiddleware(
+    thunk,
+    logger,
+  )
+)

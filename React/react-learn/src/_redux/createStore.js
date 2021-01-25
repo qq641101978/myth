@@ -1,3 +1,4 @@
+import isPlainObject from './utils/isPlainObject'
 /**
  * 实现createStore
  * @param {Function} reducer 
@@ -28,12 +29,10 @@ export default function createStore (reducer, defaultState) {
   const subscribe = (listener) => { 
     listeners.push(listener)
     // 移除监听器
-    let isRemove = false
     return () => {
-      if(isRemove) return
       const i = listeners.indexOf(listener)
+      if(i === -1) return // -1 表示移除了
       listeners.splice(i, 1)
-      isRemove = true
     }
   }
   // 创建仓库时，需要分发一次初始的 action
@@ -47,13 +46,3 @@ export default function createStore (reducer, defaultState) {
   }
 }
 
-/**
- * 验证 obj 是否是 plain-object
- * @param {*} obj 
- */
-function isPlainObject(obj) {
-  if (typeof obj !== 'object') return false
-
-  return Object.getPrototypeOf(obj) === Object.prototype
-
-}

@@ -865,6 +865,7 @@ HOOK：React16.8.0之后出现
   3. 有利于将来和 react 结合时的优化
 6. 对于复杂化的场景，需要生成多个reducer，然后在合并成一个
   1. redux 提供了一个方法帮助我们合并 combineReducers
+    1. 组装 reducers，返回一个 reducer，数据使用一个对象表示，数据的属性名与传递的参数保持一致
 
 
 ### store
@@ -876,3 +877,22 @@ HOOK：React16.8.0之后出现
 
 ### 源码实现
 ![createStore](./react-learn/src/_redux/createStore.js)
+![bindActionCreators](./react-learn/src/_redux/bindActionCreators.js)
+![combineReducers](./react-learn/src/_redux/combineReducers.js)
+
+
+### redux 中间件（Middleware）
+- 中间件：类似于插件，可以在不影响原本功能，并且不改动原本代码的基础上，进行功能的增强
+- 在 redux 中增强 dispatch
+- 莫名想到 链式调用
+
+- 常用中间件：
+- redux-logger：日志
+- redux-thunk：
+  1. thunk 允许 action 是一个带有副作用的函数，当 action 是一个函数时，thunk 会阻止 action 的后续提交
+  2. thunk会向函数传递三个参数：
+    1. dispatch：来自于 store.dispatch
+    2. getState：来自于 store.getState
+    3. extra：额外参数
+- redux-promise：允许 action 是一个 promise 对象
+- redux-saga
