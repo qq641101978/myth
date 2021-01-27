@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const iterator = {
+      total: 3, // 可迭代次数
+      i:1, // 当前迭代次数
+      next() {
+        this.i ++
+        return {
+          value: this.i > 3 ? undefined : this.i,
+          done: this.i > 3
+        }
+      }
+    }
+
+    /**
+     * 输出斐波数列的前 n 位
+     */
+    function sequence(n = 1) {
+      const iterator = {
+        a: 1,
+        b: 1,
+        curIndex: 0,
+        next() {
+          this.curIndex ++
+          if (this.curIndex === 1 || this.curIndex === 2) {
+            return {
+              value: 1,
+              done: false
+            }
+          }
+          const c = this.a + this.b
+          this.a = this.b
+          this.b = c
+          return {
+            value: this.curIndex > n ? undefined : c,
+            done: this.curIndex > n
+          }
+        }
+      }
+      for (let i = 0; i < n; i++) {
+        iterator.next()
+      }
+      return iterator.b
+    }
+
+    /**
+     * 
+     * @param {*} n  最大调用次数
+     */
+    function createIterator(n = 1) {
+      let i = 0
+      return {
+        next(){
+          i++
+          return {
+            value : i > n ? undefined: Math.random().toString(36).substring(2,6),
+            done: i > n 
+          }
+        }
+      }
+    }
+    const foo = createIterator(10)
+    
+    /**
+     * 生成器
+     * yield 后面的表达式，交给 next 来处理，传参就是返回值
+     */
+    function* createArrayIterator() {
+      console.log('‘生成器函数题：开始')
+      let result = yield 1
+      console.log('生成器执行函数体：允许1',result)
+      result = yield 2
+      console.log('生成器执行函数体：允许2',result)
+      result = yield 3
+      console.log('生成器执行函数体：允许3',result)
+      return '结束'
+    }
+    const generator = createArrayIterator() 
+    // generator.next()
+    // generator.throw(new Error('出错了')) //内部报错，结束执行。可以使用 try catch 获取错误
+    // generator.return() //强行结束生成器
+    /**
+     * 模拟 es7 的 async 和 await
+     */
+    function run (createArrayIterator) {
+      const generator = createArrayIterator() 
+      next()
+      /**
+       * 不能使用循环的原因：当yield 后面是异步操作时候，循环不会等待他，
+       */
+      function next(nextValue) {
+        const result = generator.next(nextValue)
+        if (result.done) return
+        const value = result.value
+
+        if(typeof value.then  === 'funtion') {
+          value.then(data => next(data))
+        } 
+        else {
+          next(value)
+        }
+      }
+    }
+    run(createArrayIterator)
+  </script>
+</body>
+</html>

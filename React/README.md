@@ -879,12 +879,12 @@ HOOK：React16.8.0之后出现
 ![createStore](./react-learn/src/_redux/createStore.js)
 ![bindActionCreators](./react-learn/src/_redux/bindActionCreators.js)
 ![combineReducers](./react-learn/src/_redux/combineReducers.js)
-
+![applyMiddleware](./react-learn/src/_redux/applyMiddleware.js)
 
 ### redux 中间件（Middleware）
 - 中间件：类似于插件，可以在不影响原本功能，并且不改动原本代码的基础上，进行功能的增强
 - 在 redux 中增强 dispatch
-- 莫名想到 链式调用
+- **action->中间件1->中间件2->中间件3->原始的 dispatch->reducer**
 
 - 常用中间件：
 - redux-logger：日志
@@ -896,3 +896,62 @@ HOOK：React16.8.0之后出现
     3. extra：额外参数
 - redux-promise：允许 action 是一个 promise 对象
 - redux-saga
+
+#### redux-saga
+- 以上 redux-thunk，redux-promise，不会保持 redux 的纯净
+- redux-saga 将解决这样的问题，它不仅可以保持 action，action创建函数，reducer的纯净，而且可以用模块化的方式解决副作用，并且功能非常强大。
+- reudx-saga是建立在 ES6 的生成器的基础上，要熟练的使用 saga，必须理解生成器。
+
+- saga 特点：强大，灵活，纯净
+- 在 saga 任务中，如果 yield 了一个普通数据，saga 不作任何处理，仅仅将数据传递给 yield 表达式（把得到的数据放到 next 的参数中）
+- saga 需要你在 yield 后面放上一些合适的 saga 指令（saga effects），saga 中间件会根据不同的指令进行特殊处理，以控制整个任务流程
+- 每个指令本质就是一个函数，该函数调用后会返回一个指令对象，saga会接收到指令对象，进行处理
+- **一旦saga任务完成（生成器函数运行完成）则 saga 中间件一定结束**
+- **指令前面必须用 yield，以确保该指令的返回结果被 saga 控制**
+- **指令**
+  1. take指令：【阻塞】监听某个 action，如果 action 发生了，则会进行下一步处理，take指令仅监听一次。yield
+  得到的是完美的 action 对象
+  2. all指令：【阻塞】该函数传入一个数组，数组中放入生成器，saga会等待所有的生成器全部完成后才会进一步处理（Promise.all）
+  3. takeEvery指令：不断的监听某个 action，当某个 action 达到后，运行一个函数，takeEvery 永远不会结束当前生成器
+  4. delay指令：【阻塞】阻塞指定的毫秒数
+  5. put指令：用于重新触发 action，相当于 dispatch 一个 action
+  6. call指令：【可能阻塞】用于副作用（通常是异步）函数调用，如果使用 Promise 对象被拒绝，saga会使用 gennerator.throw 抛出错误
+  7. apply指令：【可能阻塞】用于副作用（通常是异步）函数调用
+  8. select指令：用于得到当前仓库的数据
+  9. cps指令：【可能阻塞】用于调用那些传统的回调方式的异步函数
+  10. fork：开启一个新任务
+  11. cancel：取消一个或多个任务，实现原理利用了 generator.return
+  12. cancelled：判断当前任务线是否被取消了
+  13. race：【阻塞】竞赛，可以传递多个任务（Promise.race功能类似）
+  14. takeLasttest：功能与 rakeEvery 一致，只不过，会自动取消掉之前开启的任务
+
+### redux-actions
+- 该库由于简化 action-types，action-creator 以及 reducer
+- 官方文档：https://redux-actions.js.org/
+
+## dva（守望 D.Va）
+- 官方：https://dvajs.com/
+- dva 不仅仅是一个第三方库，更是一个框架，它主要整合了 redux 的相关内容，让我们处理数据更加容易，实际上，dva依赖了很多：react，react-router，redux，redux-saga，react-reudx，connect-react-router等等。
+
+
+## UmiJS :react的最佳解决方案实现
+
+- 官方：https://umijs.org/zh-CN/docs
+
+- 插件化
+- 开箱即用
+- 约定式路由
+
+### 全局安装
+
+- yarn global add umi
+- 提供了一个命令行工具：umi，通过该命令可以对umi工程进行操作
+> umi 还可以使用对应的脚手架
+- dev：使用 umi dev 启动工程
+
+### 约定式路由
+- umi 对路由的处理，主要通过两种方式
+  1. **约定式**：使用约定好的文件夹和文件，来代表页面，umi会根据发开者书写的页面，生成路由配置
+  2. 配置式：直接书写路由配置文件
+- umi约定，工程中的 pages 文件夹中存放的是页面，如果工程包含src目录，则 src/pages 是页面文件夹
+- umi约定，页面的文件名，以及页面的文件路径，是该页面匹配的路由

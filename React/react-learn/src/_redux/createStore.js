@@ -3,8 +3,19 @@ import isPlainObject from './utils/isPlainObject'
  * 实现createStore
  * @param {Function} reducer 
  * @param {any} defaultState 
+ * @param {Function} enhanced // 增强函数
  */
-export default function createStore (reducer, defaultState) {
+export default function createStore(reducer, defaultState, enhanced) {
+  // enhanced 表示 applymiddleware
+  if (typeof defaultState === 'function') {
+    // 第二个参数是用用中间件的函数返回值
+    enhanced = defaultState
+    defaultState = undefined
+  }
+  if (typeof enhanced === 'function') {
+    // 进入 applymiddleware 的处理逻辑
+    return enhanced(createStore)(reducer, defaultState)
+  }
   const currentReducer = reducer // 当前使用的 reducer
   let currentState = defaultState // 当前仓库状态
   const listeners = [] // 记录所有的监听器

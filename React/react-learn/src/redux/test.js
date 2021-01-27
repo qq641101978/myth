@@ -1,8 +1,8 @@
 import { bindActionCreators } from 'redux'
 import store from './index'
-import * as  usersActions from './action/usersAction'
+import * as  numberAction from './action/numberAction'
 
-const boundActiions = bindActionCreators(usersActions, store.dispatch)
+const boundActiions = bindActionCreators(numberAction, store.dispatch)
 
-boundActiions.fetchUsers()
+boundActiions.getDecreaseAction()
 

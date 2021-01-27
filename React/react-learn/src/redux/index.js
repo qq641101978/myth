@@ -1,21 +1,16 @@
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducer'
 import logger from 'redux-logger'
-import thunk from 'redux-thunk'
-
+import createSagaMiddleware from 'redux-saga'
+import asgaTask from './saga'
 //第三方中间件的使用
-
-// const store = createStore(reducer, applyMiddleware(thunk, logger))
-
-// // 使用 bindActionCreators
-// const boundActiions =  bindActionCreators(numberActions, store.dispatch )
-// boundActiions.getIncreaseAction()
-// boundActiions.getIncreaseAction()
-
-
+const sagaMid = createSagaMiddleware()
 export default createStore(reducer,
   applyMiddleware(
-    thunk,
+    sagaMid,
     logger,
   )
 )
+
+// 启动 saga 任务
+sagaMid.run(asgaTask)

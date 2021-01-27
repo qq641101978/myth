@@ -1,4 +1,4 @@
-// import number from './number'
+import number from './number'
 import users from './users'
 // import { combineReducers } from 'redux'
 import { combineReducers } from '../../_redux'
@@ -18,6 +18,6 @@ import { combineReducers } from '../../_redux'
  * redux 提供的导出
  */
 export default combineReducers({
-  // number,
-  users
+  number,
+  // users
 })
