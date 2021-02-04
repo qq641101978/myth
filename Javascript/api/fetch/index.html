@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="file" multiple id="avatar">
+  <script>
+    function getRequestInfo() {
+      const url = 'http://route.showapi.com/1196-2?keyword=掩耳盗铃'
+      const config = {
+        headers:{
+          'Content-type': 'text/html;charset=utf-8'
+        }
+      }
+      const req = new Request(url, config)
+      console.log(req)
+      return req
+    }
+
+    async function getData(){
+      const response = await fetch(getRequestInfo())
+      const result = await response.json()
+      console.log(response,result)
+    }
+    getData()
+
+    function upload(){
+      console.log(avatar.files)      
+      const formData = new FormData() // 构建请求体
+      formData.append('imagefile', avatar.files[0])
+      // 发送请求
+      fetch(url, {
+        method:'POST',
+        body: formData // 自动修改请求题
+      })
+    }
+  </script>
+</body>
+</html>
