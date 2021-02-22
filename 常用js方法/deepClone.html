@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const obj = {
+      foo: { name: '我是一个对象', id: 1 },
+      arr: [0, 1, 2, {name:111}],
+      func: function () { console.log('我是一个函数') },
+      date: new Date(0),
+      reg: new RegExp('/我是一个正则/ig'),
+      [Symbol('1')]: 1, // 不可枚举,
+    }
+    obj.loop = obj  // 创建循环引用 ps 简单克隆不能使用，会造成死循环
+    // console.log(obj.loop === obj)
+    // 优化1：解决不可枚举键值遍历，Reflect.ownKeys方法用于返回对象的所有属性，基本等同于Object.getOwnPropertyNames与Object.getOwnPropertySymbols之和。返回一个数组
+    // 优化2：合理判断类型
+    const dataType = (target) => Object.prototype.toString.call(target).replace(/\[object /g, '').replace(/\]/g, '').toLowerCase()
+    function deepClone(obj, hash = new WeakMap()) {
+      switch(dataType(obj)) {
+        case 'object':
+          // 有循环引用
+          if (hash.has(obj)) return hash.get(obj)
+          // const allDesc = Object.getOwnPropertyDescriptors(obj)
+          // 遍历传入参数所有键的特性 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+          // const cloneObj = Object.create(Object.getPrototypeOf(obj), allDesc)
+          // const cloneObj = Object.create(Object.getPrototypeOf(obj))
+          const cloneObj = obj
+          // 将这次的对象放入 hash
+          hash.set(obj, cloneObj)
+          for(let key of Reflect.ownKeys(obj)) {
+            cloneObj[key] = deepClone(obj[key], hash)
+          }
+          return cloneObj
+        case 'array':
+          // 没做多维数组处理
+          return obj.map(it => {
+            if(dataType(it) ==='object') {
+              return deepClone(it)
+            }else {
+              return it
+            }
+          })
+        case 'date':
+          return new Date(obj)
+        case 'regexp':
+          return new RegExp(obj)
+        default:
+          return obj
+      }
+    }
+    const obj1 = deepClone(obj)
+    obj1.foo.name = '我是新对象'
+    console.log(obj)
+    console.log(obj1)
+  </script>
+</body>
+</html>

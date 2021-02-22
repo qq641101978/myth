@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function clone (parent, child) {
+      // 这里改用 Object.create 就可以减少组合继承中多进行一次构造的过程,会多一层 __proto__
+      child.prototype = Object.create(parent.prototype);
+      child.prototype.constructor = child;
+    }
+
+    function Parent6() {
+      this.name = 'parent6';
+      this.play = [1, 2, 3];
+    }
+
+    Parent6.prototype.getName = function () {
+      return this.name;
+    }
+    Parent6.prototype.foo = [1,2,3]
+
+    function Child6() {
+      Parent6.call(this);
+      this.friends = 'child5';
+    }
+    clone(Parent6, Child6);
+
+    Child6.prototype.getFriends = function () {
+      return this.friends;
+    }
+
+    let person6 = new Child6();
+    let person7 = new Child6();
+    person7.foo.push(11)
+    // console.log(person6);
+
+    // console.log(person6.getName());
+
+    // console.log(person6.getFriends());
+
+  class Person {
+    constructor(name) {
+      this.name = name
+    }
+    getName = function () {
+      console.log('Person:', this.name)
+    }
+    arr = [1,2,3]
+
+  }
+
+  class Gamer extends Person {
+
+  constructor(name, age) {
+
+    // 子类中存在构造函数，则需要在使用“this”之前首先调用 super()。
+
+    super(name)
+
+    this.age = age
+
+  }
+
+  }
+
+  const asuna = new Gamer('Asuna', 20)
+
+  console.log(asuna)
+
+  </script>
+</body>
+</html>
