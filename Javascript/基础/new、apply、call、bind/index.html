@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /**
+     * new操作
+     * 创建一个新对象；
+     * 将构造函数的作用域赋给新对象（this 指向新对象）；
+     * 执行构造函数中的代码（为这个新对象添加属性）；
+     * 返回新对象。
+     */
+    function _new(ctor, ...args) {
+      if(typeof ctor !== 'function') throw 'ctor must be a function'
+
+      const obj = new Object();
+      obj.__proto__ = Object.create(ctor.prototype);
+      const res = ctor.apply(obj, [...args]);
+
+      // 判断返回值：返回值是引用类型，则 new 个屁
+      let isObject = typeof res === 'object' && res !== null;
+      let isFunction = typeof res === 'function';
+
+      return (isObject || isFunction) ? res : obj;
+    };
+    function Foo(name) {
+      this.name = name
+    }
+
+    let name = new Foo('libai')
+    let name1 = _new(Foo, 'libai')
+
+    console.log(name)
+    console.log(name1)
+
+    /**
+     * 需要借用什么方法，在什么上下文中，参数传递的格式，是否立即执行
+     * 如下，借用Math获取最大值的方法，Math.max(1,2,3) => 3
+     * 借用上下文： Math
+     * 借用方法：Math.max
+     * 实现：Math.max.xxx(Math, arg)
+     */
+    Function.prototype.call = function (context, ...args) {
+      const ctx = context || window;
+      ctx.fn = this;
+      const result = ctx.fn(...args)
+      delete ctx.fn
+      return result;
+    }
+
+    Function.prototype.apply = function (context, args) {
+      const ctx = context || window;
+      ctx.fn = this;
+      const result = ctx.fn(...args)
+      console.log(result)
+      delete ctx.fn
+      return result;
+    }
+
+    Function.prototype.bind = function (context, ...args) {
+      if (typeof this !== "function") {
+        throw new Error("this must be a function");
+      }
+      const self = this;
+      const fbound = () => self.apply(self, [...args])
+      //确保原型属性不丢失
+      if(this.prototype) {
+        fbound.prototype = Object.create(this.prototype);
+      }
+      return fbound;
+    }
+    // const arr = [1, 2, 3]
+    // let max1 = Math.max(...arr)
+    // let max2 = Math.max.apply(Math, arr)
+    // let max3 = Math.max.call(Math, ...arr)
+    // let max4 = Math.max.bind(Math, ...arr)()
+    // console.log(max1, max2, max3, max4)
+
+    // const obj = {
+    //   0:'bai',
+    //   1:'li',
+    //   length:2
+    // }
+    // Array.prototype.push.apply(obj, ['nihao'])
+    // console.log(obj)
+  </script>
+</body>
+</html>

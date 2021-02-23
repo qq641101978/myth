@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /**
+     * 闭包：作用域链拖拽
+     * es5:全局作用域和函数作用域
+     * es6:新增块级作用域，let， const
+     * 经典面试问题：循环 setTimeout 输出 结果
+     * 答案：（没有块作用域）setTimeout 为宏任务，由于 JS 中单线程 eventLoop 机制，在主线程同步任务执行完后才去执行宏任务，因此循环结束后 setTimeout 中的回调才依次执行。
+     * 因为 setTimeout 函数也是一种闭包，往上找它的父级作用域链就是 window，变量 i 为 window 上的全局变量，开始执行 setTimeout 之前变量 i 已经就是 5 了，因此最后输出的连续就都是 5。
+     * 解决方式：形成块作用域或者函数作用域（立即执行函数），定时器的第三个参数传递给回调函数
+     * 牵引问题：eventLoop，
+     */
+    // if(true) {
+    //   var a = 1
+    // }
+    // console.log(a) //1
+    // if(true) {
+    //   let b = 2
+    // }
+    // console.log(b) //报错 未定义
+
+    for(var i = 0; i < 5; i++) {
+      setTimeout(function(j){
+        console.log(j)
+      },10,i)
+    }
+    console.log(i)
+  </script>
+</body>
+</html>

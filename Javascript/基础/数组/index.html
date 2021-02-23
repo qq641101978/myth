@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const obj = {
+      0:'foo',
+      1:'bar',
+      length:2
+    }
+    const arr = Array.from(obj,e=>e.repeat(2))
+    console.log(arr)
+    // 方法2
+
+    var arr = [1, [2, [3, 4]]];
+
+    function flatten(arr) {
+        return arr.reduce(function(prev, next){
+          return prev.concat(Array.isArray(next) ? flatten(next) : next)
+        }, [])
+
+    }
+
+
+  </script>
+</body>
+</html>

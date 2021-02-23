@@ -41,36 +41,6 @@
     // console.log(person6.getName());
 
     // console.log(person6.getFriends());
-
-  class Person {
-    constructor(name) {
-      this.name = name
-    }
-    getName = function () {
-      console.log('Person:', this.name)
-    }
-    arr = [1,2,3]
-
-  }
-
-  class Gamer extends Person {
-
-  constructor(name, age) {
-
-    // 子类中存在构造函数，则需要在使用“this”之前首先调用 super()。
-
-    super(name)
-
-    this.age = age
-
-  }
-
-  }
-
-  const asuna = new Gamer('Asuna', 20)
-
-  console.log(asuna)
-
   </script>
 </body>
 </html>
