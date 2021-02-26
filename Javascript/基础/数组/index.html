@@ -7,25 +7,84 @@
 </head>
 <body>
   <script>
-    const obj = {
-      0:'foo',
-      1:'bar',
-      length:2
+    /**
+     * 疑问：为啥使用 Object(this) 根据打印结果，和直接赋值  this 一致
+     */
+    Array.prototype.push = function(...items) {
+      let O = Object(this);  // ecma 中提到的先转换为对象
+      // a >>> b	把a的二进制表示向右移动b位，丢弃被移出的所有位，并把左边空出的位都填充为0
+      let len = this.length >>> 0;
+      let argCount = items.length >>> 0;
+      // 2 ^ 53 - 1 为JS能表示的最大正整数
+      if (len + argCount > 2 ** 53 - 1) {
+        throw new TypeError("The number of array is over the max value")
+      }
+      for(let i = 0; i < argCount; i++) {
+        O[len + i] = items[i];
+      }
+      let newLength = len + argCount;
+      O.length = newLength;
+      return newLength;
     }
-    const arr = Array.from(obj,e=>e.repeat(2))
-    console.log(arr)
-    // 方法2
 
-    var arr = [1, [2, [3, 4]]];
+    Array.prototype.map = function(callbackFn, thisArg) {
+      if (this === null || this === undefined) {
+        throw new TypeError("Cannot read property 'map' of null");
+      }
 
-    function flatten(arr) {
-        return arr.reduce(function(prev, next){
-          return prev.concat(Array.isArray(next) ? flatten(next) : next)
-        }, [])
+      if (Object.prototype.toString.call(callbackfn) != "[object Function]") {
+        throw new TypeError(callbackfn + ' is not a function')
+      }
+      let O = Object(this);
+      let T = thisArg;
+      let len = O.length >>> 0;
+      let A = new Array(len);
+      for(let k = 0; k < len; k++) {
+        if (k in O) {
+          let kValue = O[k];
+          // 依次传入this, 当前项，当前索引，整个数组
+          let mappedValue = callbackfn.call(T, KValue, k, O);
+          A[k] = mappedValue;
+        }
+      }
+      return A;
 
     }
 
+    Array.prototype.reduce  = function(callbackfn, initialValue) {
+      // 异常处理，和 map 类似
+      if (this === null || this === undefined) {
+        throw new TypeError("Cannot read property 'reduce' of null");
+      }
+      // 处理回调类型异常
+      if (Object.prototype.toString.call(callbackfn) != "[object Function]") {
+        throw new TypeError(callbackfn + ' is not a function')
+      }
 
+      let O = Object(this);
+      let len = O.length >>> 0;
+      let k = 0;
+      let accumulator = initialValue;  // reduce方法第二个参数作为累加器的初始值
+      if (accumulator === undefined) {  // 初始值不传的处理
+        for(; k < len ; k++) {
+          if (k in O) {
+            accumulator = O[k];
+            k++;
+            break;
+          }
+        }
+        throw new Error('Each element of the array is empty');
+      }
+
+      for(;k < len; k++) {
+        if (k in O) {
+          // 注意 reduce 的核心累加器
+          accumulator = callbackfn.call(undefined, accumulator, O[k], O);
+        }
+      }
+      return accumulator;
+
+    }
   </script>
 </body>
 </html>

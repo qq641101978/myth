@@ -198,8 +198,8 @@ this.setState(cur=>{
 
 ### 旧版生命周期： React < 16.0.0
 ![旧生命周期](./img/旧生命周期.jpg)
-
-### 初始化阶段
+> 旧生命周期一些钩子函数被删除的原因是不适应 Fiber架构，和存在滥用的情况。
+#### 初始化阶段
 1. constructor：初始化阶段，初始化属性和状态
   1. 同一个组件对象只会创建一次
   2. 不能在第一次挂载页面之前，调用 setState。
@@ -221,7 +221,7 @@ this.setState(cur=>{
 > 1 - 4 挂载阶段完成
 
 #### 更新阶段 状态改变，属性更新
-5. componentWillReceiveProps 接收到新的属性值 新版移除
+5. componentWillReceiveProps 父组件更新触发 新版移除
   1. 即将接收新的属性值
   2. 参数为新的属性对象
   3. 该函数可能会导致一些bug，不推荐使用（状态和属性混乱使用，导致数据出处不明确）
@@ -254,7 +254,7 @@ constructor -> static getDerivedStateFromProps -> componentDidMount 挂载三步
 
 #### 更新阶段 状态改变，属性更新
 
-2. static getDerivedStateFromProps 从属性中获取新的状态
+2. static getDerivedStateFromProps (存在只有一个目的：让组件在 props 变化时更新 state)
   1. 通过参数可以获取新的属性和状态
   2. 该函数是静态的
   3. 该函数返回值会覆盖掉组件的状态
@@ -287,6 +287,25 @@ constructor -> static getDerivedStateFromProps -> componentDidMount 挂载三步
   1. 组件从 DOM 树移除的时候触发
   2. 通常在该函数中，销毁一些组件依赖的资源，比如计时器（**副作用处理**）
 
+### React的 Fiber架构：目的将同步渲染变成异步的
+- 将一个大的更新任务，拆解成多个小任务
+- Fiber 架构的重要特征就是可以被打断的异步渲染模式
+
+- React 16 的生命周期被划分为了 render 和 commit 两个阶段，而 commit 阶段又被细分为了 pre-commit 和 commit。每个阶段所涵盖的生命周期如下图所示：
+![Fiber](./img/Fiber架构.jpg)
+- 我们先来看下三个阶段各自有哪些特征（以下特征翻译自上图）。
+
+- render 阶段：纯净且没有副作用，可能会被 React 暂停、终止或重新启动。
+
+- pre-commit 阶段：可以读取 DOM。
+
+- commit 阶段：可以使用 DOM，运行副作用，安排更新。
+
+- 总的来说，render 阶段在执行过程中允许被打断，而 commit 阶段则总是同步执行的。
+
+- 为什么这样设计：简单来说，由于 render 阶段的操作对用户来说其实是“不可见”的，所以就算打断再重启，对用户来说也是零感知。而 commit 阶段的操作则涉及真实 DOM 的渲染，再狂的框架也不敢在用户眼皮子底下胡乱更改视图，所以这个过程必须用同步渲染来求稳。
+
+- 旧生命周期 componentWillMount，componentWillUpdate，componentWillReceiveProps 它们都处于 render 阶段，都可能重复被执行。
 
 ## 表单
 - 受控组件和非受控组件
@@ -380,7 +399,7 @@ export default class MyRef extends Component {
 
 ### 新的API(真像 vue bus)
 ![新的上下文 API](./react-learn/src/component/NewContext.js)
-- 旧版 API 存在效率和滥用问题
+- 旧版 API 存在效率和滥用问题,如果组件提供的一个Context发生了变化，而中间父组件的 shouldComponentUpdate 返回 false，那么使用到该值的后代组件不会进行更新。使用了 Context 的组件则完全失控，所以基本上没有办法能够可靠的更新 Context
 - **创建上下文**
   1. 上下文是一个独立于组件的对象，该对象通过 React.createCoontext(默认值) 创建，返回的是一个包含两个属性的对象
     1. Provider属性：生产者，一个组件，该组件会创建一个上下文
@@ -521,6 +540,7 @@ export default class MyRef extends Component {
 
 ## HOOK:真香
 HOOK：React16.8.0之后出现
+HOOK的本质：链表
 组件：无状态组件（函数组件），类组件
 类组件的麻烦：
 1. this 指向问题
@@ -963,4 +983,20 @@ HOOK：React16.8.0之后出现
 - 404约定，umi约定，pages/404.js,表示404页面，如果路由无匹配，则渲染该页面，该约定开发模式下无效，部署后生效
 
 
-##### 待续
+
+
+## 类组件和函数组件最大的不同：函数组件能捕获 render 中的状态，真正的把数据和渲染绑定到了一起
+- https://overreacted.io/zh-hans/how-are-function-components-different-from-classes/
+
+## 为什么需要 React-Hooks
+- 告别难以理解的 Class：this 不符合预期， 和生命周期的学习成本
+
+- 解决业务逻辑难以拆分的问题：类组件的逻辑和生命周期是耦合在一起的，一个生命周期不止做一件事，而在 Hooks 的帮助下，我们完全可以把这些繁杂的操作按照逻辑上的关联拆分进不同的函数组件里：我们可以有专门管理订阅的函数组件、专门处理 DOM 的函数组件、专门获取数据的函数组件等。Hooks 能够帮助我们实现业务逻辑的聚合，避免复杂的组件和冗余的代码。
+
+- 使状态逻辑复用变得简单可行；解决组件的“嵌套地狱”现象，Hooks 可以视作是 React 为解决状态逻辑复用这个问题所提供的一个原生途径。现在我们可以通过自定义 Hook，达到既不破坏组件结构、又能够实现逻辑复用的效果。
+
+- 函数组件从设计思想上来看，更加契合 React 的理念。
+
+- Hooks 并非万能：Hooks 暂时还不能完全地为函数组件补齐类组件的能力，Hooks 在使用层面有着严格的规则约束
+
+> ps：本质上都是在用实践层面的约束来解决设计层面的问题

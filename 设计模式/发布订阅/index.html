@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class Bus {
+
+      eventMap = {}
+
+      /**
+       * 订阅
+       * @param {string} type 
+       * @param {function} handle 
+       */
+      on(type, handle) {
+        if (typeof handle !== 'function') {
+          throw new Error('哥们，我需要一个函数')
+        }
+        if (!this.eventMap[type]) this.eventMap[type] = []
+        this.eventMap[type].push(handle) 
+      }
+      /**
+       * 发布
+       * @param {String} type 
+       * @param {any} params 
+       */
+      emit(type, params) {
+        this.eventMap[type] && this.eventMap[type].forEach(handle => { handle(params) })
+      } 
+      /**
+       * 优化：删除不需要的订阅函数
+       * @param {string} type 
+       * @param {Function} handler 
+       */
+      off(type, handler) {
+        this.eventMap[type] && this.eventMap[type].splice(this.eventMap[type].indexOf(handler) >>> 0, 1)
+      }
+    }
+
+    const bus = new Bus()
+    const fn = (data) => {console.log('点击了',data)}
+    bus.on('test', fn)
+    bus.emit('test','你好' )
+    bus.off('test', fn)
+    console.log(bus)
+  </script>
+</body>
+</html>

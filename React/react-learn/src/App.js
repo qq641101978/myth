@@ -11,7 +11,9 @@ import React, { Component } from 'react'
 // import Demo from './component/router/RouterData'
 // import Demo from './component/ManagementSystem'
 // import Demo from './component/router/RouterGuard'
-import Demo from './component/router/NewRouterGuard'
+// import Demo from './component/router/NewRouterGuard'
+// import Demo from './component/EventEmitter'
+import Demo from './component/FnAndClass'
 export default class App extends Component {
   render() {
     return (

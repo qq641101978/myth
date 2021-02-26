@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 const ctx = React.createContext()
+console.log(ctx)
 export default class NewContext extends Component {
   state = {
     a: 111,
