@@ -8,7 +8,7 @@
 <body>
   <script>
     /**
-     * 疑问：为啥使用 Object(this) 根据打印结果，和直接赋值  this 一致
+     * 疑问：为啥使用 Object(this) 根据打印结果，和直接赋值  this 一致,是借用原型么
      */
     Array.prototype.push = function(...items) {
       let O = Object(this);  // ecma 中提到的先转换为对象

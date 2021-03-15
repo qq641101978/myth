@@ -39,10 +39,9 @@
 
     /**
      * 需要借用什么方法，在什么上下文中，参数传递的格式，是否立即执行
-     * 如下，借用Math获取最大值的方法，Math.max(1,2,3) => 3
-     * 借用上下文： Math
-     * 借用方法：Math.max
-     * 实现：Math.max.xxx(Math, arg)
+     * 
+     * 方法实现：
+     * 借用别人的方法，那就先把别人的方法添加到自己身上，用了再删除
      */
     Function.prototype.call = function (context, ...args) {
       const ctx = context || window;

@@ -230,21 +230,43 @@
   // 定义函数：f(n, m) 函数返回的是出列人的编号数组，
   // 当 n = 1时：f(n, m) = [1]
   // 当 n = n时 [1, 2, 3,....n-3, n-2, n-1, n]
-  let n = 10
-  const m = 4
-  let p = 0
-  const list = new Array(n).fill('').map((item, index) => index + 1);
-  const arr = []
-  function f(list, m, p) {
-    if(list.length === 1)  return arr.push(list[0]) //出口
+  // let n = 10
+  // const m = 4
+  // let p = 0
+  // const list = new Array(n).fill('').map((item, index) => index + 1);
+  // const arr = []
+  // function f(list, m, p) {
+  //   if(list.length === 1)  return arr.push(list[0]) //出口
 
-    p = (p + m - 1) % list.length
-    arr.push(list[p])
-    list.splice(p, 1)
+  //   p = (p + m - 1) % list.length
+  //   arr.push(list[p])
+  //   list.splice(p, 1)
 
-    if(list.length) f(list, m, p)
-  }
-  f(list, m, p)
+  //   if(list.length) f(list, m, p)
+  // }
+  // f(list, m, p)
+
+  // 遍历b,取出 a 的同等长度子串比较，比较不对，索引 +1 ，递归调用，直到索引加上 a 的长度大于 b 的长度，返回 -1
+  let a = '12'
+    let b = '12354355'
+    function isComtain(a, b) {
+      let lenA = a.length
+      let lenB = b.length
+      function getIndex(index) {
+        if ((index + lenA) > lenB) return  -1
+        let str = ''
+        for (let i = 0; i < lenA; i++) {
+          str += b[i + index]
+        }
+        if (str === a) {
+          return index
+        } else {
+          return getIndex(index + 1)
+        }
+      }
+      return getIndex(0)
+    }
+    isComtain(a, b)
   </script>
 </body>
 </html>
