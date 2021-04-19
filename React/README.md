@@ -177,7 +177,7 @@ console.log(his.state.n) // 1
 - 如果遇到某个事件中，需要多次同步修改状态，需要使用函数的方式得到最新状态
 ```js
 this.setState(cur=>{
-  //参数 cur 表示当前状态
+  // 参数 cur 表示当前状态
   // 该函数的返回结果，会混合（覆盖）掉之前的状态
   // 该函数异步执行
   return {
@@ -185,20 +185,21 @@ this.setState(cur=>{
   }
 })
 ```
-- 实践：
+- **实践：**
  - 1、把所有 setState 当作异步的
  - 2、永远不要信任 setState 调用之后的状态
  - 3、如果要使用改变之后的状态，需要使用回调函数（setState第二个参数）
  - 4、如果新的状态需要根据之前的状态进行运算，使用函数的方式改变状态（setState第一个参数，作为函数使用）
 
 - React 会对异步的 setState 进行优化，将多次的 setState 进行合并（将多次状态改变完成后，再统一对 state 进行改变，然后触发 render）
+> ps: 不就是 vue 处理数据改变的方式么。异步更新
 
 ## 生命周期
-- 生命周期仅存在类组件中，函数组件每次调用都是重新运行函数，旧对组件即刻被销毁
+- 生命周期仅存在类组件中，函数组件每次调用都是重新运行函数，旧的组件即刻被销毁
 
 ### 旧版生命周期： React < 16.0.0
 ![旧生命周期](./img/旧生命周期.jpg)
-> 旧生命周期一些钩子函数被删除的原因是不适应 Fiber架构，和存在滥用的情况。
+> 旧生命周期一些钩子函数被删除的原因是不适应 Fiber 架构，和存在滥用的情况。
 #### 初始化阶段
 1. constructor：初始化阶段，初始化属性和状态
   1. 同一个组件对象只会创建一次
@@ -226,7 +227,7 @@ this.setState(cur=>{
   2. 参数为新的属性对象
   3. 该函数可能会导致一些bug，不推荐使用（状态和属性混乱使用，导致数据出处不明确）
 
-6. **shouldComponentUpdata** 是否重新渲染组件 性能优化点
+6. **shouldComponentUpdate** 是否重新渲染组件 性能优化点
   1. 指示 React 是否要重新渲染该组件，通过返回 true 和 false 来指定，
   2. 默认 为 true
  
@@ -260,7 +261,7 @@ constructor -> static getDerivedStateFromProps -> componentDidMount 挂载三步
   3. 该函数返回值会覆盖掉组件的状态
   4. 该函数几乎没啥用
 
-3. **shouldComponentUpdata** 是否要重新渲染该组件  性能优化点
+3. **shouldComponentUpdate** 是否要重新渲染该组件  性能优化点
   1. 指示 React 是否要重新渲染该组件，通过返回 true 和 false 来指定，
   2. 默认 为 true
  
@@ -287,7 +288,7 @@ constructor -> static getDerivedStateFromProps -> componentDidMount 挂载三步
   1. 组件从 DOM 树移除的时候触发
   2. 通常在该函数中，销毁一些组件依赖的资源，比如计时器（**副作用处理**）
 
-### React的 Fiber架构：目的将同步渲染变成异步的
+### React的 Fiber架构：目的将同步渲染变成异步的，最终结果是保证用户体验
 - 将一个大的更新任务，拆解成多个小任务
 - Fiber 架构的重要特征就是可以被打断的异步渲染模式
 
@@ -426,13 +427,14 @@ export default class MyRef extends Component {
 4. React 的事件参数 e， 并非真实的事件参数。是一个合成的对象，类似于真实的 DOM 的事件参数 
   1. stopPropagation,阻止事件在虚拟 DOM 树中的冒泡
   2. nativeEvent，可以得到真实的 DOM 事件对象
-  3. 为了提高效率，React 使用事件对象池来处理事件对象
+  3. 为了提高效率，React 使用事件对象池来处理事件对象（发布订阅模式呗）
 **注意**
   1. 如果给真实的 DOM 的事件，并且阻止了冒泡。则会导致 React 事件无法触发 
   2. 如果给真实的 DOM 的事件， 会先于 React 事件运行
   3. 通过 React 的事件中阻止事件冒泡，无法阻止真实事件
   4. 可以通过 nativeEvent.stopImmediatePropagatioon()，阻止 document 上剩余事件的执行
   5. 在事件处理程序中，不要异步使用事件对象，如果一定要使用，需要调用 e.persist 函数持久化事件对象。
+  > ps: 实际就是 事件冒泡机制的问题
 
 
 ## 渲染原理：React 元素 => React 节点 => UI
@@ -600,7 +602,7 @@ HOOK的本质：链表
     1. componentDidMount 和 componentDidUpdate，更改了真实 DOM,但是用户还没看到更新
     2. useEffect 中的副作用函数，更改了真实 DOM，并且用户已经看到了 UI更新，
   4. 每个函数组件中，可以多次使用 useEffect，但是不要放入代码块中
-  5. useEffect 中的副作用函数，可以用返回值，返回值必须是一个函数，处理副作用后的一些操作（**清理函数**）
+  5. useEffect 中的副作用函数，可以有返回值，返回值必须是一个函数，处理副作用后的一些操作（**清理函数**）
     1. 该函数运行时间点：在每次运行副作用函数之前
     2. 首次渲染组件不会运行
     3. 组件被销毁时一定会运行
@@ -627,9 +629,9 @@ HOOK的本质：链表
 [UseContext](./react-learn/src/component/Hook/UseContext.js)
 - 函数名：useContext
 - 获取上下文数据
-- 针对于 React.createCoontext ，创建上下文和使用上下文，会增加组件的嵌套。所以有了 useContext,
+- 针对于 React.createContext ，创建上下文和使用上下文，会增加组件的嵌套。所以有了 useContext,
 - 他减少了一层消费者（上下文的使用者）的嵌套
->疑问：自组件怎么获取 上下文对象
+>疑问：子组件怎么获取 上下文对象
 
 ### Callback Hook
 [UseCallback](./react-learn/src/component/Hook/UseCallback.js)
@@ -860,7 +862,7 @@ HOOK的本质：链表
   2. 通常，使用 payload 属性表示附加数据（没有强制要求）
 3. 在大型项目中，由于操作类型非常多，为了避免硬编码，会将 action 的类型存放到一个或者一些单独的文件中（样板代码）
 4. 为了方便传递 action，通常会使用 action 创建函数来创建 cation
-  1. actio 创建函数应为无副作用的纯函数
+  1. action 创建函数应为无副作用的纯函数
     - 不能以任何形式改动参数
     - 不可以有异步
     - 不可以对外部环境中的数据造成影响
@@ -1000,3 +1002,5 @@ HOOK的本质：链表
 - Hooks 并非万能：Hooks 暂时还不能完全地为函数组件补齐类组件的能力，Hooks 在使用层面有着严格的规则约束
 
 > ps：本质上都是在用实践层面的约束来解决设计层面的问题
+
+## 总结：UI = react(state)

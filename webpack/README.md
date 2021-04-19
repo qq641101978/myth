@@ -55,3 +55,6 @@
 
 - 打包后的 main.js 文件就是一个立即执行函数: 这个函数是 Webpack 工作入口（webpackBootstrap），它接收一个 modules 参数，调用时传入了一个数组。
 - 函数意义：
+
+### Webpack CLI 作用：
+- 作用就是将 CLI 参数（命令行传入的参数）和 Webpack 配置文件中的配置整合得到一个完整对象。

@@ -31,6 +31,17 @@ const config = {
     // ...
     // 详细配置文档：https://webpack.js.org/configuration/dev-server/
   },
+  // 其他配置项
+  optimization: {
+    // 模块只导出被使用的成员
+    usedExports: true,
+    // 尽可能合并每个模块到一个函数中
+    concatenateModules: true,
+    // 压缩输出结果, false 不压缩
+    minimize: false,
+    // 副作用移除
+    sideEffects: true
+  },
   module: {
     rules: [
       {
@@ -41,6 +52,22 @@ const config = {
         test: /\.md$/,
         // 直接相对路径
         use: ['html-loader', './markdown-loader']
+      },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-env',
+                 // loader 过后的模块会强行 转化成 commonJs模式，Tree-shaking 失效
+                // modules 默认为 auto ,
+                // { modules: 'commonjs' }
+              ]
+            ]
+          }
+        }
       }
     ]
   },

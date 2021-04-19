@@ -1,0 +1,70 @@
+{
+  "locale": "zh-cn",
+  "eslint.autoFixOnSave": true, //开启 eslint 校验
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnType": true,
+  "editor.formatOnSave": true,
+  "editor.fontSize": 16,
+  // prettier配置
+  "prettier.singleQuote": true, //配置单引号
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "window.zoomLevel": -1, //窗口大小
+  "editor.tabSize": 2, //代码缩进
+  "workbench.iconTheme": "vscode-icons-mac", // 文件图标
+  "minapp-vscode.disableAutoConfig": true,
+  "files.autoSave": "onFocusChange",
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "tabnine.experimentalAutoImports": true,
+  "explorer.confirmDelete": false,
+  "cSpell.userWords": [
+    "Berners",
+    "CSRF",
+    "Etag",
+    "OWASP",
+    "Referer",
+    "SPDY",
+    "crossorigin",
+    "devtool",
+    "echarts",
+    "epoll",
+    "falsish",
+    "hejiu",
+    "keepalive",
+    "methder",
+    "msword",
+    "ondelay",
+    "prefetch",
+    "qrcode",
+    "qrcodejs",
+    "sendfile",
+    "tapable",
+    "typeof",
+    "vuex"
+  ],
+  "prettier.semi": false,
+  "prettier.trailingComma": "none",
+  "prettier.arrowParens": "avoid",
+  "prettier.embeddedLanguageFormatting": "off",
+  "prettier.htmlWhitespaceSensitivity": "ignore",
+  "prettier.printWidth": 320,
+  "prettier.bracketSpacing": false,
+  "prettier.requireConfig": true,
+  "emmet.includeLanguages": {
+    "javascript":"javascriptreact"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "explorer.confirmDragAndDrop": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "settingsSync.ignoredExtensions": [
+  
+  ],
+  "fileheader.Author": "baiyf",
+  "editor.largeFileOptimizations": false,
+}

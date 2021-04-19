@@ -68,3 +68,41 @@ $ npx webpack-dev-server
 
 ## webpack5 版本下不用按装 webpack-dev-server， 直接执行命令 webpack serve
 "start": "webpack serve --open",
+
+### source-map:增加开发体验，快速定位错误，
+- 出现的原因是，代码经过 webpack 处理，会丢失原本的位子信息，排查错误造成很大困扰。
+
+### HMR：模块热更新，已经集成，只需要 --hot 开启
+- 当代码修改时候，页面会以不刷新的形式更新
+- 在不借助 框架 CLI 工具情况下，热更新只能对 css模块实现不刷新式更新，js代码的更新需要手动配置，因为js逻辑复杂，更新范围不能确定
+- module.hot.accept('需要更新的模块文件'() => {
+  更新回调
+})
+
+### Tree Shaking 的实现：借助了 ES Modules 模式
+- Webpack 的 Tree-shaking 特性在**生产模式**下会自动开启。$ npx webpack --mode=production
+- Tree Shaking 失效的原因：babel-loader 把 ES Modules 转化成了 CommonJS 模式
+- usedExports - 打包结果中只导出外部用到的成员；
+- minimize - 压缩打包结果。
+
+- 如果把我们的代码看成一棵大树，那你可以这样理解：
+  - usedExports 的作用就是标记树上哪些是枯树枝、枯树叶；
+  - minimize 的作用就是负责把枯树枝、枯树叶摇下来。
+
+- concatenateModules: 配置的作用就是尽可能将所有模块合并到一起输出到一个函数中，这样既提升了运行效率，又减少了代码的体积。
+
+
+### sideEffects: 不是太理解
+- 注意这个特性在 production 模式下同样会自动开启。
+
+- Webpack 4 中新增了一个 sideEffects 特性，它允许我们通过配置标识我们的代码是否有副作用，从而提供更大的压缩空间。
+
+- Tree-shaking 只能移除没有用到的代码成员，而想要完整移除没有用到的模块，那就需要开启 sideEffects 特性了。
+
+- 需要配置的地方
+  - webpack.config.js 中的 sideEffects 用来开启这个功能；
+  - package.json 中的 sideEffects 用来标识我们的代码没有副作用。
+
+- 目前很多第三方的库或者框架都已经使用了 sideEffects 标识，所以我们再也不用担心为了一个小功能引入一个很大体积的库了。例如，某个 UI 组件库中只有一两个组件会用到，那只要它支持 sideEffects，你就可以放心大胆的直接用了。
+
+- 重点就是想明白哪些副作用代码是可以随着模块的移除而移除，哪些又是不可以移除的。总结下来其实也很简单：对全局有影响的副作用代码不能移除，而只是对模块有影响的副作用代码就可以移除。

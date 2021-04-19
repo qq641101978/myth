@@ -277,3 +277,7 @@ https://cloud.tencent.com/developer/article/1599224
 
 
 ### 扩展问题：销毁阶段，注册到事件超出了组件范围（如注册到了body身上），Vue 能否自动解绑
+
+### vue histroy 模式 nginx 和 node服务 对应的配置
+- nginx： location 中配置 try_files $uri $uri/ /index.html ： 尝试找 对应 uri 内容，如果找不到 返回 index.html
+- node：安装对应的 histroy 模块

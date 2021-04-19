@@ -6,11 +6,16 @@
   <title>Document</title>
 </head>
 <body>
-  <script src="../core/dep.js"></script>
-  <script src="../core/observer.js"></script>
+  <script src="./index.js"></script>
   <script>
-   let obj = new Observer({name:'12'}).value
-   console.log(obj)
+     function getArea(r) {
+        console.log(r)
+        return Math.PI * r * r
+      }
+    let r = memoize(getArea)
+    r(1)
+    r(1)
+
   </script>
 </body>
 </html>
