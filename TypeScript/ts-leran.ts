@@ -1,5 +1,5 @@
 // const list: number[] = [1, 2, 3, 4]
-// const newList: Array<number | string> = [1, , '2', 3, 4] 
+// const newList: Array<number | string> = [1, , '2', 3, 4]
 // let x: [string, number]
 // x = ['10', 10]
 // x.push(1)
@@ -13,7 +13,7 @@
  * 接口:为代码定义契约！存在属性即可（类型需要对应），不检查顺序
  * readonly 只读属性
  * ? 可不传属性
- */ 
+ */
 // interface Person {
 //   lastName: string,
 //   firstName: string,
@@ -54,7 +54,7 @@
 // interface Obj{
 //   width: number,
 //   height: number,
-  
+
 //   [propName: string]: any
 // }
 // const obj: Obj = {
@@ -88,14 +88,14 @@
 
 /**
  * 可索引类型:索引签名之：数字签名，有索引签名后，在定义其他类型 必须是索引的子集！！！
- *  
+ *
  */
 // interface StringArray {
 //   [propName: number]: string,
 
 // }
 // const myArray: StringArray = ['Bob', 'Tom']
-// let a: string = myArray[0] 
+// let a: string = myArray[0]
 
 /**
  * 类类型 ：实例部分 和 构造器（静态）部分
@@ -115,7 +115,7 @@
 // }
 // class DigitalClock implements ClockInterface {
 //   constructor(hour: number, minute: number) {
-    
+
 //   }
 //   tick() {
 //     console.log('deep deep')
@@ -124,7 +124,7 @@
 
 // class AnyloglClock implements ClockInterface {
 //   constructor(hour: number, minute: number) {
-    
+
 //   }
 //   tick() {
 //     console.log('tick toc')
@@ -165,7 +165,7 @@
 // }
 // function getCounter(): Counter {
 //   const cuonter:Counter= ((star: number) => {
-    
+
 //   }) as Counter
 //   cuonter.interval = 123
 
@@ -176,7 +176,7 @@
 // let foo = getCounter()
 // foo(19)
 // foo.interval = 10
-// foo.reset() 
+// foo.reset()
 
 /**
  * 接口继承类,会继承类的私有属性
@@ -197,7 +197,7 @@
 // greeter.greet()
 
 /**
- * 
+ *
  * 继承 扩展现有的类！！！！3-13
  */
 
@@ -283,7 +283,7 @@
 
 // 保护
 // class Person {
-//   protected name: string 
+//   protected name: string
 //   // 构造函数被保护，不能被外界实例化，只能派生类(子类)去访问
 //   protected constructor(name: string) {
 //     this.name = name
@@ -305,7 +305,7 @@
 // let employee = new Employee('byf', 'dodo')
 // employee.getElevatorPiontch()
 //属性“name”受保护，只能在类“Person”及其子类中访问
-// console.log(employee.name) 
+// console.log(employee.name)
 
 /**
  * 只读：readonly  不能修改只能读取
@@ -378,13 +378,13 @@
 /**
  * 抽象类 abstract：作为派生类的基类使用，一般不能实例化
  * ts 允许类当作接口使用
- * 
+ *
 
  */
-// 
+//
 
 /**
- * 
+ *
  * 函数：函数基本示例 + 函数类型
  */
 // function add(x: number, y: number): number {
@@ -397,7 +397,7 @@
 //   return x + y
 // }
 /**
- * 省略（ts 类型推断） 
+ * 省略（ts 类型推断）
  */
 // let myAdd = function(x: number, y: number): number {
 //   return x + y
@@ -408,7 +408,7 @@
 // }
 
 /**
- * 
+ *
  * 可选参数 和 默认参数 以及 剩余参数
  * 可选参数: lastNma?:string  可选参数位子必须跟在必须参数的后面
  * 默认参数： 默认参数位子最前面  lastName = 'bai' 要获取参数 必须传入 undefined 来获取默认参数
@@ -436,10 +436,10 @@
 
 
 /**
- * 
+ *
  * 函数this 和 重载
  * this 参数是一个假参数：
- * 
+ *
  */
 
 // interface Deck {
@@ -491,7 +491,7 @@
 
 
 /**
- * 
+ *
  * 范型：T 特定场合定义一种类型变量。尽量不使用any，这样不会丢失信息：适用多个类型
  * 我们的本意是，一个函数传入的类型和返回的类型一致，但是不能使用 any
  */
@@ -501,10 +501,10 @@
 // }
 // let output = identity<string>('123')
 // // 类型推论实现。不用造成代码冗余，更为普遍
-// let output1 = identity('123')    
+// let output1 = identity('123')
 
 /**
- * 范型变量灵活性使用 
+ * 范型变量灵活性使用
  */
 // function loggingIdentity<T>(arg: T): T {
 //   console.log(arg.length)  // 因为 T 是任意属性。所以不一定存在length 我们需要其他操作
@@ -529,7 +529,7 @@
 // const identity1: IdentityFn<number> = identity
 
 /**
- * 
+ *
  * 范型类:
  * 静态属性不能使用范型类型
  */
@@ -594,7 +594,7 @@
 
 // }
 // // 如果 foo 没有类型定义，会自动推断出 Bee 和 Lion 的联合类型
-// let foo = [new Bee(), new Lion()] 
+// let foo = [new Bee(), new Lion()]
 
 /**
  * 上下文类型
@@ -625,7 +625,7 @@
 
 /**
  * 联合类型 | 或
- * 在联合类型中，我们只能访问共有属性。 
+ * 在联合类型中，我们只能访问共有属性。
  */
 
 // interface Bird {
@@ -645,7 +645,7 @@
 // b.swim  // 单独属性不能访问
 
 /**
- * 类型保护 is typeof instanceof 
+ * 类型保护 is typeof instanceof
  */
 
 // interface Bird {
@@ -669,7 +669,7 @@
 // // pet is Fish 不是返回值 而是一种谓词 pet 返回类型是否是 Fish 类型的
 // function isFish(pet: Fish | Bird): pet is Fish {
 //   // pet的 swim 属性不等于 undefined 就判定为 Fish 类型
-//   return (pet as Fish).swim !== undefined  
+//   return (pet as Fish).swim !== undefined
 // }
 
 /**
@@ -677,29 +677,65 @@
  *  其实 instanceof 主要的实现原理就是只要右边变量的 prototype 在左边变量的原型链上即可
  */
 
-class Bird {
-  fly(){
-    console.log('Bird fly')
-  }
-  layEggs(){
-    console.log('Bird lay eggs')
-  }
+// class Bird {
+//   fly(){
+//     console.log('Bird fly')
+//   }
+//   layEggs(){
+//     console.log('Bird lay eggs')
+//   }
+// }
+// class Fish {
+//   swim(){
+//     console.log('fish swim')
+//   }
+//   layEggs(){
+//     console.log('fish lay eggs')
+//   }
+// }
+
+// function getRandomPet(): Bird | Fish {
+//   return Math.random() > 0.5 ? new Bird() : new Fish()
+// }
+// let pet = getRandomPet()
+// if (pet instanceof Bird) {
+//   pet.fly()
+// } else {
+//   pet.swim()
+// }
+
+
+// 新征程
+
+// Keyof 该操作符可以用于获取某种类型的所有键，其返回类型是联合类型。
+
+interface Person {
+  name: string;
+  age: number;
+  location: string;
 }
-class Fish {
-  swim(){
-    console.log('fish swim')
-  }
-  layEggs(){
-    console.log('fish lay eggs')
-  }
+
+// 这里 type 会给类型起一个新的名称
+type K1 = keyof Person; // "name" | "age" | "location"
+type K2 = keyof Person[];  // number | "length" | "push" | "concat" | ...
+type K3 = keyof { [x: string]: Person };  // string | number
+
+// 枚举
+enum Direction {
+  NORTH,
+  SOUTH,
+  EAST,
+  WEST,
 }
-  
-function getRandomPet(): Bird | Fish {
-  return Math.random() > 0.5 ? new Bird() : new Fish()
-}
-let pet = getRandomPet()
-if (pet instanceof Bird) {
-  pet.fly()
-} else {
-  pet.swim()
-}
+
+let dir: Direction = Direction.NORTH;
+console.log(dir['NORTH']) // 0
+
+
+// Partial<T> 的作用就是将某个类型里的属性全部变为可选项 ?。
+type Partial1<T> = {
+  [P in keyof T]?: T[P];
+};
+
+//在以上代码中，首先通过 keyof T 拿到 T 的所有属性名，然后使用 in 进行遍历，
+// 将值赋给 P，最后通过 T[P] 取得相应的属性值。中间的 ? 号，用于将所有属性变为可选

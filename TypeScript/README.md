@@ -31,7 +31,7 @@
 - 基础类型：https://typescript.bootcss.com/basic-types.html
 
 - 联合类型：number | string （数字或者字符串）只能访问他俩的共有属性
-  
+
 - 强制类型转化： as 语法
 
 - 元组访问越界元素 会报错从3.1版本开始
@@ -48,3 +48,31 @@
 
 ### ts学习
 [ts学习](./ts-leran.ts)
+
+
+## TS 再学习
+
+### 编译上下文
+- 编译上下文算是一个比较花哨的术语，可以用它来给文件分组，告诉 TypeScript 哪些文件是有效的，哪些是无效的。除了有效文件所携带信息外，编译上下文还包含有正在被使用的编译选项的信息。定义这种逻辑分组，一个比较好的方式是使用 tsconfig.json 文件。
+- [编译上下文](./tsconfig.json)
+
+### 声明空间
+- 在 TypeScript 里存在两种声明空间：类型声明空间与变量声明空间。
+- 类型声明空间
+```ts
+class Foo {}
+interface Bar {}
+type Bas = {};
+```
+### 变量声明空间
+```js
+class Foo {}
+const someVar = Foo;
+const someOtherVar = 123;
+```
+
+### ES 模块语法，模块路径
+- 模块的 导出 和导入，导出和导入名称改变，默认导出
+- 模块路径
+  - 相对模块路径（路径以 . 开头，例如：./someFile 或者 ../../someFolder/someFile 等）；
+  - 其他动态查找模块（如：core-js，typestyle，react 或者甚至是 react/core 等）。

@@ -122,7 +122,7 @@ ReactDOM.render(div,document.getElementById('root'))
 
 ## 组件
 - 组件大驼峰规则
- - 如果首字母不大写，会解析成普通的 React 元素，会报错 
+ - 如果首字母不大写，会解析成普通的 React 元素，会报错
 - 函数组件：返回一个 react 元素
 - 类组件：必须继承 React.Component,提供 render函数，返回 react 元素
 > 未来：推荐使用函数组件（新增的hooks）。目的：消除 this
@@ -215,7 +215,7 @@ this.setState(cur=>{
   3. 严禁使用 setState
 
 4. **componentDidMount** 虚拟 DOM 挂载，成为真实 DOM之前
-  1. 只会执行一次，挂载完成 
+  1. 只会执行一次，挂载完成
   2. 可以使用 setState
   3. 通常情况下，会将网络请求，定时器等等操作写在这里
 
@@ -230,7 +230,7 @@ this.setState(cur=>{
 6. **shouldComponentUpdate** 是否重新渲染组件 性能优化点
   1. 指示 React 是否要重新渲染该组件，通过返回 true 和 false 来指定，
   2. 默认 为 true
- 
+
 7. componentWillUpdate 即将重新渲染组件 新版移除
   1. 组件即将被重新渲染
 
@@ -264,14 +264,14 @@ constructor -> static getDerivedStateFromProps -> componentDidMount 挂载三步
 3. **shouldComponentUpdate** 是否要重新渲染该组件  性能优化点
   1. 指示 React 是否要重新渲染该组件，通过返回 true 和 false 来指定，
   2. 默认 为 true
- 
+
 4. **render** 组件渲染虚拟 DOM
   1. 返回的 React 元素会被挂载到虚拟 DOM 树中，最终渲染到页面的真实 DOM 中
   2. render 可能不止运行一次，只要需要重新渲染，就会重新执行
   3. 严禁使用 setState
 
 5. **componentDidMount** 挂载
-  1. 只会执行一次，挂载完成 
+  1. 只会执行一次，挂载完成
   2. 可以使用 setState
   3. 通常情况下，会将网络请求，定时器等等操作写在这里(**副作用处理**)
 
@@ -315,7 +315,7 @@ constructor -> static getDerivedStateFromProps -> componentDidMount 挂载三步
 
 
 ## ref
-- 场景：希望直接使用 DOM 元素的方法，或者自定义组件的方法 
+- 场景：希望直接使用 DOM 元素的方法，或者自定义组件的方法
 1. ref 作用于内置 html 组件，得到的将是真实的 dom 对象
 2. ref 作用于类组件，得到的将是类的实列
 3. ref不能作用于函数组件
@@ -424,12 +424,12 @@ export default class MyRef extends Component {
 2. 几乎所有的元素事件处理，均在 document 的事件中处理（事件最终会冒泡到 document）
   1. 对于不冒泡的事件，直接在元素上监听，
 3. 在 doocument 的事件处理，React 会根据虚拟 DOM 树的完成事件函数的调用
-4. React 的事件参数 e， 并非真实的事件参数。是一个合成的对象，类似于真实的 DOM 的事件参数 
+4. React 的事件参数 e， 并非真实的事件参数。是一个合成的对象，类似于真实的 DOM 的事件参数
   1. stopPropagation,阻止事件在虚拟 DOM 树中的冒泡
   2. nativeEvent，可以得到真实的 DOM 事件对象
   3. 为了提高效率，React 使用事件对象池来处理事件对象（发布订阅模式呗）
 **注意**
-  1. 如果给真实的 DOM 的事件，并且阻止了冒泡。则会导致 React 事件无法触发 
+  1. 如果给真实的 DOM 的事件，并且阻止了冒泡。则会导致 React 事件无法触发
   2. 如果给真实的 DOM 的事件， 会先于 React 事件运行
   3. 通过 React 的事件中阻止事件冒泡，无法阻止真实事件
   4. 可以通过 nativeEvent.stopImmediatePropagatioon()，阻止 document 上剩余事件的执行
@@ -522,14 +522,14 @@ export default class MyRef extends Component {
     1. 遍历数组进行**递归对比更新**
 
 
-- **不一致** 
+- **不一致**
 -  整体上，卸载旧的节点，全新创建新的节点
   1. **创建新节点**
   2. **卸载旧节点**
     1. **文本节点，DOM节点，数组节点，空节点，函数组件节点**：直接放弃该节点，如果节点有子节点，递归卸载节点
     2. **组件节点**
       1. 直接放弃该节点
-      2. 调用该节点的 componentWillUnMount 函数 
+      2. 调用该节点的 componentWillUnMount 函数
       3. 递归卸载子节点
   3. 进入新节点的挂载流程
 
@@ -578,7 +578,7 @@ HOOK的本质：链表
   5. 使用函数改变数据，传入的值不会和原来的数据进行合并，会直接替换
   6. 如果要实现强制刷新组件：
     1. 类组件：使用 forceUpdate 函数
-    2. 函数组件：使用一个空对象的 useState 
+    2. 函数组件：使用一个空对象的 useState
   7. **如果某些状态直接没有必然联系。应分化为不同状态，而不要合并成一个对象**
   8. 和类组件的状态一样，函数组件中改变状态，可能是异步的（在 DOM 事件中），多个状态变化会合并，此时不能信任当前状态，如果状态变化使用到之前的状态，尽量传递函数
 
@@ -618,7 +618,7 @@ HOOK的本质：链表
 
 ### 自定义 Hook
 [useList](./react-learn/src/component/myHook/useList.js)
-- 自定义 Hook：将一些常用的，跨越多个组件的 Hook 功能，抽离出去形成一个函数，该函数就是自定义 Hook 
+- 自定义 Hook：将一些常用的，跨越多个组件的 Hook 功能，抽离出去形成一个函数，该函数就是自定义 Hook
 
 ### Reducer Hook 真好用！！！
 [useReducer](./react-learn/src/component/myHook/useReducer.js)
@@ -657,7 +657,7 @@ HOOK的本质：链表
 > 可以做很多优化，比如 全局变量（timer）固定
 
 ### ImperativeHandle Hook
-- 函数组件中使用 ref 
+- 函数组件中使用 ref
 - useImperativeHandle(ref,()=>{
   return {
     ... 需要的方法数据
@@ -675,12 +675,12 @@ HOOK的本质：链表
 ### 遵循 28 原则，使用最多的 Hook 还是 useState 和 useEffect
 
 ## React 动画：参考 vue 的动画
-- React动画库：react-transition-group 
+- React动画库：react-transition-group
 [react-transition-group](https://reactcommunity.org/react-transition-group/transition)
 ### CSSTransition
 - 自定义样式，根据对应当样式名
 - 当进入时，发生
-  1. 为 CSSTransition 内部的 DOM 根元素添加样式 enter 
+  1. 为 CSSTransition 内部的 DOM 根元素添加样式 enter
   2. 在下一帧（enter样式已经完全应用到了元素），立即为该元素添加样式 enter-active
   3. 当 timeout 结束后哦，去掉之前当样式，添加样式 enter-done
 
@@ -708,7 +708,7 @@ HOOK的本质：链表
 - **Hash Router 哈希路由**
   1. hash值的变化不会引起页面的刷新
   2. 兼容性最好，
-  3. 多了一个 # 
+  3. 多了一个 #
 
 - **Borswer history Router 浏览器历史记录路由**
   1. html5 新增 API，浏览器拥有了改变浏览器路径不刷新功能
@@ -800,7 +800,7 @@ HOOK的本质：链表
 - to：跳转的地址
 - ...
 
-### 总共学习组件： 
+### 总共学习组件：
 - Router：BrowserRouter，HashRouter
 - Route
 - Switch
@@ -834,7 +834,7 @@ HOOK的本质：链表
           - 点击超链接
         - REPLAC：替换
           - 调用 history.replace
-    - 返回结果：回调函数。取消监听 
+    - 返回结果：回调函数。取消监听
   - block：设置一个阻塞，并同时设置阻塞消息，页面发生跳转时，会进入阻塞，并将阻塞消息传递到路由根组件的 getUserConfirmation 方法。
     - 返回一个方法，用于取消阻塞
 - 路由根组件
@@ -857,7 +857,7 @@ HOOK的本质：链表
 ### action
 1. action 是一个 plain-object
   1. 他的 __proto__ 指向 Object.prototype
-2. action 中必须有 type 属性，该属性用于描述操作的类型 
+2. action 中必须有 type 属性，该属性用于描述操作的类型
   1. 但是没有对 type 的类型做出要求
   2. 通常，使用 payload 属性表示附加数据（没有强制要求）
 3. 在大型项目中，由于操作类型非常多，为了避免硬编码，会将 action 的类型存放到一个或者一些单独的文件中（样板代码）
@@ -872,7 +872,7 @@ HOOK的本质：链表
 
 
 ### Reducer: 用于改变数据的函数
-1. 一个数据仓库，有且仅有一个 reducer。并且通常情况下，一个工程只有一个仓库，因此，一个系统，只有一个 reducer 
+1. 一个数据仓库，有且仅有一个 reducer。并且通常情况下，一个工程只有一个仓库，因此，一个系统，只有一个 reducer
 2. 为了方便管理，通常会将 reducer 放在单独的文件夹
 3. reducer 被调用的时候
   1. 通过 store.dispatch，分发一个 action
