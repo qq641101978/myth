@@ -44,7 +44,8 @@
 
 - 泛型（Generics）是指在定义函数、接口或类的时候，不预先指定具体的类型，而在使用的时候再指定类型的一种特性。
 
-
+### TS 迁移的过程
+- 使用 any，类型断言 as
 
 ### ts学习
 [ts学习](./ts-leran.ts)
@@ -76,3 +77,29 @@ const someOtherVar = 123;
 - 模块路径
   - 相对模块路径（路径以 . 开头，例如：./someFile 或者 ../../someFolder/someFile 等）；
   - 其他动态查找模块（如：core-js，typestyle，react 或者甚至是 react/core 等）。
+
+### 基本注解
+- 类型注解使用 :TypeAnnotation 语法。在类型声明空间中可用的任何内容都可以用作类型注解。
+```ts
+const num: number = 123;
+function identity(num: number): number {
+  return num;
+}
+```
+- js 原声方法 都带有自己的 ts 类型
+- 类型别名: TypeScript 提供了为类型注解设置别名的便捷语法，你可以使用 type SomeName = someValidTypeAnnotation 来创建别名：
+```ts
+type StrOrNum = string | number;
+
+// 使用
+let sample: StrOrNum;
+sample = 123;
+sample = '123';
+
+// 会检查类型
+sample = true; // Error
+```
+
+### 类型保护
+- typeof,instaceof, in, 字面量
+![相关链接](https://jkchao.github.io/typescript-book-chinese/typings/typeGuard.html#%E5%AD%97%E9%9D%A2%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%BF%9D%E6%8A%A4)
